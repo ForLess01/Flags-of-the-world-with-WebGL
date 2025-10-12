@@ -1,4 +1,4 @@
-        // Shaders simplificados
+// Shaders simplificados
 const vertexShader = `
     attribute vec2 a_position;
     attribute vec3 a_color;
@@ -134,6 +134,7 @@ const flagNames = {
     spain: 'Bandera de España',
     nauru: 'Bandera de Nauru',
     honduras: 'Bandera de Honduras'
+    //Primeras 11
 };
 
 // Variables de fullscreen
