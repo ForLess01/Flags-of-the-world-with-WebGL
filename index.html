@@ -3,164 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Banderas WebGL Interactivas</title>
+    <title>Banderas con WebGL</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <div class="container">
+      <!-- La galería se generará automáticamente desde Js -->
       <div class="flags-gallery">
-        <h1>Galería de Banderas WebGL</h1>
-        <div class="flag-item">
-          <canvas
-            id="peruFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Perú</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="NorthKoreaFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Corea del Norte</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="turkeyFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Turquía</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="saintKittsFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">San Cristóbal y Nieves</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="malaysiaFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Malasia</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="mongoliaFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Mongolia</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="marshallIslandsFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Islas Marshall</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="algeriaFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Argelia</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="southAfricaFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Sudáfrica</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="spainFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">España</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="nauruFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Nauru</p>
-        </div>
-        <div class="flag-item">
-          <canvas
-            id="hondurasFlag"
-            class="flag-canvas"
-            width="400"
-            height="250"
-          ></canvas>
-          <p class="flag-name">Honduras</p>
-        </div>
+        <h1>Galería de Banderas - WebGL</h1>
+        <!-- Los canvas se generarán dinámicamente aquí -->
       </div>
 
+      <!-- La lista se generará automáticamente desde Js -->
       <div class="flags-list">
         <h2>Lista de Banderas</h2>
-        <a href="#" class="flag-link" onclick="showFullscreen('peru')"
-          >🇵🇪 Bandera de Perú</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('northKorea')"
-          >🇰🇵 Bandera de Corea del Norte</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('turkey')"
-          >🇹🇷 Bandera de Turquía</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('saintKitts')"
-          >🇰🇳 Bandera de San Cristóbal y Nieves</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('malaysia')"
-          >🇲🇾 Bandera de Malasia</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('mongolia')"
-          >🇲🇳 Bandera de Mongolia</a
-        >
-        <a
-          href="#"
-          class="flag-link"
-          onclick="showFullscreen('marshallIslands')"
-          >🇲🇭 Bandera de Islas Marshall</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('algeria')"
-          >🇩🇿 Bandera de Argelia</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('southAfrica')"
-          >🇿🇦 Bandera de Sudáfrica</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('spain')"
-          >🇪🇸 Bandera de España</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('nauru')"
-          >🇳🇷 Bandera de Nauru</a
-        >
-        <a href="#" class="flag-link" onclick="showFullscreen('honduras')"
-          >🇭🇳 Bandera de Honduras</a
-        >
+        <input
+          type="text"
+          id="searchInput"
+          class="search-input"
+          placeholder="🔍 Buscar país..."
+        />
+        <div id="flagsListContainer">
+          <!-- Los enlaces se generarán dinámicamente aquí -->
+        </div>
       </div>
     </div>
 
@@ -170,16 +35,16 @@
       <canvas
         id="fullscreenCanvas"
         class="fullscreen-canvas"
-        width="800"
-        height="500"
+        width="1600"
+        height="1000"
       ></canvas>
       <div class="scale-info">
         Arrastra desde la esquina inferior derecha para reescalar la bandera
       </div>
     </div>
-
+    <!-- Agregar cada uno de sus nombres (Ejm. Nombre1, Inicial del Nombre2 y Apellido1-->
     <footer class="footer">
-      <p>Realizado por Rendo Alfonte & Yimmy Y. Cuyo</p>
+      <p>Realizado por Rendo Alfonte, Yimmy Y. Cuyo</p>
     </footer>
 
     <script src="script.js"></script>
