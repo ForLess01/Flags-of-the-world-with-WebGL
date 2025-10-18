@@ -566,6 +566,6 @@ modificación, fusión, publicación, distribución, sublicencia y/o venta de co
 [![GitHub stars](https://img.shields.io/github/stars/ForLess01/Flags-of-the-world-with-WebGL?style=social)](https://github.com/ForLess01/Flags-of-the-world-with-WebGL/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/ForLess01/Flags-of-the-world-with-WebGL?style=social)](https://github.com/ForLess01/Flags-of-the-world-with-WebGL/network/members)
 
-Made with ❤️ by the UNA - P Team by ForLess01(lead)
+Made with ❤️ by the UNA - P Team by ForLess01(leadteam)
 
 </div>
