@@ -2021,6 +2021,67 @@ namibia: (() => {
     return fn;
 })(),
 
+nauru: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales (según estándar Pantone)
+        const blue   = [0.0, 0.24, 0.59];   // Azul marino (#002B7F)
+        const yellow = [1.0, 0.84, 0.0];    // Amarillo (#FFD100)
+        const white  = [1.0, 1.0, 1.0];     // Blanco
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        // Fondo azul
+        pushRect(x, y, x + w, y + h, blue);
+
+        // Franja amarilla horizontal (en el centro vertical)
+        const stripeH = h * 0.095;
+        const stripeY = y + h / 2 - stripeH / 2;
+        pushRect(x, stripeY, x + w, stripeY + stripeH, yellow);
+
+        return { positions, colors };
+    };
+
+    // --- Overlay: estrella blanca de 12 puntas ---
+    fn.overlay = (ctx, x, y, w, h) => {
+        const stripeH = h * 0.06;
+        const cx = x + w * 0.17;          // posición izquierda de la franja amarilla
+        const cy = y + h / 2 + stripeH * 2.3; // justo debajo de la franja
+        const R = h * 0.075;               // radio exterior de la estrella
+        const r = R * 0.5;                // radio interior
+
+        ctx.save();
+        ctx.beginPath();
+        for (let i = 0; i < 24; i++) {
+            const ang = -Math.PI / 2 + (i * Math.PI) / 12; // 12 puntas = 24 vértices
+            const rr = (i % 2 === 0) ? R : r;
+            const px = cx + Math.cos(ang) * rr;
+            const py = cy + Math.sin(ang) * rr;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
 };
 
 // Placeholder para banderas sin implementación
