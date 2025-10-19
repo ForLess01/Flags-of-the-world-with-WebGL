@@ -2433,6 +2433,78 @@ egypt: (() => {
     return fn;
 })(),
 
+elSalvador: (() => {
+    const escudoImg = new Image();
+    escudoImg.src = 'Recursos_Renso/Escudo_ElSalvador.png';
+
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+        
+        const blue = [0/255, 56/255, 147/255];
+        const white = [1, 1, 1];
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        pushRect(x, y, x + w, y + stripeH, blue);
+        pushRect(x, y + stripeH, x + w, y + stripeH * 2, white);
+        pushRect(x, y + stripeH * 2, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const stripeH = h / 3;
+        const escudoSize = Math.min(w, stripeH) * 0.9;
+
+        const drawEscudo = () => {
+            const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+            const escudoW = escudoSize * ratio;
+            const escudoH = escudoSize;
+            
+            const cx = x + w / 2;
+            const cy = y + stripeH + stripeH / 2;
+            const dx = cx - escudoW / 2;
+            const dy = cy - escudoH / 2;
+
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(x, y + stripeH, w, stripeH);
+            ctx.clip();
+            ctx.imageSmoothingEnabled = true;
+            ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+            ctx.restore();
+        };
+
+        if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+            drawEscudo();
+        } else {
+            escudoImg.onload = () => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y + stripeH, w, stripeH);
+                ctx.clip();
+                drawEscudo();
+                ctx.restore();
+            };
+        }
+    };
+
+    return fn;
+})(),
+
 ecuador: (() => {
     const escudoImg = new Image();
     escudoImg.src = 'Recursos_Renso/Escudo_Ecuador.png';
