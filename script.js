@@ -2632,6 +2632,34 @@ papuaNewGuinea: (() => {
     return fn;
 })(),
 
+paraguay: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const white = [1.0, 1.0, 1.0];
+        const blue  = [0.0, 0.19, 0.57];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const stripeH = h / 3;
+        pushRect(x, y, x + w, y + stripeH, red);
+        pushRect(x, y + stripeH, x + w, y + 2*stripeH, white);
+        pushRect(x, y + 2*stripeH, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+
+    return fn;
+})(),
 
 
 
