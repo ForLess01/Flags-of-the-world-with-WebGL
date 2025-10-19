@@ -369,7 +369,15 @@ function drawFlagToCanvas(targetCanvas, width, flagData) {
 
     const resolutionLoc = gl.getUniformLocation(program, 'u_resolution');
     gl.uniform2f(resolutionLoc, offscreenCanvas.width, offscreenCanvas.height);
+    // Configurar scissor para limitar el área de dibujo
+	const scissorX = Math.floor(x);
+	const scissorY = Math.floor(offscreenCanvas.height - (y + height));
+	const scissorW = Math.floor(width);
+	const scissorH = Math.floor(height);
+	gl.enable(gl.SCISSOR_TEST);
+	gl.scissor(scissorX, scissorY, scissorW, scissorH);
     gl.drawArrays(gl.TRIANGLES, 0, positions.length / 2);
+	gl.disable(gl.SCISSOR_TEST);
     gl.flush();
     
     // Copiar resultado al canvas target
@@ -1909,58 +1917,65 @@ namibia: (() => {
         const green = [0/255, 149/255, 67/255];
         const white = [1.0, 1.0, 1.0];
 
-        const pushQuad = (p1, p2, p3, p4, color) => {
-            positions.push(
-                p1[0], p1[1], p2[0], p2[1], p4[0], p4[1],
-                p2[0], p2[1], p3[0], p3[1], p4[0], p4[1]
-            );
-            const c = Array(6).fill(color).flat();
-            colors.push(...c);
+        const pushTriangle = (p1, p2, p3, color) => {
+            positions.push(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
+            colors.push(...color, ...color, ...color);
         };
 
-// Triángulo azul (parte superior izquierda)
-positions.push(x, y,  x + w, y,  x, y + h);
-colors.push(...Array(3).fill(blue).flat());
+        // Primero dibujar los triángulos base
+        pushTriangle([x, y], [x + w, y], [x, y + h], blue);
+        pushTriangle([x + w, y], [x + w, y + h], [x, y + h], green);
 
-// Triángulo verde (parte inferior derecha)
-positions.push(x + w, y,  x + w, y + h,  x, y + h);
-colors.push(...Array(3).fill(green).flat());
-
-        const diagVec = [w, -h];
-        const perpVecLen = Math.sqrt(w*w + h*h);
-        const perpVec = [h / perpVecLen, w / perpVecLen];
-
-        const start = [x, y + h];
-        const end = [x + w, y];
-
-        const totalStripeWidth = h * (1/4 + 2 * (1/12)); // Rojo + 2 Blancos
-        const whiteStripeWidth = h * (1/12);
-
-        const createStripePoints = (offset, width) => {
-            // Calcula los 4 puntos base de la franja
-            let p1 = [start[0] + perpVec[0] * offset, start[1] + perpVec[1] * offset];
-            let p2 = [end[0]   + perpVec[0] * offset, end[1]   + perpVec[1] * offset];
-            let p3 = [end[0]   + perpVec[0] * (offset - width), end[1]   + perpVec[1] * (offset - width)];
-            let p4 = [start[0] + perpVec[0] * (offset - width), start[1] + perpVec[1] * (offset - width)];
-
-            // Extiende los puntos muy lejos a lo largo de la diagonal para asegurar el corte
-            const extensionFactor = 0; // Un factor grande para extender
-            p1 = [p1[0] - diagVec[0] * extensionFactor, p1[1] - diagVec[1] * extensionFactor];
-            p2 = [p2[0] + diagVec[0] * extensionFactor, p2[1] + diagVec[1] * extensionFactor];
-            p3 = [p3[0] + diagVec[0] * extensionFactor, p3[1] + diagVec[1] * extensionFactor];
-            p4 = [p4[0] - diagVec[0] * extensionFactor, p4[1] - diagVec[1] * extensionFactor];
-            
-            return [p1, p2, p3, p4];
-        };
-
-        const whitePoints = createStripePoints(totalStripeWidth / 2, totalStripeWidth);
-        pushQuad(whitePoints[0], whitePoints[1], whitePoints[2], whitePoints[3], white);
-
-        const redOffset = totalStripeWidth / 2 - whiteStripeWidth;
-        const redWidth = totalStripeWidth - 2 * whiteStripeWidth;
-        const redPoints = createStripePoints(redOffset, redWidth);
-        pushQuad(redPoints[0], redPoints[1], redPoints[2], redPoints[3], red);
+        // Calcular la diagonal principal
+        const diagonalStart = [x, y + h];
+        const diagonalEnd = [x + w, y];
         
+        // Vector diagonal y perpendicular
+        const diagVec = [w, -h];
+        const diagLength = Math.sqrt(w * w + h * h);
+        const perpVec = [h / diagLength, w / diagLength];
+
+		// Anchuras de las franjas (proporciones basadas en la altura)
+		const totalStripeWidth = h * 0.25;
+		// Hacer el rojo un poco más ancho y el blanco un poco más delgado
+		const whiteStripeWidth = totalStripeWidth * 0.20; // antes: 0.25
+		const redStripeWidth = totalStripeWidth - 2 * whiteStripeWidth; // ≈ 0.60 del total
+
+        // Función para crear polígonos de franja recortados
+        const createClippedStripe = (centerOffset, width, color) => {
+            const halfWidth = width / 2;
+            
+            // Puntos de la franja sin recortar
+            const topStart = [
+                diagonalStart[0] + perpVec[0] * (centerOffset + halfWidth),
+                diagonalStart[1] + perpVec[1] * (centerOffset + halfWidth)
+            ];
+            const topEnd = [
+                diagonalEnd[0] + perpVec[0] * (centerOffset + halfWidth),
+                diagonalEnd[1] + perpVec[1] * (centerOffset + halfWidth)
+            ];
+            const bottomStart = [
+                diagonalStart[0] + perpVec[0] * (centerOffset - halfWidth),
+                diagonalStart[1] + perpVec[1] * (centerOffset - halfWidth)
+            ];
+            const bottomEnd = [
+                diagonalEnd[0] + perpVec[0] * (centerOffset - halfWidth),
+                diagonalEnd[1] + perpVec[1] * (centerOffset - halfWidth)
+            ];
+
+            positions.push(
+                topStart[0], topStart[1], topEnd[0], topEnd[1], bottomStart[0], bottomStart[1],
+                topEnd[0], topEnd[1], bottomEnd[0], bottomEnd[1], bottomStart[0], bottomStart[1]
+            );
+            
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Crear las tres franjas
+        createClippedStripe(0, redStripeWidth, red);
+        createClippedStripe(redStripeWidth/2 + whiteStripeWidth/2, whiteStripeWidth, white);
+        createClippedStripe(-redStripeWidth/2 - whiteStripeWidth/2, whiteStripeWidth, white);
+
         return { positions, colors };
     };
 
@@ -1968,24 +1983,24 @@ colors.push(...Array(3).fill(green).flat());
         const cx = x + h / 3;
         const cy = y + h / 3;
         
-        const outerRadius = h / 6;                    // Radio exterior de las puntas de los rayos
-        const rayStartRadius = outerRadius * 0.55;    // Dónde empiezan los rayos (borde exterior del anillo)
-        const centerDiscRadius = outerRadius * 0.50;  // Radio del círculo central (borde interior del anillo)
+        const outerRadius = h / 6;
+        const rayStartRadius = outerRadius * 0.55;
+        const centerDiscRadius = outerRadius * 0.50;
 
         ctx.save();
         ctx.fillStyle = '#FFC72C'; 
 
+        // Círculo central
         ctx.beginPath();
         ctx.arc(cx, cy, centerDiscRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        // 2. Dibuja los 12 rayos triangulares
+        // 12 rayos triangulares
         const numRays = 12;
         for (let i = 0; i < numRays; i++) {
             const angle = (i / numRays) * Math.PI * 2;
-            const rayBaseWidthAngle = Math.PI / 15; // Controla el ancho de la base del rayo
+            const rayBaseWidthAngle = Math.PI / 15;
 
-            // Vértices del triángulo de cada rayo
             const p1x = cx + Math.cos(angle) * outerRadius;
             const p1y = cy + Math.sin(angle) * outerRadius;
             const p2x = cx + Math.cos(angle - rayBaseWidthAngle) * rayStartRadius;
@@ -2005,7 +2020,6 @@ colors.push(...Array(3).fill(green).flat());
 
     return fn;
 })(),
-
 
 };
 
