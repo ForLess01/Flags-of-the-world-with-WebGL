@@ -2322,6 +2322,111 @@ const flags = {
         return fn;
     })(),
     
+    philippines: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+    
+            // Colores oficiales
+            const blue  = [0x00/255, 0x33/255, 0x99/255]; // Azul real
+            const red   = [0xCE/255, 0x11/255, 0x1D/255]; // Rojo
+            const white = [1, 1, 1];                      // Blanco
+    
+            const stripeH = h / 2;
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Mitad superior azul
+            pushRect(x, y, x + w, y + stripeH, blue);
+    
+            // Mitad inferior roja
+            pushRect(x, y + stripeH, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        fn.overlay = (ctx, x, y, w, h) => {
+            ctx.save();
+    
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x, y + h);
+            ctx.lineTo(x + h * 0.8, y + h / 2);
+            ctx.closePath();
+            ctx.fillStyle = "#FFFFFF";
+            ctx.fill();
+    
+            // Coordenadas base para el triángulo
+            const centerX = x + h * 0.45;
+            const centerY = y + h / 2;
+    
+            const yellow = "#FFD700";
+            const sunR = h * 0.09;
+    
+            // Círculo central
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, sunR, 0, Math.PI * 2);
+            ctx.fillStyle = yellow;
+            ctx.fill();
+    
+            // Rayos del sol (8 en total)
+            const rayoLargo = sunR * 2.3;
+            const rayoAncho = sunR * 0.3;
+            for (let i = 0; i < 8; i++) {
+                const angle = (i * Math.PI) / 4;
+                ctx.save();
+                ctx.translate(centerX, centerY);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(-rayoAncho / 2, -sunR);
+                ctx.lineTo(rayoAncho / 2, -sunR);
+                ctx.lineTo(0, -rayoLargo);
+                ctx.closePath();
+                ctx.fillStyle = yellow;
+                ctx.fill();
+                ctx.restore();
+            }
+    
+        
+            const starR = h * 0.045;
+            const starPoints = 5;
+    
+            const drawStar = (cx, cy, r) => {
+                const innerR = r * 0.5;
+                ctx.beginPath();
+                for (let i = 0; i < starPoints * 2; i++) {
+                    const radius = i % 2 === 0 ? r : innerR;
+                    const angle = (-Math.PI / 2) + (i * Math.PI) / starPoints;
+                    const px = cx + Math.cos(angle) * radius;
+                    const py = cy + Math.sin(angle) * radius;
+                    if (i === 0) ctx.moveTo(px, py);
+                    else ctx.lineTo(px, py);
+                }
+                ctx.closePath();
+                ctx.fillStyle = yellow;
+                ctx.fill();
+            };
+    
+            // Posiciones de las estrellas
+            drawStar(x + h * 0.08, y + h * 0.12, starR);           // Superior
+            drawStar(x + h * 0.08, y + h * 0.89, starR);           // Inferior
+            drawStar(x + h * 0.7, y + h * 0.50, starR);           // Derecha
+    
+            ctx.restore();
+        };
+    
+        return fn;
+    })(),
     
     
     
