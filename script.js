@@ -3516,6 +3516,1006 @@ paraguay: (() => {
 })(),
 
 
+uae: (x, y, w, h) => {
+    const positions = [];
+    const colors = [];
+
+    // Colores oficiales de Emiratos Árabes Unidos
+    const red = [206/255, 17/255, 38/255];    // #CE1126 - Rojo
+    const green = [0/255, 122/255, 61/255];   // #007A3D - Verde
+    const white = [1, 1, 1];                  // Blanco
+    const black = [0, 0, 0];                  // Negro
+
+    // Proporciones: franja vertical roja (1/4 del ancho) + tres franjas horizontales (1/3 cada una)
+    const redW = w * 0.25;  // 25% del ancho para la franja roja vertical
+    const stripeH = h / 3;  // Cada franja horizontal ocupa 1/3 de la altura
+
+    const pushRect = (x0, y0, x1, y1, color) => {
+        positions.push(
+            x0, y0,
+            x1, y0,
+            x0, y1,
+            x1, y0,
+            x1, y1,
+            x0, y1
+        );
+        colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+    };
+
+    // Franja vertical roja (asta)
+    pushRect(x, y, x + redW, y + h, red);
+
+    // Franja horizontal verde (superior)
+    pushRect(x + redW, y, x + w, y + stripeH, green);
+
+    // Franja horizontal blanca (media)
+    pushRect(x + redW, y + stripeH, x + w, y + stripeH * 2, white);
+
+    // Franja horizontal negra (inferior)
+    pushRect(x + redW, y + stripeH * 2, x + w, y + h, black);
+
+    return { positions, colors };
+},
+
+eritrea: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores de Eritrea - verde, azul y rojo
+        const green = [0x43/255, 0xB0/255, 0x2A/255];  // Verde
+        const blue  = [0x41/255, 0x8F/255, 0xDE/255];  // Azul
+
+        // Dos franjas horizontales iguales
+        const stripeH = h / 2;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja verde (superior)
+        pushRect(x, y, x + w, y + stripeH, green);
+
+        // Franja azul (inferior)
+        pushRect(x, y + stripeH, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+    // Overlay: dibujar el triángulo rojo encima
+    fn.overlay = (ctx, x, y, w, h) => {
+        const triangleW = w * 1; // 50% del ancho para el triángulo
+        const red = [0xE4/255, 0x00/255, 0x2B/255];  // Rojo de Eritrea
+
+        ctx.save();
+        ctx.fillStyle = `rgb(${Math.round(red[0] * 255)}, ${Math.round(red[1] * 255)}, ${Math.round(red[2] * 255)})`;
+        ctx.beginPath();
+        ctx.moveTo(x, y);                    // Vértice superior izquierdo
+        ctx.lineTo(x, y + h);                // Vértice inferior izquierdo
+        ctx.lineTo(x + triangleW, y + h/2);  // Vértice derecho (centro vertical)
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+slovakia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores de la bandera de Eslovaquia
+        const white = [1, 1, 1];                // Blanco
+        const blue  = [0x00/255, 0x43/255, 0x8C/255]; // Azul oscuro
+        const red   = [0xEF/255, 0x33/255, 0x2A/255]; // Rojo brillante
+
+        // Altura de cada franja (tres franjas iguales)
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja superior blanca
+        pushRect(x, y, x + w, y + stripeH, white);
+
+        // Franja del medio azul
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, blue);
+
+        // Franja inferior roja
+        pushRect(x, y + 2 * stripeH, x + w, y + h, red);
+
+        return { positions, colors };
+    };
+
+    // Dibuja el escudo sobre la bandera
+    fn.overlay = (ctx, x, y, w, h) => {
+        const escudo = new Image();
+        escudo.src = "Recursos_Renso/Escudo_Eslovaquia.png";
+
+        // Cuando la imagen esté lista, dibujarla
+        escudo.onload = () => {
+            const escudoW = w * 0.25;   // 25% del ancho total
+            const escudoH = escudoW * (escudo.height / escudo.width);
+            const escudoX = x + w * 0.08;  // Margen izquierdo
+            const escudoY = y + h * 0.25;  // Posicionado centrado verticalmente
+            ctx.drawImage(escudo, escudoX, escudoY, escudoW, escudoH);
+        };
+    };
+
+    return fn;
+})(),
+
+slovenia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores de la bandera de Eslovenia
+        const white = [0xFF/255, 0xFF/255, 0xFF/255]; 
+        const blue  = [0x00/255, 0x3D/255, 0xA5/255]; 
+        const red   = [0xFF/255, 0x00/255, 0x00/255]; 
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja superior: blanco
+        pushRect(x, y, x + w, y + stripeH, white);
+        // Franja central: azul
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, blue);
+        // Franja inferior: rojo
+        pushRect(x, y + 2 * stripeH, x + w, y + h, red);
+
+        return { positions, colors };
+    };
+
+    // Dibuja el escudo nacional sobre la bandera (Canvas)
+    fn.overlay = (ctx, x, y, w, h) => {
+        const escudo = new Image();
+        escudo.src = "Recursos_Renso/Escudo_Eslovenia.png"; 
+
+        escudo.onload = () => {
+            const escudoW = w * 0.18;   // 🔹 Más grande: ~18% del ancho total
+            const escudoH = escudoW * 1.25; // Mantiene proporción real del escudo
+            const escudoX = x + w * 0.08;   // Margen izquierdo (ligeramente desplazado)
+            const escudoY = y + h * 0.05;   // Posicionado para cruzar blanco y azul
+
+            ctx.save();
+            ctx.drawImage(escudo, escudoX, escudoY, escudoW, escudoH);
+            ctx.restore();
+        };
+
+    };
+
+    return fn;
+})(),
+
+usa: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const red   = [0xB2/255, 0x10/255, 0x1E/255]; // Rojo bandera
+        const white = [1, 1, 1];
+        const blue  = [0x3C/255, 0x3B/255, 0x6E/255]; // Azul bandera
+
+        const stripeH = h / 13; // 13 franjas horizontales
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Alternar 13 franjas rojas y blancas (comenzando con rojo)
+        for (let i = 0; i < 13; i++) {
+            const color = i % 2 === 0 ? red : white;
+            const y0 = y + i * stripeH;
+            const y1 = y0 + stripeH;
+            pushRect(x, y0, x + w, y1, color);
+        }
+
+        return { positions, colors };
+    };
+
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const cantonW = w * 0.4;        // Ancho del cantón
+        const cantonH = h * (7 / 13);   // Alto del cantón
+        const blue = "#3C3B6E";
+
+        ctx.save();
+        ctx.fillStyle = blue;
+        ctx.fillRect(x, y, cantonW, cantonH);
+
+        // Parámetros para las estrellas
+        const rows = 9;  // 9 filas alternadas
+        const colsOdd = 6; // Filas impares tienen 6 estrellas
+        const colsEven = 5; // Filas pares tienen 5 estrellas
+
+        const starSize = cantonH / 15; // Tamaño relativo
+        const rowSpacing = cantonH / rows;
+        const colSpacing = cantonW / colsOdd;
+
+        ctx.fillStyle = "#FFFFFF";
+
+        // Función para dibujar una estrella de 5 puntas
+        const drawStar = (cx, cy, r) => {
+            const spikes = 5;
+            const outerRadius = r;
+            const innerRadius = r * 0.382; // proporción áurea
+            let rot = Math.PI / 2 * 3;
+            let step = Math.PI / spikes;
+
+            ctx.beginPath();
+            ctx.moveTo(cx, cy - outerRadius);
+            for (let i = 0; i < spikes; i++) {
+                ctx.lineTo(cx + Math.cos(rot) * outerRadius, cy + Math.sin(rot) * outerRadius);
+                rot += step;
+                ctx.lineTo(cx + Math.cos(rot) * innerRadius, cy + Math.sin(rot) * innerRadius);
+                rot += step;
+            }
+            ctx.lineTo(cx, cy - outerRadius);
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        for (let row = 0; row < rows; row++) {
+            const isEvenRow = row % 2 === 1;
+            const numStars = isEvenRow ? colsEven : colsOdd;
+            const xOffset = isEvenRow ? colSpacing / 2 : 0;
+
+            for (let col = 0; col < numStars; col++) {
+                const cx = x + xOffset + col * colSpacing + colSpacing / 2.2;
+                const cy = y + row * rowSpacing + rowSpacing / 2;
+                drawStar(cx, cy, starSize);
+            }
+        }
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+estonia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales de Estonia
+        const blue  = [0x00/255, 0x60/255, 0xB0/255]; // Azul (#0060B0)
+        const black = [0x00/255, 0x00/255, 0x00/255]; // Negro (#000000)
+        const white = [0xFF/255, 0xFF/255, 0xFF/255]; // Blanco (#FFFFFF)
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja superior: azul
+        pushRect(x, y, x + w, y + stripeH, blue);
+        // Franja del medio: negro
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, black);
+        // Franja inferior: blanco
+        pushRect(x, y + 2 * stripeH, x + w, y + h, white);
+
+        return { positions, colors };
+    };
+
+
+    fn.overlay = (ctx, x, y, w, h) => {
+    };
+
+    return fn;
+})(),
+
+ethiopia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales 🇪🇹
+        const green  = [0x00/255, 0x9A/255, 0x44/255]; // Verde
+        const yellow = [0xFF/255, 0xD1/255, 0x00/255]; // Amarillo
+        const red    = [0xEF/255, 0x33/255, 0x2A/255]; // Rojo
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franjas horizontales
+        pushRect(x, y, x + w, y + stripeH, green);
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, yellow);
+        pushRect(x, y + 2 * stripeH, x + w, y + h, red);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const centerX = x + w / 2;
+        const centerY = y + h / 2;
+        const circleR = h * 0.25;
+        const blue = "#0F47AF";
+        const yellow = "#FFD100";
+
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, circleR, 0, Math.PI * 2);
+        ctx.fillStyle = blue;
+        ctx.fill();
+
+        const outerR = circleR * 0.85;
+        const innerR = circleR * 0.35;
+        const points = 5;
+        const angleOffset = -Math.PI / 2;
+
+        // Dibujar estrella completa con relleno azul y borde amarillo
+        ctx.beginPath();
+        for (let i = 0; i < points * 2; i++) {
+            const r = (i % 2 === 0) ? outerR : innerR;
+            const angle = angleOffset + (i * Math.PI) / points;
+            const px = centerX + Math.cos(angle) * r;
+            const py = centerY + Math.sin(angle) * r;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+
+        // Fondo azul dentro de la estrella
+        ctx.fillStyle = blue;
+        ctx.fill();
+
+        // Borde amarillo (estrella delineada)
+        ctx.strokeStyle = yellow;
+        ctx.lineWidth = h * 0.012;
+        ctx.stroke();
+
+        ctx.strokeStyle = yellow;
+        ctx.lineWidth = h * 0.007;
+        for (let i = 0; i < 5; i++) {
+            const angle = angleOffset + (i * 2 * Math.PI) / points;
+            const xEnd = centerX + Math.cos(angle) * outerR;
+            const yEnd = centerY + Math.sin(angle) * outerR;
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.lineTo(xEnd, yEnd);
+            ctx.stroke();
+        }
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+philippines: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const blue  = [0x00/255, 0x33/255, 0x99/255]; // Azul real
+        const red   = [0xCE/255, 0x11/255, 0x1D/255]; // Rojo
+        const white = [1, 1, 1];                      // Blanco
+
+        const stripeH = h / 2;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Mitad superior azul
+        pushRect(x, y, x + w, y + stripeH, blue);
+
+        // Mitad inferior roja
+        pushRect(x, y + stripeH, x + w, y + h, red);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x, y + h);
+        ctx.lineTo(x + h * 0.8, y + h / 2);
+        ctx.closePath();
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fill();
+
+        // Coordenadas base para el triángulo
+        const centerX = x + h * 0.45;
+        const centerY = y + h / 2;
+
+        const yellow = "#FFD700";
+        const sunR = h * 0.09;
+
+        // Círculo central
+        ctx.beginPath();
+        ctx.arc(centerX, centerY, sunR, 0, Math.PI * 2);
+        ctx.fillStyle = yellow;
+        ctx.fill();
+
+        // Rayos del sol (8 en total)
+        const rayoLargo = sunR * 2.3;
+        const rayoAncho = sunR * 0.3;
+        for (let i = 0; i < 8; i++) {
+            const angle = (i * Math.PI) / 4;
+            ctx.save();
+            ctx.translate(centerX, centerY);
+            ctx.rotate(angle);
+            ctx.beginPath();
+            ctx.moveTo(-rayoAncho / 2, -sunR);
+            ctx.lineTo(rayoAncho / 2, -sunR);
+            ctx.lineTo(0, -rayoLargo);
+            ctx.closePath();
+            ctx.fillStyle = yellow;
+            ctx.fill();
+            ctx.restore();
+        }
+
+
+        const starR = h * 0.045;
+        const starPoints = 5;
+
+        const drawStar = (cx, cy, r) => {
+            const innerR = r * 0.5;
+            ctx.beginPath();
+            for (let i = 0; i < starPoints * 2; i++) {
+                const radius = i % 2 === 0 ? r : innerR;
+                const angle = (-Math.PI / 2) + (i * Math.PI) / starPoints;
+                const px = cx + Math.cos(angle) * radius;
+                const py = cy + Math.sin(angle) * radius;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+            ctx.fillStyle = yellow;
+            ctx.fill();
+        };
+
+        // Posiciones de las estrellas
+        drawStar(x + h * 0.08, y + h * 0.12, starR);           // Superior
+        drawStar(x + h * 0.08, y + h * 0.89, starR);           // Inferior
+        drawStar(x + h * 0.7, y + h * 0.50, starR);           // Derecha
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+finland: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const white = [1, 1, 1];
+        const blue  = [0x00/255, 0x2F/255, 0x6C/255]; // Azul bandera finlandesa
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Fondo blanco completo
+        pushRect(x, y, x + w, y + h, white);
+
+        // Proporciones de la cruz (basado en proporción oficial 11:18)
+        const stripeW = h / 5.5;        // Grosor de la cruz
+        const offsetX = w * 0.28;       // Desplazamiento de la cruz hacia la izquierda
+        const offsetY = (h - stripeW) / 2;
+
+        // Cruz vertical azul
+        pushRect(x + offsetX - stripeW / 2, y, x + offsetX + stripeW / 2, y + h, blue);
+
+        // Cruz horizontal azul
+        pushRect(x, y + offsetY, x + w, y + offsetY + stripeW, blue);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+
+        // Fondo blanco
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x, y, w, h);
+
+        // Azul oficial (Pantone 294 C)
+        ctx.fillStyle = "#002F6C";
+
+        // Cruz vertical
+        const stripeW = h / 5.5;
+        const offsetX = w * 0.28;
+        ctx.fillRect(x + offsetX - stripeW / 2, y, stripeW, h);
+
+        // Cruz horizontal
+        const offsetY = (h - stripeW) / 2;
+        ctx.fillRect(x, y + offsetY, w, stripeW);
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+fiji: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Fondo celeste
+        const skyBlue = [0x68/255, 0xC3/255, 0xE2/255];
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+        pushRect(x, y, x + w, y + h, skyBlue);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+
+        // Fondo celeste
+        ctx.fillStyle = "#68C3E2";
+        ctx.fillRect(x, y, w, h);
+
+        // Cantón (Union Jack)
+        const cantonW = w * 0.5;
+        const cantonH = h * 0.5;
+        ctx.fillStyle = "#012169";
+        ctx.fillRect(x, y, cantonW, cantonH);
+
+        const drawSoftDiagonal = (color1, color2, width) => {
+            ctx.save();
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
+            ctx.lineWidth = width;
+
+            // Diagonal ↘
+            let grad1 = ctx.createLinearGradient(x, y, x + cantonW, y + cantonH);
+            grad1.addColorStop(0, color2);     // inicio se difumina
+            grad1.addColorStop(0.1, color1);   // color sólido central
+            grad1.addColorStop(0.9, color1);
+            grad1.addColorStop(1, color2);     // fin se difumina
+            ctx.strokeStyle = grad1;
+            ctx.beginPath();
+            ctx.moveTo(x, y);
+            ctx.lineTo(x + cantonW, y + cantonH);
+            ctx.stroke();
+
+            // Diagonal ↙
+            let grad2 = ctx.createLinearGradient(x + cantonW, y, x, y + cantonH);
+            grad2.addColorStop(0, color2);
+            grad2.addColorStop(0.1, color1);
+            grad2.addColorStop(0.9, color1);
+            grad2.addColorStop(1, color2);
+            ctx.strokeStyle = grad2;
+            ctx.beginPath();
+            ctx.moveTo(x + cantonW, y);
+            ctx.lineTo(x, y + cantonH);
+            ctx.stroke();
+
+            ctx.restore();
+        };
+
+        // Blanco “suave” debajo
+        drawSoftDiagonal("#FFFFFF", "rgba(1,33,105,0)", cantonH * 0.12);
+        // Rojo “hundido” encima
+        drawSoftDiagonal("#C8102E", "rgba(1,33,105,0)", cantonH * 0.06);
+
+        // === Cruces centrales ===
+        const crossW = cantonH * 0.22;
+        const innerW = cantonH * 0.12;
+
+        // Blanca
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x + cantonW / 2 - crossW / 2, y, crossW, cantonH);
+        ctx.fillRect(x, y + cantonH / 2 - crossW / 2, cantonW, crossW);
+
+        // Roja
+        ctx.fillStyle = "#C8102E";
+        ctx.fillRect(x + cantonW / 2 - innerW / 2, y, innerW, cantonH);
+        ctx.fillRect(x, y + cantonH / 2 - innerW / 2, cantonW, innerW);
+
+        
+        
+        const escudo = new Image();
+        escudo.src = "Recursos_Renso/Escudo_Fiyi.png";
+        escudo.onload = () => {
+            // 🔹 Escudo un poco más pequeño
+            const escudoW = w * 0.24;     
+            const escudoH = escudoW * 1.25;
+
+            // 🔹 Posición más a la derecha
+            const escudoX = x + cantonW + w * 0.1;  
+            const escudoY = y + (h - escudoH) / 2;
+
+            // 🔹 Dibujo del escudo
+            ctx.drawImage(escudo, escudoX, escudoY, escudoW, escudoH);
+            ctx.restore();
+        };
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+france: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales (azul, blanco, rojo)
+        const blue  = [0x00 / 255, 0x35 / 255, 0xA2 / 255]; // Azul Francia
+        const white = [1.0, 1.0, 1.0];
+        const red   = [0xED / 255, 0x29 / 255, 0x34 / 255]; // Rojo Francia
+
+        const stripeW = w / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja azul (izquierda)
+        pushRect(x, y, x + stripeW, y + h, blue);
+        // Franja blanca (centro)
+        pushRect(x + stripeW, y, x + 2 * stripeW, y + h, white);
+        // Franja roja (derecha)
+        pushRect(x + 2 * stripeW, y, x + w, y + h, red);
+
+        return { positions, colors };
+    };
+
+    // === Overlay Canvas (para visualización 2D adicional si se usa) ===
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+
+        const stripeW = w / 3;
+
+        // Franja azul
+        ctx.fillStyle = "#0035A2";
+        ctx.fillRect(x, y, stripeW, h);
+
+        // Franja blanca
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x + stripeW, y, stripeW, h);
+
+        // Franja roja
+        ctx.fillStyle = "#ED2934";
+        ctx.fillRect(x + 2 * stripeW, y, stripeW, h);
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+gabon: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const green  = [0x00 / 255, 0x9E / 255, 0x60 / 255]; // Verde
+        const yellow = [0xFCD116 / 255, 0xFCD116 / 255, 0x00 / 255]; // Amarillo brillante
+        const blue   = [0x3A / 255, 0x75 / 255, 0xCF / 255]; // Azul Gabón
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja verde (superior)
+        pushRect(x, y, x + w, y + stripeH, green);
+
+        // Franja amarilla (central)
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, yellow);
+
+        // Franja azul (inferior)
+        pushRect(x, y + 2 * stripeH, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+    // === Overlay Canvas (modo 2D) ===
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+
+        const stripeH = h / 3;
+
+        // Verde
+        ctx.fillStyle = "#009E60";
+        ctx.fillRect(x, y, w, stripeH);
+
+        // Amarillo
+        ctx.fillStyle = "#FCD116";
+        ctx.fillRect(x, y + stripeH, w, stripeH);
+
+        // Azul
+        ctx.fillStyle = "#3A75CF";
+        ctx.fillRect(x, y + 2 * stripeH, w, stripeH);
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
+gambia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const red    = [0xCE / 255, 0x11 / 255, 0x26 / 255]; // Rojo
+        const white  = [1.0, 1.0, 1.0];                      // Blanco
+        const blue   = [0x0C / 255, 0x1C / 255, 0x8C / 255]; // Azul
+        const green  = [0x3A / 255, 0x77 / 255, 0x0A / 255]; // Verde
+
+        // Proporciones según bandera oficial:
+        // Rojo: 3/9 | Blanco: 1/9 | Azul: 2/9 | Blanco: 1/9 | Verde: 3/9
+        const total = h;
+            const redH    = total * 3.2 / 9;   // un pelín más grandes
+            const whiteH  = total * 0.6 / 9;   // más finas (~7% del total)
+            const blueH   = total * 1.8 / 9;   // ligeramente ajustado
+            const greenH  = total * 3.2 / 9;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        let offset = y;
+
+        // Franja roja
+        pushRect(x, offset, x + w, offset + redH, red);
+        offset += redH;
+
+        // Blanco superior
+        pushRect(x, offset, x + w, offset + whiteH, white);
+        offset += whiteH;
+
+        // Azul (ligeramente más pequeña)
+        pushRect(x, offset, x + w, offset + blueH, blue);
+        offset += blueH;
+
+        // Blanco inferior
+        pushRect(x, offset, x + w, offset + whiteH, white);
+        offset += whiteH;
+
+        // Franja verde
+        pushRect(x, offset, x + w, offset + greenH, green);
+
+        return { positions, colors };
+    };
+
+    // === Overlay Canvas ===
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+
+        // Proporciones reales
+        const redH    = h * 3 / 9;
+        const whiteH  = h * 1 / 9;
+        const blueH   = h * 2 / 9;
+        const greenH  = h * 3 / 9;
+
+        let offset = y;
+
+        // Rojo
+        ctx.fillStyle = "#CE1126";
+        ctx.fillRect(x, offset, w, redH);
+        offset += redH;
+
+        // Blanco superior
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x, offset, w, whiteH);
+        offset += whiteH;
+
+        // Azul
+        ctx.fillStyle = "#0C1C8C";
+        ctx.fillRect(x, offset, w, blueH);
+        offset += blueH;
+
+        // Blanco inferior
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x, offset, w, whiteH);
+        offset += whiteH;
+
+        // Verde
+        ctx.fillStyle = "#3A770A";
+        ctx.fillRect(x, offset, w, greenH);
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+georgia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const white = [1, 1, 1];      // fondo blanco
+        const red   = [0.82, 0.0, 0.09]; // rojo intenso (cruces)
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Fondo blanco
+        pushRect(x, y, x + w, y + h, white);
+
+        // Dimensiones proporcionales de la cruz central
+        const crossW = w * 0.18;
+        const crossH = h * 0.18;
+
+        // Cruz central
+        pushRect(x + (w - crossW) / 2, y, x + (w + crossW) / 2, y + h, red); // vertical
+        pushRect(x, y + (h - crossH) / 2, x + w, y + (h + crossH) / 2, red); // horizontal
+
+        return { positions, colors };
+    };
+
+    // === Overlay: 4 cruces pequeñas ===
+    fn.overlay = (ctx, x, y, w, h) => {
+        const red = "#D6001C";
+        ctx.save();
+        ctx.fillStyle = red;
+
+        const crossSize = Math.min(w, h) * 0.25;
+        const arm = crossSize * 0.15;
+
+        // Función auxiliar para dibujar cruz
+        const drawSmallCross = (cx, cy) => {
+            ctx.beginPath();
+            ctx.rect(cx - arm, cy - crossSize / 2, arm * 2, crossSize);
+            ctx.rect(cx - crossSize / 2, cy - arm, crossSize, arm * 2);
+            ctx.fill();
+        };
+
+        // Posiciones: cuadrantes
+        const offsetX = w * 0.25;
+        const offsetY = h * 0.25;
+
+        drawSmallCross(x + offsetX, y + offsetY); // sup izq
+        drawSmallCross(x + w - offsetX, y + offsetY); // sup der
+        drawSmallCross(x + offsetX, y + h - offsetY); // inf izq
+        drawSmallCross(x + w - offsetX, y + h - offsetY); // inf der
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
+
+
+
+
+
+
+
+
 
 
 };
