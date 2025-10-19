@@ -2095,6 +2095,101 @@ const flags = {
     
         return fn;
     })(),
+
+    usa: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+    
+            // Colores oficiales
+            const red   = [0xB2/255, 0x10/255, 0x1E/255]; // Rojo bandera
+            const white = [1, 1, 1];
+            const blue  = [0x3C/255, 0x3B/255, 0x6E/255]; // Azul bandera
+    
+            const stripeH = h / 13; // 13 franjas horizontales
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Alternar 13 franjas rojas y blancas (comenzando con rojo)
+            for (let i = 0; i < 13; i++) {
+                const color = i % 2 === 0 ? red : white;
+                const y0 = y + i * stripeH;
+                const y1 = y0 + stripeH;
+                pushRect(x, y0, x + w, y1, color);
+            }
+    
+            return { positions, colors };
+        };
+    
+    
+        fn.overlay = (ctx, x, y, w, h) => {
+            const cantonW = w * 0.4;        // Ancho del cantón
+            const cantonH = h * (7 / 13);   // Alto del cantón
+            const blue = "#3C3B6E";
+    
+            ctx.save();
+            ctx.fillStyle = blue;
+            ctx.fillRect(x, y, cantonW, cantonH);
+    
+            // Parámetros para las estrellas
+            const rows = 9;  // 9 filas alternadas
+            const colsOdd = 6; // Filas impares tienen 6 estrellas
+            const colsEven = 5; // Filas pares tienen 5 estrellas
+    
+            const starSize = cantonH / 15; // Tamaño relativo
+            const rowSpacing = cantonH / rows;
+            const colSpacing = cantonW / colsOdd;
+    
+            ctx.fillStyle = "#FFFFFF";
+    
+            // Función para dibujar una estrella de 5 puntas
+            const drawStar = (cx, cy, r) => {
+                const spikes = 5;
+                const outerRadius = r;
+                const innerRadius = r * 0.382; // proporción áurea
+                let rot = Math.PI / 2 * 3;
+                let step = Math.PI / spikes;
+    
+                ctx.beginPath();
+                ctx.moveTo(cx, cy - outerRadius);
+                for (let i = 0; i < spikes; i++) {
+                    ctx.lineTo(cx + Math.cos(rot) * outerRadius, cy + Math.sin(rot) * outerRadius);
+                    rot += step;
+                    ctx.lineTo(cx + Math.cos(rot) * innerRadius, cy + Math.sin(rot) * innerRadius);
+                    rot += step;
+                }
+                ctx.lineTo(cx, cy - outerRadius);
+                ctx.closePath();
+                ctx.fill();
+            };
+    
+            for (let row = 0; row < rows; row++) {
+                const isEvenRow = row % 2 === 1;
+                const numStars = isEvenRow ? colsEven : colsOdd;
+                const xOffset = isEvenRow ? colSpacing / 2 : 0;
+    
+                for (let col = 0; col < numStars; col++) {
+                    const cx = x + xOffset + col * colSpacing + colSpacing / 2.2;
+                    const cy = y + row * rowSpacing + rowSpacing / 2;
+                    drawStar(cx, cy, starSize);
+                }
+            }
+    
+            ctx.restore();
+        };
+    
+        return fn;
+    })(),
     
     
 
