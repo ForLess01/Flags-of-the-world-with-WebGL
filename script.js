@@ -2571,6 +2571,68 @@ panama: (() => {
     return fn;
 })(),
 
+papuaNewGuinea: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red = [0.84, 0.0, 0.09];
+        const black = [0.0, 0.0, 0.0];
+
+        // Triángulo negro (inferior izquierda)
+        positions.push(
+            x, y + h,
+            x, y,
+            x + w, y + h
+        );
+        colors.push(...Array(3).fill(black).flat());
+
+        // Triángulo rojo (superior derecha)
+        positions.push(
+            x, y,
+            x + w, y,
+            x + w, y + h
+        );
+        colors.push(...Array(3).fill(red).flat());
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+        ctx.fillStyle = 'white';
+
+        const drawStar = (ctx, cx, cy, rOuter, rInner = rOuter*0.382, points=5) => {
+            ctx.beginPath();
+            for (let i = 0; i < points*2; i++) {
+                const angle = Math.PI / points * i - Math.PI/2;
+                const radius = i % 2 === 0 ? rOuter : rInner;
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        // Posiciones de la Cruz del Sur (triángulo negro)
+            const starData = [
+        [x + w*0.23, y + h*0.36, h*0.05],  // estrella grande
+        [x + w*0.30, y + h*0.48, h*0.05],
+        [x + w*0.15, y + h*0.50, h*0.045],
+        [x + w*0.25, y + h*0.75, h*0.045],
+        [x + w*0.27, y + h*0.63, h*0.035]
+    ];
+
+        for (let [cx, cy, r] of starData) {
+            drawStar(ctx, cx, cy, r);
+        }
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
 
 
 
