@@ -1986,6 +1986,62 @@ const flags = {
         return fn;
     })(),
 
+    slovakia: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+    
+            // Colores de la bandera de Eslovaquia
+            const white = [1, 1, 1];                // Blanco
+            const blue  = [0x00/255, 0x43/255, 0x8C/255]; // Azul oscuro
+            const red   = [0xEF/255, 0x33/255, 0x2A/255]; // Rojo brillante
+    
+            // Altura de cada franja (tres franjas iguales)
+            const stripeH = h / 3;
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franja superior blanca
+            pushRect(x, y, x + w, y + stripeH, white);
+    
+            // Franja del medio azul
+            pushRect(x, y + stripeH, x + w, y + 2 * stripeH, blue);
+    
+            // Franja inferior roja
+            pushRect(x, y + 2 * stripeH, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        // Dibuja el escudo sobre la bandera
+        fn.overlay = (ctx, x, y, w, h) => {
+            const escudo = new Image();
+            escudo.src = "Recursos_Renso/Escudo_Eslovaquia.png";
+    
+            // Cuando la imagen esté lista, dibujarla
+            escudo.onload = () => {
+                const escudoW = w * 0.25;   // 25% del ancho total
+                const escudoH = escudoW * (escudo.height / escudo.width);
+                const escudoX = x + w * 0.08;  // Margen izquierdo
+                const escudoY = y + h * 0.25;  // Posicionado centrado verticalmente
+                ctx.drawImage(escudo, escudoX, escudoY, escudoW, escudoH);
+            };
+        };
+    
+        return fn;
+    })(),
+    
+
     
     
 };
