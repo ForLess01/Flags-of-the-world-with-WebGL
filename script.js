@@ -1302,6 +1302,150 @@ const flags = {
          ];
          return { positions, colors };
      },
+    lithuania: (x, y, w, h) => {
+        const h3 = h / 3;
+        const yellow = [253/255, 185/255, 19/255];   // #FDB913
+        const green = [0/255, 106/255, 68/255];      // #006A44
+        const red = [193/255, 39/255, 45/255];       // #C1272D
+    
+        const positions = [
+            // Franja amarilla (superior)
+            x, y, x + w, y, x, y + h3,
+            x + w, y, x + w, y + h3, x, y + h3,
+            // Franja verde (media)
+            x, y + h3, x + w, y + h3, x, y + 2*h3,
+            x + w, y + h3, x + w, y + 2*h3, x, y + 2*h3,
+            // Franja roja (inferior)
+            x, y + 2*h3, x + w, y + 2*h3, x, y + h,
+            x + w, y + 2*h3, x + w, y + h, x, y + h
+        ];
+    
+        const colors = [
+            ...new Array(6).fill(yellow).flat(),
+            ...new Array(6).fill(green).flat(),
+            ...new Array(6).fill(red).flat()
+        ];
+    
+        return { positions, colors };
+    },
+
+    luxembourg: (x, y, w, h) => {
+        const h3 = h / 3;
+        const red = [237/255, 41/255, 57/255];    // #ED2939
+        const white = [1, 1, 1];
+        const blue = [0/255, 161/255, 222/255];   // #00A1DE
+
+        return {
+            positions: [
+                x, y, x + w, y, x, y + h3, x + w, y, x + w, y + h3, x, y + h3,
+                x, y + h3, x + w, y + h3, x, y + 2*h3, x + w, y + h3, x + w, y + 2*h3, x, y + 2*h3,
+                x, y + 2*h3, x + w, y + 2*h3, x, y + h, x + w, y + 2*h3, x + w, y + h, x, y + h
+            ],
+            colors: [
+                ...new Array(6).fill(red).flat(),
+                ...new Array(6).fill(white).flat(),
+                ...new Array(6).fill(blue).flat()
+            ]
+        };
+    },
+
+    northMacedonia: (x, y, w, h) => {
+        const red = [210/255, 0, 0]; // #D20000
+        const yellow = [1, 1, 0];    // #FFFF00
+
+        // Fondo rojo (Correcto)
+        const positionsBG = [
+            x, y, x + w, y, x, y + h,
+            x + w, y, x + w, y + h, x, y + h
+        ];
+        const colorsBG = new Array(6).fill(red).flat();
+
+        // Sol amarillo: un círculo central y 8 rayos
+        const cx = x + w / 2;
+        const cy = y + h / 2;
+
+        // --- INICIO DE LA CORRECCIÓN ---
+
+        const radius = h * 0.18; // radio del círculo central
+        const gap = h * 0.025;   // <--- ¡NUEVO! Tamaño del espacio rojo entre círculo y rayos
+        const rayStartRadius = radius + gap; // <--- ¡NUEVO! Radio donde comienzan los rayos
+
+        // --- FIN DE LA CORRECCIÓN ---
+
+
+        const positionsSun = [];
+        const colorsSun = [];
+
+        // Círculo central (Usa el 'radius' original)
+        const segments = 32;
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x1 = cx + radius * Math.cos(a1); // <-- Usa 'radius'
+            const y1 = cy + radius * Math.sin(a1); // <-- Usa 'radius'
+            const x2 = cx + radius * Math.cos(a2); // <-- Usa 'radius'
+            const y2 = cy + radius * Math.sin(a2); // <-- Usa 'radius'
+
+            positionsSun.push(cx, cy, x1, y1, x2, y2);
+            colorsSun.push(...yellow, ...yellow, ...yellow);
+        }
+
+        // Rayos (8 rayos trapezoidales)
+        for (let i = 0; i < 8; i++) {
+            const angle = (i / 8) * Math.PI * 2; 
+            const angleWidth = (Math.PI / 32); 
+            
+            const a1 = angle - angleWidth; 
+            const a2 = angle + angleWidth; 
+            
+            // --- INICIO DE LA CORRECCIÓN ---
+
+            // Puntos en la base interna del trapezoide (ahora usan 'rayStartRadius')
+            const x_c1 = cx + rayStartRadius * Math.cos(a1); // <-- CORREGIDO
+            const y_c1 = cy + rayStartRadius * Math.sin(a1); // <-- CORREGIDO
+            const x_c2 = cx + rayStartRadius * Math.cos(a2); // <-- CORREGIDO
+            const y_c2 = cy + rayStartRadius * Math.sin(a2); // <-- CORREGIDO
+            
+            // --- FIN DE LA CORRECCIÓN ---
+
+
+            // Función para encontrar el punto de intersección con el borde
+            const findEdgePoint = (angle) => {
+                const c = Math.cos(angle);
+                const s = Math.sin(angle);
+                const dist_h = w / 2;
+                const dist_v = h / 2;
+                
+                let t_h = Infinity, t_v = Infinity;
+
+                if (Math.abs(c) > 1e-6) { 
+                    t_h = (c > 0) ? dist_h / c : -dist_h / c;
+                }
+                if (Math.abs(s) > 1e-6) {
+                    t_v = (s > 0) ? dist_v / s : -dist_v / s;
+                }
+                
+                const t = Math.min(t_h, t_v);
+                return { x: cx + t * c, y: cy + t * s };
+            };
+
+            // Puntos en el borde de la bandera (base externa del trapezoide)
+            const p_e1 = findEdgePoint(a1); 
+            const p_e2 = findEdgePoint(a2); 
+
+            // Crear el trapezoide con dos triángulos
+            positionsSun.push(
+                x_c1, y_c1, p_e1.x, p_e1.y, p_e2.x, p_e2.y,
+                x_c1, y_c1, p_e2.x, p_e2.y, x_c2, y_c2
+            );
+            colorsSun.push(...new Array(6).fill(yellow).flat());
+        }
+        
+        return {
+            positions: [...positionsBG, ...positionsSun],
+            colors: [...colorsBG, ...colorsSun]
+        };
+    },
 
     marshallIslands: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
