@@ -2360,6 +2360,90 @@ const flags = {
         return fn;
     })(),
 
+    egypt: (() => {
+        // Bandera de Egipto: roja-blanca-negra con escudo nacional centrado
+        const escudoImg = new Image();
+        escudoImg.src = 'Recursos_Renso/Escudo_Egipto.png';
+
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            // Colores oficiales de Egipto
+            const red = [206/255, 17/255, 38/255];    // #CE1126 - Rojo
+            const white = [1, 1, 1];                  // Blanco
+            const black = [0, 0, 0];                  // Negro
+
+            // Proporciones de las franjas: roja (1), blanca (1), negra (1)
+            const stripeH = h / 3;  // Cada franja ocupa 1/3 de la altura
+
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+
+            // Franja roja (superior)
+            pushRect(x, y, x + w, y + stripeH, red);
+            
+            // Franja blanca (media)
+            pushRect(x, y + stripeH, x + w, y + stripeH * 2, white);
+            
+            // Franja negra (inferior)
+            pushRect(x, y + stripeH * 2, x + w, y + h, black);
+
+            return { positions, colors };
+        };
+
+        // Overlay: dibujar el escudo nacional centrado en la franja blanca
+        fn.overlay = (ctx, x, y, w, h) => {
+            const stripeH = h / 3; // altura de cada franja
+            const escudoSize = Math.min(w, stripeH) * 1.0; // tamaño del escudo
+
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                const escudoW = escudoSize * ratio;
+                const escudoH = escudoSize;
+                
+                // Centrar el escudo horizontalmente y verticalmente en la franja blanca
+                const cx = x + w / 2;
+                const cy = y + stripeH + stripeH / 2; // Centro de la franja blanca
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+
+                ctx.save();
+                // Recortar al área de la franja blanca
+                ctx.beginPath();
+                ctx.rect(x, y + stripeH, w, stripeH);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(x, y + stripeH, w, stripeH);
+                    ctx.clip();
+                    drawEscudo();
+                    ctx.restore();
+                };
+            }
+        };
+
+        return fn;
+    })(),
+
     ecuador: (() => {
         // Bandera de Ecuador: amarillo-azul-rojo con escudo nacional centrado
         const escudoImg = new Image();
