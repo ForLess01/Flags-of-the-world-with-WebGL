@@ -2231,6 +2231,98 @@ const flags = {
     
         return fn;
     })(),
+
+    ethiopia: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+    
+            // Colores oficiales 🇪🇹
+            const green  = [0x00/255, 0x9A/255, 0x44/255]; // Verde
+            const yellow = [0xFF/255, 0xD1/255, 0x00/255]; // Amarillo
+            const red    = [0xEF/255, 0x33/255, 0x2A/255]; // Rojo
+    
+            const stripeH = h / 3;
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franjas horizontales
+            pushRect(x, y, x + w, y + stripeH, green);
+            pushRect(x, y + stripeH, x + w, y + 2 * stripeH, yellow);
+            pushRect(x, y + 2 * stripeH, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        fn.overlay = (ctx, x, y, w, h) => {
+            const centerX = x + w / 2;
+            const centerY = y + h / 2;
+            const circleR = h * 0.25;
+            const blue = "#0F47AF";
+            const yellow = "#FFD100";
+    
+            ctx.save();
+    
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, circleR, 0, Math.PI * 2);
+            ctx.fillStyle = blue;
+            ctx.fill();
+    
+            const outerR = circleR * 0.85;
+            const innerR = circleR * 0.35;
+            const points = 5;
+            const angleOffset = -Math.PI / 2;
+    
+            // Dibujar estrella completa con relleno azul y borde amarillo
+            ctx.beginPath();
+            for (let i = 0; i < points * 2; i++) {
+                const r = (i % 2 === 0) ? outerR : innerR;
+                const angle = angleOffset + (i * Math.PI) / points;
+                const px = centerX + Math.cos(angle) * r;
+                const py = centerY + Math.sin(angle) * r;
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            }
+            ctx.closePath();
+    
+            // Fondo azul dentro de la estrella
+            ctx.fillStyle = blue;
+            ctx.fill();
+    
+            // Borde amarillo (estrella delineada)
+            ctx.strokeStyle = yellow;
+            ctx.lineWidth = h * 0.012;
+            ctx.stroke();
+    
+            ctx.strokeStyle = yellow;
+            ctx.lineWidth = h * 0.007;
+            for (let i = 0; i < 5; i++) {
+                const angle = angleOffset + (i * 2 * Math.PI) / points;
+                const xEnd = centerX + Math.cos(angle) * outerR;
+                const yEnd = centerY + Math.sin(angle) * outerR;
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.lineTo(xEnd, yEnd);
+                ctx.stroke();
+            }
+    
+            ctx.restore();
+        };
+    
+        return fn;
+    })(),
+    
+    
     
     
 
