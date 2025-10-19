@@ -2191,6 +2191,47 @@ const flags = {
         return fn;
     })(),
     
+    estonia: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+    
+            // Colores oficiales de Estonia
+            const blue  = [0x00/255, 0x60/255, 0xB0/255]; // Azul (#0060B0)
+            const black = [0x00/255, 0x00/255, 0x00/255]; // Negro (#000000)
+            const white = [0xFF/255, 0xFF/255, 0xFF/255]; // Blanco (#FFFFFF)
+    
+            const stripeH = h / 3;
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franja superior: azul
+            pushRect(x, y, x + w, y + stripeH, blue);
+            // Franja del medio: negro
+            pushRect(x, y + stripeH, x + w, y + 2 * stripeH, black);
+            // Franja inferior: blanco
+            pushRect(x, y + 2 * stripeH, x + w, y + h, white);
+    
+            return { positions, colors };
+        };
+    
+        
+        fn.overlay = (ctx, x, y, w, h) => {
+        };
+    
+        return fn;
+    })(),
+    
     
 
     
