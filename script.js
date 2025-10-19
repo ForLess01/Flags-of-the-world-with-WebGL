@@ -1470,16 +1470,137 @@ const flags = {
             ]
         };
     },
-
+    
     marshallIslands: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
         colors: new Array(6).fill([0, 0.3, 0.6]).flat()
     }),
 
-    malaysia: (x, y, w, h) => ({
-        positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
-        colors: new Array(6).fill([0.8, 0.1, 0.2]).flat()
-    }),
+    malaysia: (x, y, w, h) => {
+        // Colores (los tuyos + amarillo)
+        const red = [187/255, 0, 0];    // #BB0000
+        const white = [1, 1, 1];
+        const blue = [0, 0, 139/255];   // #00008B
+        const yellow = [1, 252/255, 0]; // #FFFC00 (Amarillo brillante para los símbolos)
+
+        const positions = [];
+        const colors = [];
+        const stripeH = h / 14;
+
+        // --- CORRECCIÓN EN FRANJAS Y CANTÓN ---
+
+        // 1. Dibujar las 7 franjas inferiores (i = 7 a 13)
+        // Estas ocupan TODO el ancho
+        for (let i = 7; i < 14; i++) {
+            const y0 = y + i * stripeH;
+            const y1 = y0 + stripeH;
+            const stripeColor = i % 2 === 0 ? red : white; // La franja 0 (superior) es roja
+            positions.push(
+                x, y0, x + w, y0, x, y1,
+                x + w, y0, x + w, y1, x, y1
+            );
+            colors.push(...new Array(6).fill(stripeColor).flat());
+        }
+
+        // 2. Dibujar el Cantón Azul (Rectángulo corregido)
+        const cantonHeight = h / 2; // Correcto (cubre 7 franjas)
+        const cantonWidth = w / 2;  // CORREGIDO: Basado en el ancho 'w', no en 'h'
+        positions.push(
+            x, y, x + cantonWidth, y, x, y + cantonHeight,
+            x + cantonWidth, y, x + cantonWidth, y + cantonHeight, x, y + cantonHeight
+        );
+        colors.push(...new Array(6).fill(blue).flat());
+
+        // 3. Dibujar las 7 franjas superiores (i = 0 a 6)
+        // Estas solo ocupan la parte DERECHA (la "mosca"), desde el cantón hasta el final
+        for (let i = 0; i < 7; i++) {
+            const y0 = y + i * stripeH;
+            const y1 = y0 + stripeH;
+            const stripeColor = i % 2 === 0 ? red : white;
+            positions.push(
+                x + cantonWidth, y0, x + w, y0, x + cantonWidth, y1, // Empezar en x + cantonWidth
+                x + w, y0, x + w, y1, x + cantonWidth, y1
+            );
+            colors.push(...new Array(6).fill(stripeColor).flat());
+        }
+
+        // --- AÑADIR SÍMBOLOS (LUNA Y ESTRELLA) ---
+
+        // Centro de los símbolos (dentro del cantón)
+        // Ajustados ligeramente para que se parezcan a la bandera real
+        const cx = x + cantonWidth / 2.1; 
+        const cy = y + cantonHeight / 2;
+
+        const positionsSymbols = [];
+        const colorsSymbols = [];
+        const segments = 32; // Calidad para los círculos
+
+        // 4. Media Luna
+        // Se dibuja con el "método de recorte":
+        // 1. Dibuja un círculo amarillo grande.
+        // 2. Dibuja un círculo azul (color del fondo) más pequeño y desplazado encima.
+
+        const rOuterCrescent = h * 0.16; // Radio exterior
+        const rInnerCrescent = h * 0.15; // Radio interior (para el recorte)
+        const crescentCenterX = cx - w * 0.04; // Centro del círculo amarillo
+        const cutoutCenterX = crescentCenterX + w * 0.025; // Centro del círculo azul (recorte)
+
+        // Círculo exterior (Amarillo)
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x1 = crescentCenterX + rOuterCrescent * Math.cos(a1);
+            const y1 = cy + rOuterCrescent * Math.sin(a1);
+            const x2 = crescentCenterX + rOuterCrescent * Math.cos(a2);
+            const y2 = cy + rOuterCrescent * Math.sin(a2);
+            positionsSymbols.push(crescentCenterX, cy, x1, y1, x2, y2);
+            colorsSymbols.push(...yellow, ...yellow, ...yellow);
+        }
+
+        // Círculo interior (Azul - "Recorte")
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x1 = cutoutCenterX + rInnerCrescent * Math.cos(a1);
+            const y1 = cy + rInnerCrescent * Math.sin(a1);
+            const x2 = cutoutCenterX + rInnerCrescent * Math.cos(a2);
+            const y2 = cy + rInnerCrescent * Math.sin(a2);
+            positionsSymbols.push(cutoutCenterX, cy, x1, y1, x2, y2);
+            colorsSymbols.push(...blue, ...blue, ...blue); // Usar color del fondo
+        }
+        
+        // 5. Estrella de 14 puntas
+        const starPoints = 14;
+        const starSegments = starPoints * 2; // 2 vértices por punta (punta y valle)
+        const rStarOuter = h * 0.15; // Radio de las puntas
+        const rStarInner = h * 0.06; // Radio de los valles
+        const starCenterX = cx + w * 0.1; // Centro de la estrella (a la derecha de la luna)
+        const rotationOffset = Math.PI / 14; // Para rotar la estrella y que no quede una punta vertical
+
+        for (let i = 0; i < starSegments; i++) {
+            // Alternar radio exterior e interior
+            const r1 = (i % 2 === 0) ? rStarOuter : rStarInner;
+            const r2 = ((i + 1) % 2 === 0) ? rStarOuter : rStarInner;
+            
+            const a1 = (i / starSegments) * Math.PI * 2 + rotationOffset;
+            const a2 = ((i + 1) / starSegments) * Math.PI * 2 + rotationOffset;
+
+            const x1 = starCenterX + r1 * Math.cos(a1);
+            const y1 = cy + r1 * Math.sin(a1);
+            const x2 = starCenterX + r2 * Math.cos(a2);
+            const y2 = cy + r2 * Math.sin(a2);
+
+            // Triángulo desde el centro a los dos vértices
+            positionsSymbols.push(starCenterX, cy, x1, y1, x2, y2);
+            colorsSymbols.push(...yellow, ...yellow, ...yellow);
+        }
+
+        // Devolver todas las posiciones y colores combinados
+        return {
+            positions: [...positions, ...positionsSymbols],
+            colors: [...colors, ...colorsSymbols]
+        };
+    },
 
     mongolia: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
