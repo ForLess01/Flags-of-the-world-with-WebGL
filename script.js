@@ -1447,6 +1447,30 @@ const flags = {
         };
     },
 
+    madagascar: (x, y, w, h) => {
+        const w3 = w / 3;
+        const h2 = h / 2;
+        const white = [1, 1, 1];
+        const red = [252/255, 61/255, 50/255];  // #FC3D32
+        const green = [0, 149/255, 67/255];     // #009543
+
+        return {
+            positions: [
+                // Franja vertical blanca
+                x, y, x + w3, y, x, y + h, x + w3, y, x + w3, y + h, x, y + h,
+                // Franja horizontal roja (derecha superior)
+                x + w3, y, x + w, y, x + w3, y + h2, x + w, y, x + w, y + h2, x + w3, y + h2,
+                // Franja horizontal verde (derecha inferior)
+                x + w3, y + h2, x + w, y + h2, x + w3, y + h, x + w, y + h2, x + w, y + h, x + w3, y + h
+            ],
+            colors: [
+                ...new Array(6).fill(white).flat(),
+                ...new Array(6).fill(red).flat(),
+                ...new Array(6).fill(green).flat()
+            ]
+        };
+    },
+
     marshallIslands: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
         colors: new Array(6).fill([0, 0.3, 0.6]).flat()
