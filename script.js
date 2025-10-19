@@ -2368,6 +2368,7 @@ const flags = {
         return fn;
     })(),
 
+    
 egypt: (() => {
     const escudoImg = new Image();
     escudoImg.src = 'Recursos_Renso/Escudo_Egipto.png';
@@ -4508,15 +4509,317 @@ georgia: (() => {
 })(),
 
 
+togo: (x, y, w, h) => {
+        const w3 = w / 3;
+        return {
+            positions: [
+                x,y, x+w3,y, x,y+h, x+w3,y, x+w3,y+h, x,y+h,
+                x+w3,y, x+w3*2,y, x+w3,y+h, x+w3*2,y, x+w3*2,y+h, x+w3,y+h,
+                x+w3*2,y, x+w,y, x+w3*2,y+h, x+w,y, x+w,y+h, x+w3*2,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,0]).flat(),
+                ...new Array(6).fill([0.8,0,0]).flat()
+            ]
+        };
+    },
 
+    tonga: (x, y, w, h) => ({
+        positions: [x,y, x+w,y, x,y+h, x+w,y, x+w,y+h, x,y+h],
+        colors: new Array(6).fill([0.8,0,0]).flat()
+    }),
 
+    trinidadAndTobago: (x, y, w, h) => {
+        const h3 = h / 3;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h3, x+w,y, x+w,y+h3, x,y+h3,
+                x,y+h3, x+w,y+h3, x,y+h3*2, x+w,y+h3, x+w,y+h3*2, x,y+h3,
+                x,y+h3*2, x+w,y+h3*2, x,y+h, x+w,y+h3*2, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0.8,0.1,0.2]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0.1,0.5,0.2]).flat()
+            ]
+        };
+    },
 
+    tunisia: (x, y, w, h) => ({
+        positions: [x,y, x+w,y, x,y+h, x+w,y, x+w,y+h, x,y+h],
+        colors: new Array(6).fill([0.8,0,0]).flat()
+    }),
 
+    turkmenistan: (x, y, w, h) => {
+        const w5 = w / 5;
+        return {
+            positions: [
+                x,y, x+w5,y, x,y+h, x+w5,y, x+w5,y+h, x,y+h,
+                x+w5,y, x+w5*2,y, x+w5,y+h, x+w5*2,y, x+w5*2,y+h, x+w5,y+h,
+                x+w5*2,y, x+w5*3,y, x+w5*2,y+h, x+w5*3,y, x+w5*3,y+h, x+w5*2,y+h,
+                x+w5*3,y, x+w5*4,y, x+w5*3,y+h, x+w5*4,y, x+w5*4,y+h, x+w5*3,y+h,
+                x+w5*4,y, x+w,y, x+w5*4,y+h, x+w,y, x+w,y+h, x+w5*4,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0.8,0.1,0.2]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat()
+            ]
+        };
+    },
 
+    turkey: (x, y, w, h) => {
+        const positions = [x,y, x+w,y, x,y+h, x+w,y, x+w,y+h, x,y+h];
+        const colors = new Array(6).fill([0.89,0.15,0.21]).flat();
+        return { positions, colors };
+    },
 
+    tuvalu: (x, y, w, h) => ({
+        positions: [x,y, x+w,y, x,y+h, x+w,y, x+w,y+h, x,y+h],
+        colors: new Array(6).fill([0,0.2,0.6]).flat()
+    }),
 
+    ukraine: (x, y, w, h) => {
+        const h2 = h / 2;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h2, x+w,y, x+w,y+h2, x,y+h2,
+                x,y+h2, x+w,y+h2, x,y+h, x+w,y+h2, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,0]).flat()
+            ]
+        };
+    },
 
+    uganda: (x, y, w, h) => {
+        const h6 = h / 6;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h6, x+w,y, x+w,y+h6, x,y+h6,
+                x,y+h6, x+w,y+h6, x,y+h6*2, x+w,y+h6, x+w,y+h6*2, x,y+h6,
+                x,y+h6*2, x+w,y+h6*2, x,y+h6*3, x+w,y+h6*2, x+w,y+h6*3, x,y+h6,
+                x,y+h6*3, x+w,y+h6*3, x,y+h6*4, x+w,y+h6*3, x+w,y+h6*4, x,y+h6,
+                x,y+h6*4, x+w,y+h6*4, x,y+h6*5, x+w,y+h6*4, x+w,y+h6*5, x,y+h6,
+                x,y+h6*5, x+w,y+h6*5, x,y+h, x+w,y+h6*5, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,0]).flat(),
+                ...new Array(6).fill([0.8,0,0]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,0]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat()
+            ]
+        };
+    },
 
+    uruguay: (x, y, w, h) => {
+        const h9 = h / 9;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h9, x+w,y, x+w,y+h9, x,y+h9,
+                x,y+h9, x+w,y+h9, x,y+h9*2, x+w,y+h9, x+w,y+h9*2, x,y+h9,
+                x,y+h9*2, x+w,y+h9*2, x,y+h9*3, x+w,y+h9*2, x+w,y+h9*3, x,y+h9,
+                x,y+h9*3, x+w,y+h9*3, x,y+h9*4, x+w,y+h9*3, x+w,y+h9*4, x,y+h9,
+                x,y+h9*4, x+w,y+h9*4, x,y+h9*5, x+w,y+h9*4, x+w,y+h9*5, x,y+h9,
+                x,y+h9*5, x+w,y+h9*5, x,y+h9*6, x+w,y+h9*5, x+w,y+h9*6, x,y+h9,
+                x,y+h9*6, x+w,y+h9*6, x,y+h9*7, x+w,y+h9*6, x+w,y+h9*7, x,y+h9,
+                x,y+h9*7, x+w,y+h9*7, x,y+h9*8, x+w,y+h9*7, x+w,y+h9*8, x,y+h9,
+                x,y+h9*8, x+w,y+h9*8, x,y+h, x+w,y+h9*8, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat()
+            ]
+        };
+    },
+
+    uzbekistan: (x, y, w, h) => {
+        const h12 = h / 12;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h12, x+w,y, x+w,y+h12, x,y+h12,
+                x,y+h12, x+w,y+h12, x,y+h12*2, x+w,y+h12, x+w,y+h12*2, x,y+h12,
+                x,y+h12*2, x+w,y+h12*2, x,y+h12*3, x+w,y+h12*2, x+w,y+h12*3, x,y+h12,
+                x,y+h12*3, x+w,y+h12*3, x,y+h12*4, x+w,y+h12*3, x+w,y+h12*4, x,y+h12,
+                x,y+h12*4, x+w,y+h12*4, x,y+h12*5, x+w,y+h12*4, x+w,y+h12*5, x,y+h12,
+                x,y+h12*5, x+w,y+h12*5, x,y+h12*6, x+w,y+h12*5, x+w,y+h12*6, x,y+h12,
+                x,y+h12*6, x+w,y+h12*6, x,y+h12*7, x+w,y+h12*6, x+w,y+h12*7, x,y+h12,
+                x,y+h12*7, x+w,y+h12*7, x,y+h12*8, x+w,y+h12*7, x+w,y+h12*8, x,y+h12,
+                x,y+h12*8, x+w,y+h12*8, x,y+h12*9, x+w,y+h12*8, x+w,y+h12*9, x,y+h12,
+                x,y+h12*9, x+w,y+h12*9, x,y+h12*10, x+w,y+h12*9, x+w,y+h12*10, x,y+h12,
+                x,y+h12*10, x+w,y+h12*10, x,y+h12*11, x+w,y+h12*10, x+w,y+h12*11, x,y+h12,
+                x,y+h12*11, x+w,y+h12*11, x,y+h, x+w,y+h12*11, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,1]).flat()
+            ]
+        };
+    },
+
+    vanuatu: (x, y, w, h) => ({
+        positions: [x,y, x+w,y, x,y+h, x+w,y, x+w,y+h, x,y+h],
+        colors: new Array(6).fill([0.8,0.1,0.2]).flat()
+    }),
+
+    venezuela: (x, y, w, h) => {
+        const h3 = h / 3;
+        return {
+            positions: [
+            x,y, x+w,y, x,y+h3, x+w,y, x+w,y+h3, x,y+h3,
+            x,y+h3, x+w,y+h3, x,y+h3*2, x+w,y+h3, x+w,y+h3*2, x,y+h3,
+            x,y+h3*2, x+w,y+h3*2, x,y+h, x+w,y+h3*2, x+w,y+h, x,y+h
+            ],
+            colors: [
+            ...new Array(6).fill([1,1,0]).flat(),
+            ...new Array(6).fill([0,0.4,0.8]).flat(),
+            ...new Array(6).fill([0.8,0,0]).flat()
+            ]
+        };
+        },
+
+    vietnam: (x, y, w, h) => {
+        const positions = [
+            x,y,
+            x + w,y,
+            x,y + h,
+            x + w,y,
+            x + w,y + h,
+            x,y + h,
+        ];
+        const redColor = [218 / 255, 18 / 255, 26 / 255];
+        const colors = [...Array(6).fill(redColor).flat()];
+
+        // Estrella amarilla de 5 puntas
+        const [cx, cy, r1, r2] = [x + w / 2, y + h / 2, h * 0.25, h * 0.1]; //definimos los radios para las puntas externas
+        const yellow = [1, 0.84, 0]; // [255/255, 215/255, 0/255];
+        //se divide entre 255 porque los colores en webGL van de 0 a 1 y especifico es 255 porque es el maximo valor en RGB
+        for (let i = 0; i < 5; i++) {
+            const a1 = Math.PI / 2 + (i * 2 * Math.PI) / 5; //angulo inicial de cada punta, distancia entre cada punta
+            // 1er: 90 grados
+            const a2 = a1 + Math.PI / 5; //Aqui es porque en PI debe de haber 5 triangulos
+            // 2do: 90 + 36 = 126 grados
+            positions.push(
+            cx,
+            cy,
+            cx + r1 * Math.cos(a1),
+            cy - r1 * Math.sin(a1), //punta mas larga
+            cx + r2 * Math.cos(a2),
+            cy - r2 * Math.sin(a2) //punta mas corta
+            );
+            colors.push(...yellow, ...yellow, ...yellow);
+        }
+        for (let i = 0; i < 5; i++) {
+            const b1 = Math.PI / 2 + (i * 2 * Math.PI) / 5; //angulo inicial de cada punta, distancia entre cada punta
+            // 1er: 90 grados
+            const b2 = b1 - Math.PI / 5; //Aqui es porque en PI debe de haber 5 triangulos
+            // 2do: 90 + 36 = 126 grados
+            positions.push(
+            cx,
+            cy,
+            cx + r1 * Math.cos(b1),// Fórmula de conversión polar -> cartesiano
+            cy - r1 * Math.sin(b1), //punta mas larga
+            cx + r2 * Math.cos(b2),
+            cy - r2 * Math.sin(b2) //punta mas corta
+            );
+            colors.push(...yellow, ...yellow, ...yellow); //spread
+        }
+        return {
+            positions,
+            colors,
+        };
+    },
+
+    yemen: (x, y, w, h) => {
+        const h3 = h / 3;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h3,
+                x+w,y, x+w,y+h3, x,y+h3,
+                x,y+h3, x+w,y+h3, x,y+h3*2,
+                x+w,y+h3, x+w,y+h3*2, x,y+h3*2,
+                x,y+h3*2, x+w,y+h3*2, x,y+h,
+                x+w,y+h3*2, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0.8,0,0]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0,0]).flat()
+            ]
+        };
+    },
+
+    zambia: (x, y, w, h) => {
+        const v=(w*0.3426)/3;
+        const hA=h*0.6402;
+        const hB=h-hA;
+        const wA=w-(v*3);
+        return {
+            positions: [
+                x,y,x+w,y,x,y+h,x+w,y,x+w,y+h,x,y+h,//grande
+                x+wA,y+hB,x+wA+v,y+hB,x+wA,y+h,//rojitos
+                x+wA+v,y+hB,x+wA+v,y+h,x+wA,y+h,//rojitos
+                x+wA+v,y+hB,x+wA+v*2,y+hB,x+wA+v,y+h, //negritos
+                x+wA+v*2,y+hB,x+wA+v*2,y+h,x+wA+v,y+h,//negritos
+                x+wA+v*2,y+hB,x+wA+v*3,y+hB,x+wA+v*2,y+h,//amarillos
+                x+wA+v*3,y+hB,x+wA+v*3,y+h,x+wA+v*2,y+h //negritos
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([0.8,0.1,0.2]).flat(),
+                ...new Array(6).fill([0,0,0]).flat(),
+                ...new Array(12).fill([0.9412,0.4902,0]).flat()
+                //239/255=0.9412, 125/255=0.4902, 0/255=0
+            ]
+        };
+    },
+
+    zimbabwe: (x, y, w, h) => {
+        const h7 = h / 7;
+        return {
+            positions: [
+                x,y, x+w,y, x,y+h7, x+w,y, x+w,y+h7, x,y+h7,
+                x,y+h7, x+w,y+h7, x,y+h7*2, x+w,y+h7, x+w,y+h7*2, x,y+h7,
+                x,y+h7*2, x+w,y+h7*2, x,y+h7*3, x+w,y+h7*2, x+w,y+h7*3, x,y+h7,
+                x,y+h7*3, x+w,y+h7*3, x,y+h7*4, x+w,y+h7*3, x+w,y+h7*4, x,y+h7,
+                x,y+h7*4, x+w,y+h7*4, x,y+h7*5, x+w,y+h7*4, x+w,y+h7*5, x,y+h7,
+                x,y+h7*5, x+w,y+h7*5, x,y+h7*6, x+w,y+h7*5, x+w,y+h7*6, x,y+h7,
+                x,y+h7*6, x+w,y+h7*6, x,y+h, x+w,y+h7*6, x+w,y+h, x,y+h
+            ],
+            colors: [
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,0]).flat(),
+                ...new Array(6).fill([0.8,0,0]).flat(),
+                ...new Array(6).fill([0,0.4,0]).flat(),
+                ...new Array(6).fill([1,1,1]).flat(),
+                ...new Array(6).fill([0,0.4,0.8]).flat(),
+                ...new Array(6).fill([1,1,0]).flat()
+            ]
+        };
+    }
 
 };
 
