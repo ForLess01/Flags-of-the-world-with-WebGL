@@ -2166,6 +2166,57 @@ nigeria: (() => {
     return fn;
 })(),
 
+norway: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const white = [1.0, 1.0, 1.0];
+        const blue  = [0.0, 0.19, 0.57];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        // Proporciones oficiales simplificadas (unidades):
+        // Horizontal: 6 (rojo) + 1 (blanco) + 2 (azul) + 1 (blanco) + 12 (rojo)
+        // Vertical:   6 (rojo) + 1 (blanco) + 2 (azul) + 1 (blanco) + 6 (rojo)
+        const unitX = w / 22;
+        const unitY = h / 16;
+
+        // Fondo rojo
+        pushRect(x, y, x + w, y + h, red);
+
+        // Bandas blancas
+        // Vertical blanca centrando la azul (x = 6u a 6u+4u)
+        const whiteVx0 = x + 6 * unitX;
+        const whiteVx1 = x + 10 * unitX; // 1u blanco + 2u azul + 1u blanco
+        pushRect(whiteVx0, y, whiteVx1, y + h, white);
+        // Horizontal blanca (y = 6u a 6u+4u)
+        const whiteHy0 = y + 6 * unitY;
+        const whiteHy1 = y + 10 * unitY;
+        pushRect(x, whiteHy0, x + w, whiteHy1, white);
+
+        // Bandas azules al centro de las blancas (2u de ancho)
+        const blueVx0 = x + 7 * unitX;
+        const blueVx1 = x + 9 * unitX;
+        pushRect(blueVx0, y, blueVx1, y + h, blue);
+        const blueHy0 = y + 7 * unitY;
+        const blueHy1 = y + 9 * unitY;
+        pushRect(x, blueHy0, x + w, blueHy1, blue);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {};
+
+    return fn;
+})(),
 
 
 
