@@ -1892,6 +1892,47 @@ const flags = {
 
         return fn;
     })(),
+
+    uae: (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+        
+        // Colores oficiales de Emiratos Árabes Unidos
+        const red = [206/255, 17/255, 38/255];    // #CE1126 - Rojo
+        const green = [0/255, 122/255, 61/255];   // #007A3D - Verde
+        const white = [1, 1, 1];                  // Blanco
+        const black = [0, 0, 0];                  // Negro
+
+        // Proporciones: franja vertical roja (1/4 del ancho) + tres franjas horizontales (1/3 cada una)
+        const redW = w * 0.25;  // 25% del ancho para la franja roja vertical
+        const stripeH = h / 3;  // Cada franja horizontal ocupa 1/3 de la altura
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja vertical roja (asta)
+        pushRect(x, y, x + redW, y + h, red);
+        
+        // Franja horizontal verde (superior)
+        pushRect(x + redW, y, x + w, y + stripeH, green);
+        
+        // Franja horizontal blanca (media)
+        pushRect(x + redW, y + stripeH, x + w, y + stripeH * 2, white);
+        
+        // Franja horizontal negra (inferior)
+        pushRect(x + redW, y + stripeH * 2, x + w, y + h, black);
+
+        return { positions, colors };
+    },
     
 };
 
