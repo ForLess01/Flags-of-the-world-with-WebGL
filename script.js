@@ -2427,7 +2427,7 @@ pakistan: (() => {
             ctx.fill();
         };
 
-        drawStar(ctx, cx + rMoon*1.2, cy - 120, rStar);
+        drawStar(ctx, cx + rMoon*1.2, cy - rMoon*0.5, rStar);
 
         ctx.restore();
     };
