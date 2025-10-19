@@ -7,20 +7,17 @@ on:
 jobs:
   auto-assign:
     runs-on: ubuntu-latest
-
     permissions:
-      contents: read           # necesario para actions/checkout
-      pull-requests: write     # permite editar/asignar el PR
-
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      contents: read
+      pull-requests: write # El permiso sigue siendo necesario
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+      # Ya no necesitas el paso de checkout para esta acción
+      # - uses: actions/checkout@v4
 
-      - name: Asignar PR al autor y a tu usuario
-        run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.actor }},ForLess01"
+      - name: Asignar PR
+        uses: wow-actions/auto-assign@v1
+        with:
+          # Se asignará únicamente a ForLess01
+          assignees: ForLess01
+
