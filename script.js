@@ -2789,8 +2789,8 @@ namibia: (() => {
         const diagLength = Math.sqrt(w * w + h * h);
         const perpVec = [h / diagLength, w / diagLength];
 
-		// Anchuras de las franjas (proporciones basadas en la altura)
-		const totalStripeWidth = h * 0.25;
+        // Anchuras de las franjas (proporciones basadas en la altura)
+        const totalStripeWidth = h * 0.25;
 		// Hacer el rojo un poco más ancho y el blanco un poco más delgado
 		const whiteStripeWidth = totalStripeWidth * 0.20; // antes: 0.25
 		const redStripeWidth = totalStripeWidth - 2 * whiteStripeWidth; // ≈ 0.60 del total
@@ -2984,7 +2984,7 @@ nigeria: (() => {
         const white = [1.0, 1.0, 1.0];
 
         const pushRect = (x0, y0, x1, y1, color) => {
-            positions.push(
+        positions.push(
                 x0, y0, x1, y0, x0, y1,
                 x1, y0, x1, y1, x0, y1
             );
@@ -3044,7 +3044,8 @@ norway: (() => {
         const unitY = h / 16;
 
         // Fondo rojo
-        pushRect(x, y, x + w, y + h, red);
+        // Fondo azul (campo de la bandera)
+        pushRect(x, y, x + w, y + h, blue);
 
         // Bandas blancas
         // Vertical blanca centrando la azul (x = 6u a 6u+4u)
@@ -3071,6 +3072,449 @@ norway: (() => {
 
     return fn;
 })(),
+newZealand: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [200/255, 16/255, 46/255];   // #C8102E
+        const white = [1.0, 1.0, 1.0];            // #FFFFFF
+        const blue  = [1/255, 33/255, 105/255];   // #012169 (campo y cantón)
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        // Fondo azul del pabellón
+        pushRect(x, y, x + w, y + h, blue);
+
+        // Union Jack en el cantón: ancho 1/2 y alto 1/2 del pabellón
+        const unionW = w * 0.5;
+        const unionH = h * 0.5;
+        const ux = x;
+        const uy = y;
+
+        const drawUnionJack = (ctx, ux, uy, unionW, unionH) => {
+            ctx.save();
+            ctx.translate(ux, uy);
+            // Fondo azul del cantón (color CSS)
+            ctx.fillStyle = '#012169';
+            ctx.fillRect(0, 0, unionW, unionH);
+
+            // Recortar todo lo que se dibuje del Union Jack al rectángulo del cantón
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(0, 0, unionW, unionH);
+            ctx.clip();
+            ctx.lineCap = 'butt';
+
+            // Diagonales blancas (ligeramente más delgadas)
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = unionH * 0.10;
+            ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(unionW, unionH);
+            ctx.moveTo(unionW, 0); ctx.lineTo(0, unionH);
+            ctx.stroke();
+
+            // Diagonales rojas centradas sobre blancas (más delgadas)
+            ctx.strokeStyle = '#C8102E';
+            ctx.lineWidth = unionH * 0.05;
+        ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(unionW, unionH);
+            ctx.moveTo(unionW, 0); ctx.lineTo(0, unionH);
+            ctx.stroke();
+
+            // Cruces ortogonales (blanca gruesa, luego roja más estrecha)
+            // Vertical/Horiz blanca con recorte al rectángulo del cantón
+            ctx.fillStyle = '#FFFFFF';
+            const whiteBarW = unionW * 0.16;
+            const whiteBarH = unionH * 0.16;
+            ctx.fillRect(unionW/2 - whiteBarW/2, 0, whiteBarW, unionH);
+            ctx.fillRect(0, unionH/2 - whiteBarH/2, unionW, whiteBarH);
+            // Roja
+            ctx.fillStyle = '#C8102E';
+            const redBarW = whiteBarW * 0.62;
+            const redBarH = whiteBarH * 0.62;
+            ctx.fillRect(unionW/2 - redBarW/2, 0, redBarW, unionH);
+            ctx.fillRect(0, unionH/2 - redBarH/2, unionW, redBarH);
+
+            ctx.restore(); // fin clip cantón
+            ctx.restore();
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            drawUnionJack(ctx, ux, uy, unionW, unionH);
+
+            // Estrellas (Crux) posiciones y tamaños aproximados a la especificación
+            const stars = [
+                { cx: x + w * 0.80, cy: y + h * 0.20, R: h * 0.052 }, // top-left of cluster
+                { cx: x + w * 0.90, cy: y + h * 0.35, R: h * 0.042 }, // small upper-right
+                { cx: x + w * 0.69, cy: y + h * 0.42, R: h * 0.060 }, // middle
+                { cx: x + w * 0.80, cy: y + h * 0.73, R: h * 0.082 }  // largest bottom-right
+            ];
+
+            const drawStarPath = (cx, cy, rOuter, rInner = rOuter * 0.5, points = 5) => {
+            ctx.beginPath();
+                for (let i = 0; i < points * 2; i++) {
+                    const angle = Math.PI / points * i - Math.PI / 2;
+                    const radius = (i % 2 === 0) ? rOuter : rInner;
+                    const px = cx + Math.cos(angle) * radius;
+                    const py = cy + Math.sin(angle) * radius;
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            ctx.closePath();
+            };
+
+            ctx.save();
+            for (const s of stars) {
+                // Trazo blanco (borde)
+                drawStarPath(s.cx, s.cy, s.R, s.R * 0.5);
+                ctx.lineWidth = s.R * 0.18;
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.stroke();
+                // Relleno rojo
+                drawStarPath(s.cx, s.cy, s.R, s.R * 0.5);
+                ctx.fillStyle = '#C8102E';
+            ctx.fill();
+        }
+        ctx.restore();
+        };
+
+        return { positions, colors };
+    };
+
+    return fn;
+})(),
+
+
+oman: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const white = [1.0, 1.0, 1.0];
+        const green = [0.0, 0.56, 0.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const sideW = w * 0.25;
+        const stripeH = h / 2;
+        const redH = h * 0.29; 
+
+        pushRect(x, y, x + sideW, y + h, red);
+        pushRect(x + sideW, y, x + w, y + stripeH - redH/2, white);
+        pushRect(x + sideW, y + stripeH - redH/2, x + w, y + stripeH + redH/2, red);
+        pushRect(x + sideW, y + stripeH + redH/2, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {};
+
+    return fn;
+})(),
+
+pakistan: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const green = [0.0, 0.39, 0.0];
+        const white = [1.0, 1.0, 1.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const sideW = w * 0.25;
+
+        pushRect(x, y, x + sideW, y + h, white);
+        pushRect(x + sideW, y, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const sideW = w * 0.25;
+        const cx = x + sideW + (w - sideW) * 0.45;
+        const cy = y + h / 2;
+        const rMoon = h * 0.18; // tamaño media luna
+        const rStar = h * 0.08; // tamaño estrella
+
+        ctx.save();
+        ctx.fillStyle = 'white';
+
+        // Media luna rotada
+        ctx.translate(cx, cy);
+        ctx.rotate(-Math.PI/9); // rotar -20 grados
+        ctx.beginPath();
+        ctx.arc(0, 0, rMoon, 0.3 * Math.PI, 1.7 * Math.PI, false);
+        ctx.arc(rMoon*0.3, 0, rMoon*0.7, 1.7 * Math.PI, 0.3 * Math.PI, true);
+        ctx.closePath();
+        ctx.fill();
+        ctx.setTransform(1,0,0,1,0,0); // reset transform
+
+        // Estrella de 5 puntas afuera de la luna
+        const drawStar = (ctx, cx, cy, rOuter, rInner = rOuter*0.5, points=5) => {
+            ctx.beginPath();
+            for (let i = 0; i < points*2; i++) {
+                const angle = Math.PI / points * i - Math.PI/2;
+                const radius = i % 2 === 0 ? rOuter : rInner;
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        drawStar(ctx, cx + rMoon*1.2, cy - rMoon*0.5, rStar);
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+palau: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const blue = [0.0, 0.71, 0.92];
+        const yellow = [1.0, 0.87, 0.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        pushRect(x, y, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const cx = x + w * 0.45; // círculo ligeramente desplazado a la izquierda
+        const cy = y + h / 2;
+        const r = h * 0.3;
+
+        ctx.save();
+        ctx.fillStyle = '#FFD700'; // amarillo
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+palestine: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const black = [0.0, 0.0, 0.0];
+        const white = [1.0, 1.0, 1.0];
+        const green = [0.0, 0.56, 0.0];
+        const red   = [0.84, 0.0, 0.09];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const stripeH = h / 3;
+        pushRect(x, y, x + w, y + stripeH, black);
+        pushRect(x, y + stripeH, x + w, y + 2*stripeH, white);
+        pushRect(x, y + 2*stripeH, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+        ctx.fillStyle = '#D60000'; // rojo
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + w * 0.35, y + h / 2);
+        ctx.lineTo(x, y + h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+panama: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const blue  = [0.0, 0.19, 0.57];
+        const white = [1.0, 1.0, 1.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const halfW = w / 2;
+        const halfH = h / 2;
+
+        pushRect(x, y, x + halfW, y + halfH, white); // sup izq
+        pushRect(x + halfW, y, x + w, y + halfH, red); // sup der
+        pushRect(x, y + halfH, x + halfW, y + h, blue); // inf izq
+        pushRect(x + halfW, y + halfH, x + w, y + h, white); // inf der
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const halfW = w / 2;
+        const halfH = h / 2;
+        const rStar = Math.min(w, h) * 0.07;
+
+        const drawStar = (ctx, cx, cy, rOuter, rInner = rOuter*0.382, points=5) => {
+            ctx.beginPath();
+            for (let i = 0; i < points*2; i++) {
+                const angle = Math.PI / points * i - Math.PI/2; // 0° arriba
+                const radius = i % 2 === 0 ? rOuter : rInner;
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        ctx.save();
+
+        ctx.fillStyle = 'blue';
+        drawStar(ctx, x + halfW/2, y + halfH/2, rStar); // estrella sup izq
+
+        ctx.fillStyle = 'red';
+        drawStar(ctx, x + halfW + halfW/2, y + halfH + halfH/2, rStar); // estrella inf der
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+papuaNewGuinea: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red = [0.84, 0.0, 0.09];
+        const black = [0.0, 0.0, 0.0];
+
+        // Triángulo negro (inferior izquierda)
+        positions.push(
+            x, y + h,
+            x, y,
+            x + w, y + h
+        );
+        colors.push(...Array(3).fill(black).flat());
+
+        // Triángulo rojo (superior derecha)
+        positions.push(
+            x, y,
+            x + w, y,
+            x + w, y + h
+        );
+        colors.push(...Array(3).fill(red).flat());
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+        ctx.fillStyle = 'white';
+
+        const drawStar = (ctx, cx, cy, rOuter, rInner = rOuter*0.382, points=5) => {
+            ctx.beginPath();
+            for (let i = 0; i < points*2; i++) {
+                const angle = Math.PI / points * i - Math.PI/2;
+                const radius = i % 2 === 0 ? rOuter : rInner;
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        // Posiciones de la Cruz del Sur (triángulo negro)
+            const starData = [
+        [x + w*0.23, y + h*0.36, h*0.05],  // estrella grande
+        [x + w*0.30, y + h*0.48, h*0.05],
+        [x + w*0.15, y + h*0.50, h*0.045],
+        [x + w*0.25, y + h*0.75, h*0.045],
+        [x + w*0.27, y + h*0.63, h*0.035]
+    ];
+
+        for (let [cx, cy, r] of starData) {
+            drawStar(ctx, cx, cy, r);
+        }
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+paraguay: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const white = [1.0, 1.0, 1.0];
+        const blue  = [0.0, 0.19, 0.57];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const stripeH = h / 3;
+        pushRect(x, y, x + w, y + stripeH, red);
+        pushRect(x, y + stripeH, x + w, y + 2*stripeH, white);
+        pushRect(x, y + 2*stripeH, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+
+    return fn;
+})(),
+
 
 
 
