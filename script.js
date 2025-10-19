@@ -1725,7 +1725,276 @@ const flags = {
 
         return fn;
     })(),
-    
+
+    netherlands: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red = [174 / 255, 28 / 255, 40 / 255];   // #AE1C28
+        const white = [1, 1, 1];                       // Blanco
+        const blue = [33 / 255, 70 / 255, 139 / 255];  // #21468B
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Rojo arriba
+        pushRect(x, y, x + w, y + stripeH, red);
+        // Blanco centro
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, white);
+        // Azul abajo
+        pushRect(x, y + 2 * stripeH, x + w, y + 3 * stripeH, blue);
+
+        return { positions, colors };
+    };
+
+    return fn;
+})(),
+
+niger: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales aproximados
+        const orange = [1.0, 0.4, 0.0]; // #FF7F00
+        const white  = [1.0, 1.0, 1.0];
+        const green  = [0.0, 0.6, 0.2]; // #009E49
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Naranja arriba
+        pushRect(x, y, x + w, y + stripeH, orange);
+        // Blanco medio
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, white);
+        // Verde abajo
+        pushRect(x, y + 2 * stripeH, x + w, y + 3 * stripeH, green);
+
+        return { positions, colors };
+    };
+
+    // Overlay: círculo naranja centrado en la franja blanca
+    fn.overlay = (ctx, x, y, w, h) => {
+        const stripeH = h / 3;
+        const cx = x + w / 2;
+        const cy = y + stripeH * 1.5; // centro de la franja blanca
+        const radius = stripeH * 0.35;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#FF7F00';
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+mozambique: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores normalizados
+        const green  = [0.0, 0.52, 0.27]; // verde
+        const black  = [0.0, 0.0, 0.0];   // negro
+        const yellow = [1.0, 0.8, 0.0];   // amarillo
+        const red    = [0.78, 0.13, 0.17]; // triángulo rojo
+        const white  = [1.0, 1.0, 1.0];   // blanco (fimbrias)
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Parámetros de franjas
+        const whiteThick = h * 0.02;
+        const stripeH = (h - 2 * whiteThick) / 3;
+
+        // Franja verde (superior)
+        pushRect(x, y, x + w, y + stripeH, green);
+
+        // Franja blanca
+        pushRect(x, y + stripeH, x + w, y + stripeH + whiteThick, white);
+
+        // Franja negra (centro)
+        pushRect(x, y + stripeH + whiteThick, x + w, y + 2 * stripeH + whiteThick, black);
+
+        // Franja blanca
+        pushRect(x, y + 2 * stripeH + whiteThick, x + w, y + 2 * stripeH + 2 * whiteThick, white);
+
+        // Franja amarilla (inferior)
+        pushRect(x, y + 2 * stripeH + 2 * whiteThick, x + w, y + h, yellow);
+
+        // Triángulo rojo (lado izquierdo)
+        const triW = w * 0.35;
+        positions.push(
+            x, y,
+            x + triW, y + h / 2,
+            x, y + h,
+            x, y,
+            x + triW, y + h / 2,
+            x, y + h
+        );
+        colors.push(...red, ...red, ...red, ...red, ...red, ...red);
+
+        return { positions, colors };
+    };
+
+    // --- Overlay: estrella amarilla en el triángulo ---
+    fn.overlay = (ctx, x, y, w, h) => {
+  const triW = w * 0.35;
+  const cx = x + triW * 0.30;     // un poco hacia la derecha en el triángulo
+  const cy = y + h / 2;           // verticalmente centro
+  const R  = triW * 0.30;         // radio exterior de la estrella
+  const r  = R * 0.382;           // radio interior
+
+  ctx.save();
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const ang = -Math.PI/2 + i * (Math.PI/5);
+    const rr = (i % 2 === 0) ? R : r;
+    const px = cx + Math.cos(ang) * rr;
+    const py = cy + Math.sin(ang) * rr;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fillStyle = '#f2c500'; // color amarillo de la estrella
+  ctx.fill();
+  ctx.restore();
+};
+
+    return fn;
+})(),
+
+namibia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const blue  = [0.0, 0.21, 0.50];   // #003580
+        const red   = [0.82, 0.06, 0.20];  // #D21034
+        const green = [0.0, 0.58, 0.26];   // #009543
+        const white = [1.0, 1.0, 1.0];     // Blanco
+
+        // --- Funciones auxiliares ---
+        const pushTriangle = (coords, color) => {
+            positions.push(...coords);
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        // --- Fondo dividido en azul (superior izq) y verde (inferior der) ---
+        pushTriangle([
+            x, y,          // esquina superior izquierda
+            x + w, y,      // esquina superior derecha
+            x, y + h       // esquina inferior izquierda
+        ], blue);
+
+        pushTriangle([
+            x + w, y,      // superior derecha
+            x + w, y + h,  // inferior derecha
+            x, y + h       // inferior izquierda
+        ], green);
+
+        // --- Franja diagonal blanca + roja ---
+        const stripeW = h * 0.18;  // ancho total de la franja blanca
+        const redW = h * 0.10;     // ancho de la franja roja
+        const slope = h / w;
+
+        // Franja blanca
+        pushRect(
+            x - stripeW, y + stripeW * slope,
+            x + w + stripeW, y + h + stripeW * slope,
+            white
+        );
+
+        // Franja roja
+        pushRect(
+            x - redW, y + redW * slope,
+            x + w + redW, y + h + redW * slope,
+            red
+        );
+
+        return { positions, colors };
+    };
+
+    // --- Sol amarillo con 12 rayos ---
+    fn.overlay = (ctx, x, y, w, h) => {
+        const cx = x + w * 0.20;
+        const cy = y + h * 0.20;
+        const outerR = h * 0.09;
+        const innerR = outerR * 0.45;
+
+        ctx.save();
+        ctx.beginPath();
+        for (let i = 0; i < 24; i++) {
+            const ang = (i * Math.PI) / 12;
+            const r = (i % 2 === 0) ? outerR : innerR;
+            const px = cx + Math.cos(ang) * r;
+            const py = cy + Math.sin(ang) * r;
+            if (i === 0) ctx.moveTo(px, py);
+            else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fillStyle = '#FFCE00'; // amarillo
+        ctx.fill();
+
+        // Círculo central
+        ctx.beginPath();
+        ctx.arc(cx, cy, outerR * 0.55, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
 };
 
 // Placeholder para banderas sin implementación
