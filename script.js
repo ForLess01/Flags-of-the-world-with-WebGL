@@ -2337,6 +2337,42 @@ newZealand: (() => {
 })(),
 
 
+oman: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const white = [1.0, 1.0, 1.0];
+        const green = [0.0, 0.56, 0.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const sideW = w * 0.25;
+        const stripeH = h / 2;
+        const redH = h * 0.29; 
+
+        pushRect(x, y, x + sideW, y + h, red);
+        pushRect(x + sideW, y, x + w, y + stripeH - redH/2, white);
+        pushRect(x + sideW, y + stripeH - redH/2, x + w, y + stripeH + redH/2, red);
+        pushRect(x + sideW, y + stripeH + redH/2, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {};
+
+    return fn;
+})(),
+
+
+
 
 };
 
