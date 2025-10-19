@@ -1,31 +1,26 @@
-# .github/workflows/auto-assign.yml
-
-# Nombre del workflow que aparecerá en la pestaña "Actions"
 name: Auto Asignar PRs
 
-# Evento que dispara el workflow: cuando se abre un Pull Request
 on:
   pull_request:
     types: [opened]
 
-# Tareas a ejecutar
 jobs:
   auto-assign:
-    # Usar la última versión de Ubuntu
     runs-on: ubuntu-latest
-    
-    # Permisos necesarios para que la acción pueda modificar el PR
+
     permissions:
-      pull-requests: write
+      contents: read           # necesario para actions/checkout
+      pull-requests: write     # permite editar/asignar el PR
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - name: Asignar PR al autor y a Copilot
-        # Usamos la CLI de GitHub (gh) que ya viene preinstalada
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Asignar PR al autor y a tu usuario
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.actor }},Copilot"
-        env:
-          # El token es necesario para autenticar la solicitud a la API de GitHub
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          # El actor es quien abrió el PR, pero lo cambiamos a tu usuario fijo
-          # Dejamos github.actor por si alguien más abre un PR, se le asigne también.
-          # Si solo quieres que se te asigne a ti, cambia ${{ github.actor }} por ForLess01
+          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.actor }},ForLess01"
