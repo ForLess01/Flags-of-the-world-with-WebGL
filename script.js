@@ -2435,6 +2435,42 @@ pakistan: (() => {
     return fn;
 })(),
 
+palau: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const blue = [0.0, 0.71, 0.92];
+        const yellow = [1.0, 0.87, 0.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        pushRect(x, y, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const cx = x + w * 0.45; // círculo ligeramente desplazado a la izquierda
+        const cy = y + h / 2;
+        const r = h * 0.3;
+
+        ctx.save();
+        ctx.fillStyle = '#FFD700'; // amarillo
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
 
 
 
