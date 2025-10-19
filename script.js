@@ -2513,6 +2513,64 @@ palestine: (() => {
     return fn;
 })(),
 
+panama: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [0.84, 0.0, 0.09];
+        const blue  = [0.0, 0.19, 0.57];
+        const white = [1.0, 1.0, 1.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const halfW = w / 2;
+        const halfH = h / 2;
+
+        pushRect(x, y, x + halfW, y + halfH, white); // sup izq
+        pushRect(x + halfW, y, x + w, y + halfH, red); // sup der
+        pushRect(x, y + halfH, x + halfW, y + h, blue); // inf izq
+        pushRect(x + halfW, y + halfH, x + w, y + h, white); // inf der
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const halfW = w / 2;
+        const halfH = h / 2;
+        const rStar = Math.min(w, h) * 0.07;
+
+        const drawStar = (ctx, cx, cy, rOuter, rInner = rOuter*0.382, points=5) => {
+            ctx.beginPath();
+            for (let i = 0; i < points*2; i++) {
+                const angle = Math.PI / points * i - Math.PI/2; // 0° arriba
+                const radius = i % 2 === 0 ? rOuter : rInner;
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        ctx.save();
+
+        ctx.fillStyle = 'blue';
+        drawStar(ctx, x + halfW/2, y + halfH/2, rStar); // estrella sup izq
+
+        ctx.fillStyle = 'red';
+        drawStar(ctx, x + halfW + halfW/2, y + halfH + halfH/2, rStar); // estrella inf der
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
 
 
 
