@@ -2371,6 +2371,71 @@ oman: (() => {
     return fn;
 })(),
 
+pakistan: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const green = [0.0, 0.39, 0.0];
+        const white = [1.0, 1.0, 1.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const sideW = w * 0.25;
+
+        pushRect(x, y, x + sideW, y + h, white);
+        pushRect(x + sideW, y, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const sideW = w * 0.25;
+        const cx = x + sideW + (w - sideW) * 0.45;
+        const cy = y + h / 2;
+        const rMoon = h * 0.18; // tamaño media luna
+        const rStar = h * 0.08; // tamaño estrella
+
+        ctx.save();
+        ctx.fillStyle = 'white';
+
+        // Media luna rotada
+        ctx.translate(cx, cy);
+        ctx.rotate(-Math.PI/9); // rotar -20 grados
+        ctx.beginPath();
+        ctx.arc(0, 0, rMoon, 0.3 * Math.PI, 1.7 * Math.PI, false);
+        ctx.arc(rMoon*0.3, 0, rMoon*0.7, 1.7 * Math.PI, 0.3 * Math.PI, true);
+        ctx.closePath();
+        ctx.fill();
+        ctx.setTransform(1,0,0,1,0,0); // reset transform
+
+        // Estrella de 5 puntas afuera de la luna
+        const drawStar = (ctx, cx, cy, rOuter, rInner = rOuter*0.5, points=5) => {
+            ctx.beginPath();
+            for (let i = 0; i < points*2; i++) {
+                const angle = Math.PI / points * i - Math.PI/2;
+                const radius = i % 2 === 0 ? rOuter : rInner;
+                ctx.lineTo(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+            }
+            ctx.closePath();
+            ctx.fill();
+        };
+
+        drawStar(ctx, cx + rMoon*1.2, cy - 120, rStar);
+
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
 
 
 
