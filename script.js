@@ -1328,7 +1328,26 @@ const flags = {
     
         return { positions, colors };
     },
-    
+
+    luxembourg: (x, y, w, h) => {
+        const h3 = h / 3;
+        const red = [237/255, 41/255, 57/255];    // #ED2939
+        const white = [1, 1, 1];
+        const blue = [0/255, 161/255, 222/255];   // #00A1DE
+
+        return {
+            positions: [
+                x, y, x + w, y, x, y + h3, x + w, y, x + w, y + h3, x, y + h3,
+                x, y + h3, x + w, y + h3, x, y + 2*h3, x + w, y + h3, x + w, y + 2*h3, x, y + 2*h3,
+                x, y + 2*h3, x + w, y + 2*h3, x, y + h, x + w, y + 2*h3, x + w, y + h, x, y + h
+            ],
+            colors: [
+                ...new Array(6).fill(red).flat(),
+                ...new Array(6).fill(white).flat(),
+                ...new Array(6).fill(blue).flat()
+            ]
+        };
+    },
 
     marshallIslands: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
