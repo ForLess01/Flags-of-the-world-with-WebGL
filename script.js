@@ -2121,6 +2121,51 @@ nicaragua: (() => {
     return fn;
 })(),
 
+nigeria: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const green = [0.0, 0.56, 0.0];
+        const white = [1.0, 1.0, 1.0];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const stripeW = w / 3;
+
+        pushRect(x, y, x + stripeW, y + h, green);
+        pushRect(x + stripeW, y, x + 2 * stripeW, y + h, white);
+        pushRect(x + 2 * stripeW, y, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        // Círculo verde centrado en la franja blanca
+        const cx = x + w / 2;
+        const cy = y + h / 2;
+        const radius = Math.min(w, h) * 0.15; // tamaño proporcional
+        ctx.save();
+        // Recortar a la franja blanca para evitar sangrados
+        ctx.beginPath();
+        ctx.rect(x + w/3, y, w/3, h);
+        ctx.clip();
+        ctx.fillStyle = '#008753'; // verde de Nigeria
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
 
 
 
