@@ -1725,7 +1725,288 @@ const flags = {
 
         return fn;
     })(),
-    
+
+netherlands: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red = [174 / 255, 28 / 255, 40 / 255];   // #AE1C28
+        const white = [1, 1, 1];                       // Blanco
+        const blue = [33 / 255, 70 / 255, 139 / 255];  // #21468B
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Rojo arriba
+        pushRect(x, y, x + w, y + stripeH, red);
+        // Blanco centro
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, white);
+        // Azul abajo
+        pushRect(x, y + 2 * stripeH, x + w, y + 3 * stripeH, blue);
+
+        return { positions, colors };
+    };
+
+    return fn;
+})(),
+
+niger: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales aproximados
+        const orange = [1.0, 0.4, 0.0]; // #FF7F00
+        const white  = [1.0, 1.0, 1.0];
+        const green  = [0.0, 0.6, 0.2]; // #009E49
+
+        const stripeH = h / 3;
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Naranja arriba
+        pushRect(x, y, x + w, y + stripeH, orange);
+        // Blanco medio
+        pushRect(x, y + stripeH, x + w, y + 2 * stripeH, white);
+        // Verde abajo
+        pushRect(x, y + 2 * stripeH, x + w, y + 3 * stripeH, green);
+
+        return { positions, colors };
+    };
+
+    // Overlay: círculo naranja centrado en la franja blanca
+    fn.overlay = (ctx, x, y, w, h) => {
+        const stripeH = h / 3;
+        const cx = x + w / 2;
+        const cy = y + stripeH * 1.5; // centro de la franja blanca
+        const radius = stripeH * 0.35;
+
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#FF7F00';
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+mozambique: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores normalizados
+        const green  = [0.0, 0.52, 0.27]; // verde
+        const black  = [0.0, 0.0, 0.0];   // negro
+        const yellow = [1.0, 0.8, 0.0];   // amarillo
+        const red    = [0.78, 0.13, 0.17]; // triángulo rojo
+        const white  = [1.0, 1.0, 1.0];   // blanco (fimbrias)
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Parámetros de franjas
+        const whiteThick = h * 0.02;
+        const stripeH = (h - 2 * whiteThick) / 3;
+
+        // Franja verde (superior)
+        pushRect(x, y, x + w, y + stripeH, green);
+
+        // Franja blanca
+        pushRect(x, y + stripeH, x + w, y + stripeH + whiteThick, white);
+
+        // Franja negra (centro)
+        pushRect(x, y + stripeH + whiteThick, x + w, y + 2 * stripeH + whiteThick, black);
+
+        // Franja blanca
+        pushRect(x, y + 2 * stripeH + whiteThick, x + w, y + 2 * stripeH + 2 * whiteThick, white);
+
+        // Franja amarilla (inferior)
+        pushRect(x, y + 2 * stripeH + 2 * whiteThick, x + w, y + h, yellow);
+
+        // Triángulo rojo (lado izquierdo)
+        const triW = w * 0.35;
+        positions.push(
+            x, y,
+            x + triW, y + h / 2,
+            x, y + h,
+            x, y,
+            x + triW, y + h / 2,
+            x, y + h
+        );
+        colors.push(...red, ...red, ...red, ...red, ...red, ...red);
+
+        return { positions, colors };
+    };
+
+    // --- Overlay: estrella amarilla en el triángulo ---
+    fn.overlay = (ctx, x, y, w, h) => {
+  const triW = w * 0.35;
+  const cx = x + triW * 0.30;     // un poco hacia la derecha en el triángulo
+  const cy = y + h / 2;           // verticalmente centro
+  const R  = triW * 0.30;         // radio exterior de la estrella
+  const r  = R * 0.382;           // radio interior
+
+  ctx.save();
+  ctx.beginPath();
+  for (let i = 0; i < 10; i++) {
+    const ang = -Math.PI/2 + i * (Math.PI/5);
+    const rr = (i % 2 === 0) ? R : r;
+    const px = cx + Math.cos(ang) * rr;
+    const py = cy + Math.sin(ang) * rr;
+    if (i === 0) ctx.moveTo(px, py);
+    else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.fillStyle = '#f2c500'; // color amarillo de la estrella
+  ctx.fill();
+  ctx.restore();
+};
+
+    return fn;
+})(),
+
+namibia: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const blue  = [0/255, 53/255, 128/255]; 
+        const red   = [210/255, 16/255, 52/255];  
+        const green = [0/255, 149/255, 67/255];
+        const white = [1.0, 1.0, 1.0];
+
+        const pushQuad = (p1, p2, p3, p4, color) => {
+            positions.push(
+                p1[0], p1[1], p2[0], p2[1], p4[0], p4[1],
+                p2[0], p2[1], p3[0], p3[1], p4[0], p4[1]
+            );
+            const c = Array(6).fill(color).flat();
+            colors.push(...c);
+        };
+
+// Triángulo azul (parte superior izquierda)
+positions.push(x, y,  x + w, y,  x, y + h);
+colors.push(...Array(3).fill(blue).flat());
+
+// Triángulo verde (parte inferior derecha)
+positions.push(x + w, y,  x + w, y + h,  x, y + h);
+colors.push(...Array(3).fill(green).flat());
+
+        const diagVec = [w, -h];
+        const perpVecLen = Math.sqrt(w*w + h*h);
+        const perpVec = [h / perpVecLen, w / perpVecLen];
+
+        const start = [x, y + h];
+        const end = [x + w, y];
+
+        const totalStripeWidth = h * (1/4 + 2 * (1/12)); // Rojo + 2 Blancos
+        const whiteStripeWidth = h * (1/12);
+
+        const createStripePoints = (offset, width) => {
+            // Calcula los 4 puntos base de la franja
+            let p1 = [start[0] + perpVec[0] * offset, start[1] + perpVec[1] * offset];
+            let p2 = [end[0]   + perpVec[0] * offset, end[1]   + perpVec[1] * offset];
+            let p3 = [end[0]   + perpVec[0] * (offset - width), end[1]   + perpVec[1] * (offset - width)];
+            let p4 = [start[0] + perpVec[0] * (offset - width), start[1] + perpVec[1] * (offset - width)];
+
+            // Extiende los puntos muy lejos a lo largo de la diagonal para asegurar el corte
+            const extensionFactor = 0; // Un factor grande para extender
+            p1 = [p1[0] - diagVec[0] * extensionFactor, p1[1] - diagVec[1] * extensionFactor];
+            p2 = [p2[0] + diagVec[0] * extensionFactor, p2[1] + diagVec[1] * extensionFactor];
+            p3 = [p3[0] + diagVec[0] * extensionFactor, p3[1] + diagVec[1] * extensionFactor];
+            p4 = [p4[0] - diagVec[0] * extensionFactor, p4[1] - diagVec[1] * extensionFactor];
+            
+            return [p1, p2, p3, p4];
+        };
+
+        const whitePoints = createStripePoints(totalStripeWidth / 2, totalStripeWidth);
+        pushQuad(whitePoints[0], whitePoints[1], whitePoints[2], whitePoints[3], white);
+
+        const redOffset = totalStripeWidth / 2 - whiteStripeWidth;
+        const redWidth = totalStripeWidth - 2 * whiteStripeWidth;
+        const redPoints = createStripePoints(redOffset, redWidth);
+        pushQuad(redPoints[0], redPoints[1], redPoints[2], redPoints[3], red);
+        
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        const cx = x + h / 3;
+        const cy = y + h / 3;
+        
+        const outerRadius = h / 6;                    // Radio exterior de las puntas de los rayos
+        const rayStartRadius = outerRadius * 0.55;    // Dónde empiezan los rayos (borde exterior del anillo)
+        const centerDiscRadius = outerRadius * 0.50;  // Radio del círculo central (borde interior del anillo)
+
+        ctx.save();
+        ctx.fillStyle = '#FFC72C'; 
+
+        ctx.beginPath();
+        ctx.arc(cx, cy, centerDiscRadius, 0, Math.PI * 2);
+        ctx.fill();
+
+        // 2. Dibuja los 12 rayos triangulares
+        const numRays = 12;
+        for (let i = 0; i < numRays; i++) {
+            const angle = (i / numRays) * Math.PI * 2;
+            const rayBaseWidthAngle = Math.PI / 15; // Controla el ancho de la base del rayo
+
+            // Vértices del triángulo de cada rayo
+            const p1x = cx + Math.cos(angle) * outerRadius;
+            const p1y = cy + Math.sin(angle) * outerRadius;
+            const p2x = cx + Math.cos(angle - rayBaseWidthAngle) * rayStartRadius;
+            const p2y = cy + Math.sin(angle - rayBaseWidthAngle) * rayStartRadius;
+            const p3x = cx + Math.cos(angle + rayBaseWidthAngle) * rayStartRadius;
+            const p3y = cy + Math.sin(angle + rayBaseWidthAngle) * rayStartRadius;
+            
+            ctx.beginPath();
+            ctx.moveTo(p1x, p1y);
+            ctx.lineTo(p2x, p2y);
+            ctx.lineTo(p3x, p3y);
+            ctx.closePath();
+            ctx.fill();
+        }
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
+
 };
 
 // Placeholder para banderas sin implementación
