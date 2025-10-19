@@ -9,11 +9,8 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read           # necesario para actions/checkout
-      pull-requests: write     # permite editar/asignar el PR
-
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      contents: read
+      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -21,6 +18,14 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Asignar PR al autor y a tu usuario
+      - name: Asignar PR al autor y a ForLess01
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          AUTHOR: ${{ github.actor }}
         run: |
-          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.actor }},ForLess01"
+          if [ "$AUTHOR" != "ForLess01" ]; then
+            gh pr edit $PR_NUMBER --add-assignee "$AUTHOR,ForLess01"
+          else
+            gh pr edit $PR_NUMBER --add-assignee "ForLess01"
+          fi
