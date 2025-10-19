@@ -1302,6 +1302,33 @@ const flags = {
          ];
          return { positions, colors };
      },
+    lithuania: (x, y, w, h) => {
+        const h3 = h / 3;
+        const yellow = [253/255, 185/255, 19/255];   // #FDB913
+        const green = [0/255, 106/255, 68/255];      // #006A44
+        const red = [193/255, 39/255, 45/255];       // #C1272D
+    
+        const positions = [
+            // Franja amarilla (superior)
+            x, y, x + w, y, x, y + h3,
+            x + w, y, x + w, y + h3, x, y + h3,
+            // Franja verde (media)
+            x, y + h3, x + w, y + h3, x, y + 2*h3,
+            x + w, y + h3, x + w, y + 2*h3, x, y + 2*h3,
+            // Franja roja (inferior)
+            x, y + 2*h3, x + w, y + 2*h3, x, y + h,
+            x + w, y + 2*h3, x + w, y + h, x, y + h
+        ];
+    
+        const colors = [
+            ...new Array(6).fill(yellow).flat(),
+            ...new Array(6).fill(green).flat(),
+            ...new Array(6).fill(red).flat()
+        ];
+    
+        return { positions, colors };
+    },
+    
 
     marshallIslands: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
