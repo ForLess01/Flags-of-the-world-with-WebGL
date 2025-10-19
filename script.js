@@ -2360,6 +2360,93 @@ const flags = {
         return fn;
     })(),
 
+    ecuador: (() => {
+        // Bandera de Ecuador: amarillo-azul-rojo con escudo nacional centrado
+        const escudoImg = new Image();
+        escudoImg.src = 'Recursos_Renso/Escudo_Ecuador.png';
+
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            // Colores oficiales de Ecuador
+            const yellow = [255/255, 221/255, 0/255];    // #FFDD00 - Amarillo
+            const blue = [0/255, 56/255, 147/255];       // #003893 - Azul
+            const red = [237/255, 28/255, 36/255];       // #ED1C24 - Rojo
+
+            // Proporciones de las franjas: amarillo (2), azul (1), rojo (1)
+            const yellowH = h * 0.5;  // 50% - franja amarilla
+            const blueH = h * 0.25;   // 25% - franja azul
+            const redH = h * 0.25;    // 25% - franja roja
+
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+
+            // Franja amarilla (superior)
+            pushRect(x, y, x + w, y + yellowH, yellow);
+            
+            // Franja azul (media)
+            pushRect(x, y + yellowH, x + w, y + yellowH + blueH, blue);
+            
+            // Franja roja (inferior)
+            pushRect(x, y + yellowH + blueH, x + w, y + h, red);
+
+            return { positions, colors };
+        };
+
+        // Overlay: dibujar el escudo nacional entre las franjas amarilla y azul
+        fn.overlay = (ctx, x, y, w, h) => {
+            const yellowH = h * 0.5; // altura de la franja amarilla
+            const blueH = h * 0.25;  // altura de la franja azul
+            const escudoSize = Math.min(w, h) * 0.3; // tamaño del escudo
+
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                const escudoW = escudoSize * ratio;
+                const escudoH = escudoSize;
+                
+                // Centrar el escudo horizontalmente y posicionarlo entre las franjas amarilla y azul
+                const cx = x + w / 2;
+                const cy = y + yellowH; 
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+
+                ctx.save();
+                // Recortar al área que incluye parte de la franja amarilla y azul
+                ctx.beginPath();
+                ctx.rect(x, y + yellowH * 0.5, w, yellowH * 0.5 + blueH);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(x, y, w, yellowH);
+                    ctx.clip();
+                    drawEscudo();
+                    ctx.restore();
+                };
+            }
+        };
+
+        return fn;
+    })(),
+    
 netherlands: (() => {
     const fn = (x, y, w, h) => {
         const positions = [];
