@@ -2472,6 +2472,47 @@ palau: (() => {
     return fn;
 })(),
 
+palestine: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const black = [0.0, 0.0, 0.0];
+        const white = [1.0, 1.0, 1.0];
+        const green = [0.0, 0.56, 0.0];
+        const red   = [0.84, 0.0, 0.09];
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        const stripeH = h / 3;
+        pushRect(x, y, x + w, y + stripeH, black);
+        pushRect(x, y + stripeH, x + w, y + 2*stripeH, white);
+        pushRect(x, y + 2*stripeH, x + w, y + h, green);
+
+        return { positions, colors };
+    };
+
+    fn.overlay = (ctx, x, y, w, h) => {
+        ctx.save();
+        ctx.fillStyle = '#D60000'; // rojo
+        ctx.beginPath();
+        ctx.moveTo(x, y);
+        ctx.lineTo(x + w * 0.35, y + h / 2);
+        ctx.lineTo(x, y + h);
+        ctx.closePath();
+        ctx.fill();
+        ctx.restore();
+    };
+
+    return fn;
+})(),
+
 
 
 
