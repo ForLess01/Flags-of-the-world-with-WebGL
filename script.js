@@ -2081,6 +2081,48 @@ nauru: (() => {
     return fn;
 })(),
 
+nicaragua: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        // Colores oficiales
+        const blue  = [0.0, 0.33, 0.71]; // Azul (#0067C6)
+        const white = [1.0, 1.0, 1.0];   // Blanco
+
+        // Función auxiliar para franjas
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        // --- Franja superior azul ---
+        pushRect(x, y, x + w, y + h / 3, blue);
+
+        // --- Franja central blanca ---
+        pushRect(x, y + h / 3, x + w, y + (2 * h) / 3, white);
+
+        // --- Franja inferior azul ---
+        pushRect(x, y + (2 * h) / 3, x + w, y + h, blue);
+
+        return { positions, colors };
+    };
+
+    // No hay escudo ni símbolo
+    fn.overlay = (ctx, x, y, w, h) => {};
+
+    return fn;
+})(),
+
+
+
 
 };
 
