@@ -2360,151 +2360,6 @@ const flags = {
         return fn;
     })(),
 
-egypt: (() => {
-    const escudoImg = new Image();
-    escudoImg.src = 'Recursos_Renso/Escudo_Egipto.png';
-
-    const fn = (x, y, w, h) => {
-        const positions = [];
-        const colors = [];
-        
-        const red = [206/255, 17/255, 38/255];
-        const white = [1, 1, 1];
-        const black = [0, 0, 0];
-
-        const stripeH = h / 3;
-
-        const pushRect = (x0, y0, x1, y1, color) => {
-            positions.push(
-                x0, y0,
-                x1, y0,
-                x0, y1,
-                x1, y0,
-                x1, y1,
-                x0, y1
-            );
-            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
-        };
-
-        pushRect(x, y, x + w, y + stripeH, red);
-        pushRect(x, y + stripeH, x + w, y + stripeH * 2, white);
-        pushRect(x, y + stripeH * 2, x + w, y + h, black);
-
-        return { positions, colors };
-    };
-
-    fn.overlay = (ctx, x, y, w, h) => {
-        const stripeH = h / 3;
-        const escudoSize = Math.min(w, stripeH) * 1.0;
-
-        const drawEscudo = () => {
-            const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
-            const escudoW = escudoSize * ratio;
-            const escudoH = escudoSize;
-            
-            const cx = x + w / 2;
-            const cy = y + stripeH + stripeH / 2;
-            const dx = cx - escudoW / 2;
-            const dy = cy - escudoH / 2;
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.rect(x, y + stripeH, w, stripeH);
-            ctx.clip();
-            ctx.imageSmoothingEnabled = true;
-            ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
-            ctx.restore();
-        };
-
-        if (escudoImg.complete && escudoImg.naturalWidth > 0) {
-            drawEscudo();
-        } else {
-            escudoImg.onload = () => {
-                ctx.save();
-                ctx.beginPath();
-                ctx.rect(x, y + stripeH, w, stripeH);
-                ctx.clip();
-                drawEscudo();
-                ctx.restore();
-            };
-        }
-    };
-
-    return fn;
-})(),
-
-elSalvador: (() => {
-    const escudoImg = new Image();
-    escudoImg.src = 'Recursos_Renso/Escudo_ElSalvador.png';
-
-    const fn = (x, y, w, h) => {
-        const positions = [];
-        const colors = [];
-        
-        const blue = [0/255, 56/255, 147/255];
-        const white = [1, 1, 1];
-
-        const stripeH = h / 3;
-
-        const pushRect = (x0, y0, x1, y1, color) => {
-            positions.push(
-                x0, y0,
-                x1, y0,
-                x0, y1,
-                x1, y0,
-                x1, y1,
-                x0, y1
-            );
-            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
-        };
-
-        pushRect(x, y, x + w, y + stripeH, blue);
-        pushRect(x, y + stripeH, x + w, y + stripeH * 2, white);
-        pushRect(x, y + stripeH * 2, x + w, y + h, blue);
-
-        return { positions, colors };
-    };
-
-    fn.overlay = (ctx, x, y, w, h) => {
-        const stripeH = h / 3;
-        const escudoSize = Math.min(w, stripeH) * 0.9;
-
-        const drawEscudo = () => {
-            const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
-            const escudoW = escudoSize * ratio;
-            const escudoH = escudoSize;
-            
-            const cx = x + w / 2;
-            const cy = y + stripeH + stripeH / 2;
-            const dx = cx - escudoW / 2;
-            const dy = cy - escudoH / 2;
-
-            ctx.save();
-            ctx.beginPath();
-            ctx.rect(x, y + stripeH, w, stripeH);
-            ctx.clip();
-            ctx.imageSmoothingEnabled = true;
-            ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
-            ctx.restore();
-        };
-
-        if (escudoImg.complete && escudoImg.naturalWidth > 0) {
-            drawEscudo();
-        } else {
-            escudoImg.onload = () => {
-                ctx.save();
-                ctx.beginPath();
-                ctx.rect(x, y + stripeH, w, stripeH);
-                ctx.clip();
-                drawEscudo();
-                ctx.restore();
-            };
-        }
-    };
-
-    return fn;
-})(),
-
 ecuador: (() => {
     const escudoImg = new Image();
     escudoImg.src = 'Recursos_Renso/Escudo_Ecuador.png';
@@ -2603,28 +2458,12 @@ netherlands: (() => {
             colors.push(...color, ...color, ...color, ...color, ...color, ...color);
         };
 
-        return fn;
-    })(),
-
-    uae: (x, y, w, h) => {
-        const positions = [];
-        const colors = [];
-        
-        // Colores oficiales de Emiratos Árabes Unidos
-        const red = [206/255, 17/255, 38/255];    // #CE1126 - Rojo
-        const green = [0/255, 122/255, 61/255];   // #007A3D - Verde
-        const white = [1, 1, 1];                  // Blanco
-        const black = [0, 0, 0];                  // Negro
-
-        // Proporciones: franja vertical roja (1/4 del ancho) + tres franjas horizontales (1/3 cada una)
-        const redW = w * 0.25;  // 25% del ancho para la franja roja vertical
-        const stripeH = h / 3;  // Cada franja horizontal ocupa 1/3 de la altura
         // Rojo arriba
         pushRect(x, y, x + w, y + stripeH, red);
         // Blanco centro
         pushRect(x, y + stripeH, x + w, y + 2 * stripeH, white);
         // Azul abajo
-        pushRect(x, y + 2 * stripeH, x + w, y + 3 * stripeH, blue);
+        pushRect(x, y + 2 * stripeH, x + w, y + h, blue);
 
         return { positions, colors };
     };
@@ -2656,27 +2495,12 @@ niger: (() => {
             colors.push(...color, ...color, ...color, ...color, ...color, ...color);
         };
 
-        // Franja vertical roja (asta)
-        pushRect(x, y, x + redW, y + h, red);
-        
-        // Franja horizontal verde (superior)
-        pushRect(x + redW, y, x + w, y + stripeH, green);
-        
-        // Franja horizontal blanca (media)
-        pushRect(x + redW, y + stripeH, x + w, y + stripeH * 2, white);
-        
-        // Franja horizontal negra (inferior)
-        pushRect(x + redW, y + stripeH * 2, x + w, y + h, black);
-
-        return { positions, colors };
-    },
-    
         // Naranja arriba
         pushRect(x, y, x + w, y + stripeH, orange);
         // Blanco medio
         pushRect(x, y + stripeH, x + w, y + 2 * stripeH, white);
         // Verde abajo
-        pushRect(x, y + 2 * stripeH, x + w, y + 3 * stripeH, green);
+        pushRect(x, y + 2 * stripeH, x + w, y + h, green);
 
         return { positions, colors };
     };
@@ -2891,6 +2715,265 @@ colors.push(...Array(3).fill(green).flat());
     return fn;
 })(),
 
+    egypt: (() => {
+        // Bandera de Egipto: roja-blanca-negra con escudo nacional centrado
+        const escudoImg = new Image();
+        escudoImg.src = 'Recursos_Renso/Escudo_Egipto.png';
+
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            // Colores oficiales de Egipto
+            const red = [206/255, 17/255, 38/255];    // #CE1126 - Rojo
+            const white = [1, 1, 1];                  // Blanco
+            const black = [0, 0, 0];                  // Negro
+
+            // Proporciones de las franjas: roja (1), blanca (1), negra (1)
+            const stripeH = h / 3;  // Cada franja ocupa 1/3 de la altura
+
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+
+            // Franja roja (superior)
+            pushRect(x, y, x + w, y + stripeH, red);
+            
+            // Franja blanca (media)
+            pushRect(x, y + stripeH, x + w, y + stripeH * 2, white);
+            
+            // Franja negra (inferior)
+            pushRect(x, y + stripeH * 2, x + w, y + h, black);
+
+            return { positions, colors };
+        };
+
+        // Overlay: dibujar el escudo nacional centrado en la franja blanca
+        fn.overlay = (ctx, x, y, w, h) => {
+            const stripeH = h / 3; // altura de cada franja
+            const escudoSize = Math.min(w, stripeH) * 1.0; // tamaño del escudo
+
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                const escudoW = escudoSize * ratio;
+                const escudoH = escudoSize;
+                
+                // Centrar el escudo horizontalmente y verticalmente en la franja blanca
+                const cx = x + w / 2;
+                const cy = y + stripeH + stripeH / 2; // Centro de la franja blanca
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+
+                ctx.save();
+                // Recortar al área de la franja blanca
+                ctx.beginPath();
+                ctx.rect(x, y + stripeH, w, stripeH);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(x, y + stripeH, w, stripeH);
+                    ctx.clip();
+                    drawEscudo();
+                    ctx.restore();
+                };
+            }
+        };
+
+        return fn;
+    })(),
+
+    elSalvador: (() => {
+        // Bandera de El Salvador: azul-blanca-azul con escudo nacional centrado
+        const escudoImg = new Image();
+        escudoImg.src = 'Recursos_Renso/Escudo_ElSalvador.png';
+
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            // Colores oficiales de El Salvador
+            const blue = [0/255, 56/255, 147/255];     // #003893 - Azul
+            const white = [1, 1, 1];                   // Blanco
+
+            // Proporciones de las franjas: azul (1), blanca (1), azul (1)
+            const stripeH = h / 3;  // Cada franja ocupa 1/3 de la altura
+
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+
+            // Franja azul (superior)
+            pushRect(x, y, x + w, y + stripeH, blue);
+            
+            // Franja blanca (media)
+            pushRect(x, y + stripeH, x + w, y + stripeH * 2, white);
+            
+            // Franja azul (inferior)
+            pushRect(x, y + stripeH * 2, x + w, y + h, blue);
+
+            return { positions, colors };
+        };
+
+        // Overlay: dibujar el escudo nacional centrado en la franja blanca
+        fn.overlay = (ctx, x, y, w, h) => {
+            const stripeH = h / 3; // altura de cada franja
+            const escudoSize = Math.min(w, stripeH) * 0.9; // tamaño del escudo
+
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                const escudoW = escudoSize * ratio;
+                const escudoH = escudoSize;
+                
+                // Centrar el escudo horizontalmente y verticalmente en la franja blanca
+                const cx = x + w / 2;
+                const cy = y + stripeH + stripeH / 2; // Centro de la franja blanca
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+
+                ctx.save();
+                // Recortar al área de la franja blanca
+                ctx.beginPath();
+                ctx.rect(x, y + stripeH, w, stripeH);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = () => {
+                    ctx.save();
+                    ctx.beginPath();
+                    ctx.rect(x, y + stripeH, w, stripeH);
+                    ctx.clip();
+                    drawEscudo();
+                    ctx.restore();
+                };
+            }
+        };
+
+        return fn;
+    })(),
+
+    uae: (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+        
+        // Colores oficiales de Emiratos Árabes Unidos
+        const red = [206/255, 17/255, 38/255];    // #CE1126 - Rojo
+        const green = [0/255, 122/255, 61/255];   // #007A3D - Verde
+        const white = [1, 1, 1];                  // Blanco
+        const black = [0, 0, 0];                  // Negro
+
+        // Proporciones: franja vertical roja (1/4 del ancho) + tres franjas horizontales (1/3 cada una)
+        const redW = w * 0.25;  // 25% del ancho para la franja roja vertical
+        const stripeH = h / 3;  // Cada franja horizontal ocupa 1/3 de la altura
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0,
+                x1, y0,
+                x0, y1,
+                x1, y0,
+                x1, y1,
+                x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+
+        // Franja vertical roja (asta)
+        pushRect(x, y, x + redW, y + h, red);
+        
+        // Franja horizontal verde (superior)
+        pushRect(x + redW, y, x + w, y + stripeH, green);
+        
+        // Franja horizontal blanca (media)
+        pushRect(x + redW, y + stripeH, x + w, y + stripeH * 2, white);
+        
+        // Franja horizontal negra (inferior)
+        pushRect(x + redW, y + stripeH * 2, x + w, y + h, black);
+
+        return { positions, colors };
+    },
+
+    eritrea: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+        
+            // Colores de Eritrea - verde, azul y rojo
+            const green = [0x43/255, 0xB0/255, 0x2A/255];  // Verde
+            const blue  = [0x41/255, 0x8F/255, 0xDE/255];  // Azul
+        
+            // Dos franjas horizontales iguales
+            const stripeH = h / 2;
+
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+
+            // Franja verde (superior)
+            pushRect(x, y, x + w, y + stripeH, green);
+            
+            // Franja azul (inferior)
+            pushRect(x, y + stripeH, x + w, y + h, blue);
+
+            return { positions, colors };
+        };
+
+        // Overlay: dibujar el triángulo rojo encima
+        fn.overlay = (ctx, x, y, w, h) => {
+            const triangleW = w * 1; // 50% del ancho para el triángulo
+            const red = [0xE4/255, 0x00/255, 0x2B/255];  // Rojo de Eritrea
+
+            ctx.save();
+            ctx.fillStyle = `rgb(${Math.round(red[0] * 255)}, ${Math.round(red[1] * 255)}, ${Math.round(red[2] * 255)})`;
+            ctx.beginPath();
+            ctx.moveTo(x, y);                    // Vértice superior izquierdo
+            ctx.lineTo(x, y + h);                // Vértice inferior izquierdo
+            ctx.lineTo(x + triangleW, y + h/2);  // Vértice derecho (centro vertical)
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        };
+
+        return fn;
+    })(),
 
 };
 
