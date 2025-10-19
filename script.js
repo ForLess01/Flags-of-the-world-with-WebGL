@@ -1933,6 +1933,60 @@ const flags = {
 
         return { positions, colors };
     },
+
+    eritrea: (() => {
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+        
+            // Colores de Eritrea - verde, azul y rojo
+            const green = [0x43/255, 0xB0/255, 0x2A/255];  // Verde
+            const blue  = [0x41/255, 0x8F/255, 0xDE/255];  // Azul
+        
+            // Dos franjas horizontales iguales
+            const stripeH = h / 2;
+
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0,
+                    x1, y0,
+                    x0, y1,
+                    x1, y0,
+                    x1, y1,
+                    x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+
+            // Franja verde (superior)
+            pushRect(x, y, x + w, y + stripeH, green);
+            
+            // Franja azul (inferior)
+            pushRect(x, y + stripeH, x + w, y + h, blue);
+
+            return { positions, colors };
+        };
+
+        // Overlay: dibujar el triángulo rojo encima
+        fn.overlay = (ctx, x, y, w, h) => {
+            const triangleW = w * 1; // 50% del ancho para el triángulo
+            const red = [0xE4/255, 0x00/255, 0x2B/255];  // Rojo de Eritrea
+
+            ctx.save();
+            ctx.fillStyle = `rgb(${Math.round(red[0] * 255)}, ${Math.round(red[1] * 255)}, ${Math.round(red[2] * 255)})`;
+            ctx.beginPath();
+            ctx.moveTo(x, y);                    // Vértice superior izquierdo
+            ctx.lineTo(x, y + h);                // Vértice inferior izquierdo
+            ctx.lineTo(x + triangleW, y + h/2);  // Vértice derecho (centro vertical)
+            ctx.closePath();
+            ctx.fill();
+            ctx.restore();
+        };
+
+        return fn;
+    })(),
+
+    
     
 };
 
