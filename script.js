@@ -1935,8 +1935,8 @@ namibia: (() => {
         const diagLength = Math.sqrt(w * w + h * h);
         const perpVec = [h / diagLength, w / diagLength];
 
-		// Anchuras de las franjas (proporciones basadas en la altura)
-		const totalStripeWidth = h * 0.25;
+        // Anchuras de las franjas (proporciones basadas en la altura)
+        const totalStripeWidth = h * 0.25;
 		// Hacer el rojo un poco más ancho y el blanco un poco más delgado
 		const whiteStripeWidth = totalStripeWidth * 0.20; // antes: 0.25
 		const redStripeWidth = totalStripeWidth - 2 * whiteStripeWidth; // ≈ 0.60 del total
@@ -2130,7 +2130,7 @@ nigeria: (() => {
         const white = [1.0, 1.0, 1.0];
 
         const pushRect = (x0, y0, x1, y1, color) => {
-            positions.push(
+        positions.push(
                 x0, y0, x1, y0, x0, y1,
                 x1, y0, x1, y1, x0, y1
             );
@@ -2190,7 +2190,8 @@ norway: (() => {
         const unitY = h / 16;
 
         // Fondo rojo
-        pushRect(x, y, x + w, y + h, red);
+        // Fondo azul (campo de la bandera)
+        pushRect(x, y, x + w, y + h, blue);
 
         // Bandas blancas
         // Vertical blanca centrando la azul (x = 6u a 6u+4u)
@@ -2214,6 +2215,123 @@ norway: (() => {
     };
 
     fn.overlay = (ctx, x, y, w, h) => {};
+
+    return fn;
+})(),
+newZealand: (() => {
+    const fn = (x, y, w, h) => {
+        const positions = [];
+        const colors = [];
+
+        const red   = [200/255, 16/255, 46/255];   // #C8102E
+        const white = [1.0, 1.0, 1.0];            // #FFFFFF
+        const blue  = [1/255, 33/255, 105/255];   // #012169 (campo y cantón)
+
+        const pushRect = (x0, y0, x1, y1, color) => {
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...Array(6).fill(color).flat());
+        };
+
+        // Fondo azul del pabellón
+        pushRect(x, y, x + w, y + h, blue);
+
+        // Union Jack en el cantón: ancho 1/2 y alto 1/2 del pabellón
+        const unionW = w * 0.5;
+        const unionH = h * 0.5;
+        const ux = x;
+        const uy = y;
+
+        const drawUnionJack = (ctx, ux, uy, unionW, unionH) => {
+            ctx.save();
+            ctx.translate(ux, uy);
+            // Fondo azul del cantón (color CSS)
+            ctx.fillStyle = '#012169';
+            ctx.fillRect(0, 0, unionW, unionH);
+
+            // Recortar todo lo que se dibuje del Union Jack al rectángulo del cantón
+            ctx.save();
+            ctx.beginPath();
+            ctx.rect(0, 0, unionW, unionH);
+            ctx.clip();
+            ctx.lineCap = 'butt';
+
+            // Diagonales blancas (ligeramente más delgadas)
+            ctx.strokeStyle = '#FFFFFF';
+            ctx.lineWidth = unionH * 0.10;
+            ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(unionW, unionH);
+            ctx.moveTo(unionW, 0); ctx.lineTo(0, unionH);
+            ctx.stroke();
+
+            // Diagonales rojas centradas sobre blancas (más delgadas)
+            ctx.strokeStyle = '#C8102E';
+            ctx.lineWidth = unionH * 0.05;
+        ctx.beginPath();
+            ctx.moveTo(0, 0); ctx.lineTo(unionW, unionH);
+            ctx.moveTo(unionW, 0); ctx.lineTo(0, unionH);
+            ctx.stroke();
+
+            // Cruces ortogonales (blanca gruesa, luego roja más estrecha)
+            // Vertical/Horiz blanca con recorte al rectángulo del cantón
+            ctx.fillStyle = '#FFFFFF';
+            const whiteBarW = unionW * 0.16;
+            const whiteBarH = unionH * 0.16;
+            ctx.fillRect(unionW/2 - whiteBarW/2, 0, whiteBarW, unionH);
+            ctx.fillRect(0, unionH/2 - whiteBarH/2, unionW, whiteBarH);
+            // Roja
+            ctx.fillStyle = '#C8102E';
+            const redBarW = whiteBarW * 0.62;
+            const redBarH = whiteBarH * 0.62;
+            ctx.fillRect(unionW/2 - redBarW/2, 0, redBarW, unionH);
+            ctx.fillRect(0, unionH/2 - redBarH/2, unionW, redBarH);
+
+            ctx.restore(); // fin clip cantón
+            ctx.restore();
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            drawUnionJack(ctx, ux, uy, unionW, unionH);
+
+            // Estrellas (Crux) posiciones y tamaños aproximados a la especificación
+            const stars = [
+                { cx: x + w * 0.80, cy: y + h * 0.20, R: h * 0.052 }, // top-left of cluster
+                { cx: x + w * 0.90, cy: y + h * 0.35, R: h * 0.042 }, // small upper-right
+                { cx: x + w * 0.69, cy: y + h * 0.42, R: h * 0.060 }, // middle
+                { cx: x + w * 0.80, cy: y + h * 0.73, R: h * 0.082 }  // largest bottom-right
+            ];
+
+            const drawStarPath = (cx, cy, rOuter, rInner = rOuter * 0.5, points = 5) => {
+            ctx.beginPath();
+                for (let i = 0; i < points * 2; i++) {
+                    const angle = Math.PI / points * i - Math.PI / 2;
+                    const radius = (i % 2 === 0) ? rOuter : rInner;
+                    const px = cx + Math.cos(angle) * radius;
+                    const py = cy + Math.sin(angle) * radius;
+                    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+                }
+            ctx.closePath();
+            };
+
+            ctx.save();
+            for (const s of stars) {
+                // Trazo blanco (borde)
+                drawStarPath(s.cx, s.cy, s.R, s.R * 0.5);
+                ctx.lineWidth = s.R * 0.18;
+                ctx.strokeStyle = '#FFFFFF';
+                ctx.stroke();
+                // Relleno rojo
+                drawStarPath(s.cx, s.cy, s.R, s.R * 0.5);
+                ctx.fillStyle = '#C8102E';
+            ctx.fill();
+        }
+        ctx.restore();
+        };
+
+        return { positions, colors };
+    };
 
     return fn;
 })(),
