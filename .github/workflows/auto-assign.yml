@@ -1,0 +1,26 @@
+name: Auto Asignar PRs
+
+on:
+  pull_request:
+    types: [opened]
+
+jobs:
+  auto-assign:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read           # necesario para actions/checkout
+      pull-requests: write     # permite editar/asignar el PR
+
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Asignar PR al autor y a tu usuario
+        run: |
+          gh pr edit ${{ github.event.pull_request.number }} --add-assignee "${{ github.actor }},ForLess01"
