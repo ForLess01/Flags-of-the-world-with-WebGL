@@ -401,6 +401,540 @@ function drawFlagToCanvas(targetCanvas, width, flagData) {
 // =========================
 
 const flags = {
+    // === A ===
+    afghanistan: (() => {
+    const BLACK=[0,0,0], RED=[0.827,0.125,0.067], GREEN=[0,0.478,0.239];
+
+    const emblemImg = new Image();
+    emblemImg.src = 'recursos_yoel/afghanistan_escudo.svg'; // requiere viewBox en el SVG
+
+    const fn = (x,y,w,h) => {
+        const positions=[], colors=[]; const s=w/3;
+        // Negro
+        positions.push(x,y, x+s,y, x,y+h,  x+s,y, x+s,y+h, x,y+h);
+        colors.push(...Array(6).fill(BLACK).flat());
+        // Rojo (centro)
+        positions.push(x+s,y, x+2*s,y, x+s,y+h,  x+2*s,y, x+2*s,y+h, x+s,y+h);
+        colors.push(...Array(6).fill(RED).flat());
+        // Verde
+        positions.push(x+2*s,y, x+w,y, x+2*s,y+h,  x+w,y, x+w,y+h, x+2*s,y+h);
+        colors.push(...Array(6).fill(GREEN).flat());
+        return { positions, colors };
+    };
+
+    // Escudo centrado en la franja roja, con object-fit: contain
+    fn.overlay = (ctx, x, y, w, h) => {
+        const draw = () => {
+        const nw = emblemImg.naturalWidth || 1, nh = emblemImg.naturalHeight || 1;
+        const ar = nw/nh;
+        const s = w/3;                  // ancho de cada franja
+        const boxW = s * 0.78;          // caja máxima dentro del rojo
+        const boxH = h * 0.78;
+        const boxAR = boxW/boxH;
+        let ew, eh;
+        if (ar > boxAR) { ew = boxW; eh = ew/ar; } else { eh = boxH; ew = eh*ar; }
+        const ex = (x + s) + (s - ew)/2; // centra dentro de la franja roja
+        const ey = y + (h - eh)/2;
+        ctx.save(); ctx.drawImage(emblemImg, ex, ey, ew, eh); ctx.restore();
+        };
+        if (emblemImg.complete && emblemImg.naturalWidth>0) draw(); else emblemImg.onload = draw;
+    };
+
+    return fn;
+    })(),
+
+    albania: (() => {
+    // Fondo rojo + águila bicéfala desde archivo SVG externo, manteniendo proporciones correctas
+    const RED = [0.894, 0.118, 0.125];
+
+    const eagleImg = new Image();
+    eagleImg.src = 'recursos_yoel/albania_escudo.svg'; // SVG local (con viewBox definido)
+
+    const fn = (x, y, w, h) => {
+        const positions = [], colors = [];
+        // Fondo rojo
+        positions.push(
+        x, y,  x + w, y,  x, y + h,
+        x + w, y,  x + w, y + h,  x, y + h
+        );
+        colors.push(...Array(6).fill(RED).flat());
+        return { positions, colors };
+    };
+
+    // Dibujo del escudo: se ajusta al "contenedor" manteniendo aspect ratio (como object-fit: contain)
+    fn.overlay = (ctx, x, y, w, h) => {
+        const draw = () => {
+        const nw = eagleImg.naturalWidth || 1;
+        const nh = eagleImg.naturalHeight || 1;
+        const imgAR = nw / nh;
+
+        // Caja de destino proporcional a la bandera (centrada)
+        const boxW = w * 0.56;     // ancho máximo permitido del escudo
+        const boxH = h * 0.66;     // alto máximo permitido del escudo
+        const boxAR = boxW / boxH;
+
+        let ew, eh;                 // tamaño final del escudo (manteniendo AR)
+        if (imgAR > boxAR) {
+            // Imagen más "ancha" que la caja → ajusta por ancho
+            ew = boxW;
+            eh = ew / imgAR;
+        } else {
+            // Imagen más "alta" que la caja → ajusta por alto
+            eh = boxH;
+            ew = eh * imgAR;
+        }
+
+        const ex = x + (w - ew) * 0.5; // centrado horizontal
+        const ey = y + (h - eh) * 0.5; // centrado vertical
+
+        ctx.save();
+        ctx.drawImage(eagleImg, ex, ey, ew, eh);
+        ctx.restore();
+        };
+
+        if (eagleImg.complete && eagleImg.naturalWidth > 0) draw();
+        else eagleImg.onload = draw;
+    };
+
+    return fn;
+    })(),
+
+
+
+    germany: (x,y,w,h)=>{
+    const s=h/3; const BLACK=[0,0,0], RED=[0.867,0,0], Y=[1,0.808,0];
+    const positions=[],colors=[];
+    positions.push(x,y, x+w,y, x,y+s,  x+w,y, x+w,y+s, x,y+s); colors.push(...Array(6).fill(BLACK).flat());
+    positions.push(x,y+s, x+w,y+s, x,y+2*s,  x+w,y+s, x+w,y+2*s, x,y+2*s); colors.push(...Array(6).fill(RED).flat());
+    positions.push(x,y+2*s, x+w,y+2*s, x,y+h,  x+w,y+2*s, x+w,y+h, x,y+h); colors.push(...Array(6).fill(Y).flat());
+    return {positions,colors};
+    },
+
+    andorra: (() => {
+    const B=[0,0.196,0.627], Y=[1,0.847,0], R=[0.855,0.071,0.102];
+
+    const armsImg = new Image();
+    armsImg.src = 'recursos_yoel/andorra_escudo.svg'; // SVG con viewBox
+
+    const fn = (x,y,w,h)=>{
+        const positions=[],colors=[]; const s=w/3;
+        // Azul
+        positions.push(x,y, x+s,y, x,y+h,  x+s,y, x+s,y+h, x,y+h);
+        colors.push(...Array(6).fill(B).flat());
+        // Amarillo
+        positions.push(x+s,y, x+2*s,y, x+s,y+h,  x+2*s,y, x+2*s,y+h, x+s,y+h);
+        colors.push(...Array(6).fill(Y).flat());
+        // Rojo
+        positions.push(x+2*s,y, x+w,y, x+2*s,y+h,  x+w,y, x+w,y+h, x+2*s,y+h);
+        colors.push(...Array(6).fill(R).flat());
+        return {positions,colors};
+    };
+
+    fn.overlay = (ctx,x,y,w,h)=>{
+        const draw = () => {
+        const nw = armsImg.naturalWidth || 1, nh = armsImg.naturalHeight || 1;
+        const ar = nw/nh;
+        const s = w/3;
+        const boxW = s * 0.70;     // ancho máximo en franja amarilla
+        const boxH = h * 0.78;     // alto máximo permitido
+        const boxAR = boxW/boxH;
+        let ew, eh;
+        if (ar > boxAR) { ew = boxW; eh = ew/ar; } else { eh = boxH; ew = eh*ar; }
+        const ex = (x + s) + (s - ew)/2; // centrado en franja central
+        const ey = y + (h - eh)/2;
+        ctx.save(); ctx.drawImage(armsImg, ex, ey, ew, eh); ctx.restore();
+        };
+        if (armsImg.complete && armsImg.naturalWidth>0) draw(); else armsImg.onload = draw;
+    };
+
+    return fn;
+    })(),
+
+    angola: (() => {
+    const R=[0.808,0.067,0.149], K=[0,0,0];
+
+    const emblemImg = new Image();
+    emblemImg.src = 'recursos_yoel/angola_escudo.svg'; // SVG con viewBox
+
+    const fn=(x,y,w,h)=>{
+        const positions=[],colors=[];
+        // Mitad roja superior
+        positions.push(x,y, x+w,y, x,y+h/2,  x+w,y, x+w,y+h/2, x,y+h/2);
+        colors.push(...Array(6).fill(R).flat());
+        // Mitad negra inferior
+        positions.push(x,y+h/2, x+w,y+h/2, x,y+h,  x+w,y+h/2, x+w,y+h, x,y+h);
+        colors.push(...Array(6).fill(K).flat());
+        return {positions,colors};
+    };
+
+    fn.overlay=(ctx,x,y,w,h)=>{
+        const draw=()=>{
+        const nw = emblemImg.naturalWidth || 1, nh = emblemImg.naturalHeight || 1;
+        const ar = nw/nh;
+        const boxW = w * 0.56;     // caja centrada (algo conservadora)
+        const boxH = h * 0.66;
+        const boxAR = boxW/boxH;
+        let ew, eh;
+        if (ar > boxAR) { ew = boxW; eh = ew/ar; } else { eh = boxH; ew = eh*ar; }
+        const ex = x + (w - ew)/2;
+        const ey = y + (h - eh)/2;
+        ctx.save(); ctx.drawImage(emblemImg, ex, ey, ew, eh); ctx.restore();
+        };
+        if (emblemImg.complete && emblemImg.naturalWidth>0) draw(); else emblemImg.onload=draw;
+    };
+
+    return fn;
+    })(),
+
+    antiguaAndBarbuda: (x, y, w, h) => {
+    // Antigua y Barbuda — respeta el sistema (x,y) arriba-izquierda.
+    // Orden: rojo (fondo) → triángulo blanco invertido → FRANJA NEGRA SUPERIOR (TRAPEZOIDE) → franja azul → sol (16 rayos).
+    const RED=[0.808,0.067,0.149], BLACK=[0,0,0], WHITE=[1,1,1],
+            BLUE=[0,0.447,0.807], SUN=[0.988,0.820,0.070];
+
+    const positions=[], colors=[];
+
+    // 1) Fondo rojo completo
+    positions.push(x,y, x+w,y, x,y+h,  x+w,y, x+w,y+h, x,y+h);
+    colors.push(...Array(6).fill(RED).flat());
+
+    // 2) Triángulo blanco invertido (base = borde superior, ápice = centro inferior)
+    const apexX = x + w*0.5, apexY = y + h;
+    positions.push(x, y,  x+w, y,  apexX, apexY);
+    colors.push(...WHITE, ...WHITE, ...WHITE);
+
+    // Utilidad: intersección horizontal con los lados del triángulo blanco
+    const edgeAtY = (yy) => {
+        const t = (yy - y) / (apexY - y); // 0 en y, 1 en el ápice
+        return {
+        left:  x + (apexX - x) * t,
+        right: x + w - (x + w - apexX) * t,
+        };
+    };
+
+    // 3) FRANJA NEGRA SUPERIOR (TRAPEZOIDE dentro del triángulo blanco)
+    //    "toda la parte de arriba" = desde el borde superior hasta blackBaseY, recortado por el triángulo blanco.
+    const blackBaseY = y + h * 0.36;
+    const eBase = edgeAtY(blackBaseY);
+    // trapezoide: (x,y)-(x+w,y)-(eBase.right,blackBaseY)-(eBase.left,blackBaseY)
+    positions.push(
+        x, y,         x+w, y,          eBase.right, blackBaseY,
+        x, y,         eBase.right, blackBaseY,  eBase.left,  blackBaseY
+    );
+    colors.push(...Array(6).fill(BLACK).flat());
+
+    // 4) Franja azul (trapezoide) bajo la base negra, también recortada por el triángulo blanco
+    const blueBotY = y + h * 0.66;
+    const eBot = edgeAtY(blueBotY);
+    positions.push(
+        eBase.left,  blackBaseY,  eBase.right, blackBaseY,  eBot.left,  blueBotY,
+        eBase.right, blackBaseY,  eBot.right,  blueBotY,    eBot.left,  blueBotY
+    );
+    colors.push(...Array(6).fill(BLUE).flat());
+
+    // 5) Sol de 16 rayos sobre la base negra (semicírculo hacia arriba)
+    const cx = (eBase.left + eBase.right) * 0.5;
+    const cy = blackBaseY;
+    // limitar radio para mantenerlo dentro del triángulo blanco y bajo el borde superior
+    const maxR = Math.min((eBase.right - eBase.left) * 0.48, (blackBaseY - y) * 0.95);
+    const R = Math.min(maxR, Math.min(w,h) * 0.165);
+    const rays = 16;
+    for (let i=0; i<rays-1; i++) {
+        const a0 = -Math.PI + (Math.PI/(rays-1))*i;
+        const a1 = -Math.PI + (Math.PI/(rays-1))*(i+1);
+        positions.push(
+        cx, cy,
+        cx + R*Math.cos(a0), cy + R*Math.sin(a0),
+        cx + R*Math.cos(a1), cy + R*Math.sin(a1)
+        );
+        colors.push(...SUN, ...SUN, ...SUN);
+    }
+
+    return { positions, colors };
+    },
+
+
+
+    saudiArabia: (() => {
+    // Verde + shahada/espada muy simplificada (SVG inline, sin dependencias externas)
+    const FIELD=[0,0.423,0.208];
+    const svgData = `
+    <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 600'>
+        <g fill='#fff'>
+        <path d='M120,210q40-60 120-60h120q40 0 40 40v40q0 40-40 40h-80q-40 0-60 20t-20 50q0 40 40 40h160q40 0 60-20t20-50v-30h60v35q0 50-35 85t-95 35H250q-55 0-92.5-32.5T80,320q0-65 40-110z'/>
+        <rect x='540' y='270' width='280' height='50' rx='16'/>
+        <rect x='200' y='430' width='540' height='18' rx='9'/>
+        <path d='M720,430q70 0 120 40q-55-10-120 18z'/>
+        </g>
+    </svg>`;
+    const img=new Image(); img.src='data:image/svg+xml;base64,'+btoa(svgData);
+    const fn=(x,y,w,h)=>{
+        const positions=[],colors=[];
+        positions.push(x,y, x+w,y, x,y+h,  x+w,y, x+w,y+h, x,y+h);
+        colors.push(...Array(6).fill(FIELD).flat());
+        return {positions,colors};
+    };
+    fn.overlay=(ctx,x,y,w,h)=>{
+        const draw=()=>{
+        const mx=w*0.08; const bx=x+mx, by=y+h*0.16, bw=w-mx*2, bh=h*0.68;
+        ctx.save(); ctx.drawImage(img,bx,by,bw,bh); ctx.restore();
+        };
+        if(img.complete&&img.naturalWidth>0) draw(); else img.onload=draw;
+    };
+    return fn;
+    })(),
+
+    algeria: (x,y,w,h)=>{
+    // Verde/Blanco + creciente y estrella (geométrico)
+    const G=[0,0.384,0.2], W=[1,1,1], R=[0.823,0.063,0.204];
+    const positions=[],colors=[];
+    // mitad verde
+    positions.push(x,y, x+w/2,y, x,y+h,  x+w/2,y, x+w/2,y+h, x,y+h);
+    colors.push(...Array(6).fill(G).flat());
+    // mitad blanca
+    positions.push(x+w/2,y, x+w,y, x+w/2,y+h,  x+w,y, x+w,y+h, x+w/2,y+h);
+    colors.push(...Array(6).fill(W).flat());
+    // creciente
+    const cx=x+w*0.48, cy=y+h*0.5; const R1=Math.min(w,h)*0.22, r1=R1*0.75, off=R1*0.40, seg=80, step=2*Math.PI/seg;
+    for(let i=0;i<seg;i++){ const a=i*step,b=(i+1)*step; positions.push(cx,cy, cx+R1*Math.cos(a),cy+R1*Math.sin(a), cx+R1*Math.cos(b),cy+R1*Math.sin(b)); colors.push(...R,...R,...R); }
+    for(let i=0;i<seg;i++){ const a=i*step,b=(i+1)*step, cxx=cx+off; positions.push(cxx,cy, cxx+r1*Math.cos(a),cy+r1*Math.sin(a), cxx+r1*Math.cos(b),cy+r1*Math.sin(b)); colors.push(...W,...W,...W); }
+    // estrella
+    const pts=[]; const outer=R1*0.28, inner=outer*0.5;
+    for(let i=0;i<10;i++){ const ang=(Math.PI*i)/5 - Math.PI/2; const rr=(i%2===0)?outer:inner; pts.push(cx+rr*Math.cos(ang), cy+rr*Math.sin(ang)); }
+    for(let i=1;i<pts.length/2-1;i++){ positions.push(pts[0],pts[1], pts[2*i],pts[2*i+1], pts[2*(i+1)],pts[2*(i+1)+1]); colors.push(...R,...R,...R); }
+    return {positions,colors};
+    },
+
+    argentina: (()=> {
+    // Celeste/Blanco/Celeste + Sol (SVG inline)
+    const CEL=[0.455,0.675,0.875], W=[1,1,1];
+    const sunSvg=(()=>{
+        let rays = '';
+        for(let i=0;i<32;i++){
+        const ang=(Math.PI*2/32)*i; const r1=90, r2=(i%2?130:115);
+        const x1=200+Math.cos(ang)*r1, y1=200+Math.sin(ang)*r1;
+        const x2=200+Math.cos(ang)*r2, y2=200+Math.sin(ang)*r2;
+        rays += `<path d='M${x1.toFixed(1)},${y1.toFixed(1)} L${x2.toFixed(1)},${y2.toFixed(1)}'/>`;
+        }
+        return `
+        <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 400 400'>
+        <g fill='#f6b40e' stroke='#a67c00' stroke-width='4'>
+            <circle cx='200' cy='200' r='58'/>
+            ${rays}
+        </g>
+        </svg>`;
+    })();
+    const sunImg=new Image(); sunImg.src='data:image/svg+xml;base64,'+btoa(sunSvg);
+    const fn=(x,y,w,h)=>{
+        const positions=[],colors=[]; const s=h/3;
+        positions.push(x,y, x+w,y, x,y+s,  x+w,y, x+w,y+s, x,y+s); colors.push(...Array(6).fill(CEL).flat());
+        positions.push(x,y+s, x+w,y+s, x,y+2*s,  x+w,y+s, x+w,y+2*s, x,y+2*s); colors.push(...Array(6).fill(W).flat());
+        positions.push(x,y+2*s, x+w,y+2*s, x,y+h,  x+w,y+2*s, x+w,y+h, x,y+h); colors.push(...Array(6).fill(CEL).flat());
+        return {positions,colors};
+    };
+    fn.overlay=(ctx,x,y,w,h)=>{
+        const draw=()=>{
+        const R=Math.min(w,h)*0.23; const sz=R*2;
+        const ex=x+w/2 - sz/2, ey=y+h/2 - sz/2;
+        ctx.save(); ctx.drawImage(sunImg,ex,ey,sz,sz); ctx.restore();
+        };
+        if(sunImg.complete&&sunImg.naturalWidth>0) draw(); else sunImg.onload=draw;
+    };
+    return fn;
+    })(),
+
+    armenia: (x,y,w,h)=>{
+    const s=h/3, RED=[0.851,0,0.070], BLUE=[0,0.2,0.627], OR=[0.949,0.659,0.086];
+    const positions=[],colors=[];
+    positions.push(x,y, x+w,y, x,y+s,  x+w,y, x+w,y+s, x,y+s); colors.push(...Array(6).fill(RED).flat());
+    positions.push(x,y+s, x+w,y+s, x,y+2*s,  x+w,y+s, x+w,y+2*s, x,y+2*s); colors.push(...Array(6).fill(BLUE).flat());
+    positions.push(x,y+2*s, x+w,y+2*s, x,y+h,  x+w,y+2*s, x+w,y+h, x,y+h); colors.push(...Array(6).fill(OR).flat());
+    return {positions,colors};
+    },
+
+    australia: (x, y, w, h) => {
+    // Geometría completa (Union Jack con fimbriación + estrellas) sin SVG
+    const BLUE=[0.004,0.129,0.412], WHITE=[1,1,1], RED=[0.784,0.063,0.180];
+    const positions=[], colors=[];
+    const rect = (x0,y0,x1,y1,col)=>{
+        positions.push(x0,y0, x1,y0, x0,y1,  x1,y0, x1,y1, x0,y1);
+        colors.push(...Array(6).fill(col).flat());
+    };
+    const quad = (p, col) => {
+        positions.push(p[0],p[1], p[2],p[3], p[4],p[5],  p[0],p[1], p[4],p[5], p[6],p[7]);
+        colors.push(...Array(6).fill(col).flat());
+    };
+    const star = (cx, cy, R, r, points, tilt=-Math.PI/2) => {
+        for (let i=0;i<points*2;i++){
+        const a0 = tilt + (Math.PI/points)*i;
+        const a1 = tilt + (Math.PI/points)*(i+1);
+        const rr0 = (i%2===0) ? R : r;
+        const rr1 = ((i+1)%2===0) ? R : r;
+        positions.push(
+            cx, cy,
+            cx + rr0*Math.cos(a0), cy + rr0*Math.sin(a0),
+            cx + rr1*Math.cos(a1), cy + rr1*Math.sin(a1)
+        );
+        colors.push(...WHITE, ...WHITE, ...WHITE);
+        }
+    };
+    // campo
+    rect(x,y, x+w,y+h, BLUE);
+
+    // Cantón 1/2 × 1/2
+    const cx0=x, cy0=y, cw=w*0.5, ch=h*0.5;
+    rect(cx0, cy0, cx0+cw, cy0+ch, BLUE);
+    const wWhite = ch * 0.20, wRed = wWhite * 0.6;
+    const wWhiteDiag = ch * 0.12, wRedDiag = wWhiteDiag * 0.6, asym = wWhiteDiag * 0.25;
+
+    // Aspas blancas
+    { const x0=cx0,y0=cy0,x1=cx0+cw,y1=cy0+ch,dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy),px=-dy/L,py=dx/L,hw=wWhiteDiag*0.5;
+        quad([x0+px*hw,y0+py*hw, x1+px*hw,y1+py*hw, x1-px*hw,y1-py*hw, x0-px*hw,y0-py*hw], WHITE);
+    }
+    { const x0=cx0+cw,y0=cy0,x1=cx0,y1=cy0+ch,dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy),px=-dy/L,py=dx/L,hw=wWhiteDiag*0.5;
+        quad([x0+px*hw,y0+py*hw, x1+px*hw,y1+py*hw, x1-px*hw,y1-py*hw, x0-px*hw,y0-py*hw], WHITE);
+    }
+    // Aspas rojas descentradas
+    { const x0=cx0,y0=cy0,x1=cx0+cw,y1=cy0+ch,dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L,hw=wRedDiag*0.5,off=asym;
+        quad([x0+nx*(hw+off),y0+ny*(hw+off), x1+nx*(hw+off),y1+ny*(hw+off), x1-nx*(hw-off),y1-ny*(hw-off), x0-nx*(hw-off),y0-ny*(hw-off)], RED);
+    }
+    { const x0=cx0+cw,y0=cy0,x1=cx0,y1=cy0+ch,dx=x1-x0,dy=y1-y0,L=Math.hypot(dx,dy),nx=-dy/L,ny=dx/L,hw=wRedDiag*0.5,off=-asym;
+        quad([x0+nx*(hw+off),y0+ny*(hw+off), x1+nx*(hw+off),y1+ny*(hw+off), x1-nx*(hw-off),y1-ny*(hw-off), x0-nx*(hw-off),y0-ny*(hw-off)], RED);
+    }
+    // Cruces
+    rect(cx0, cy0 + ch*0.5 - wWhite*0.5, cx0+cw, cy0 + ch*0.5 + wWhite*0.5, WHITE);
+    rect(cx0 + cw*0.5 - wWhite*0.5, cy0, cx0 + cw*0.5 + wWhite*0.5, cy0+ch, WHITE);
+    rect(cx0, cy0 + ch*0.5 - wRed*0.5, cx0+cw, cy0 + ch*0.5 + wRed*0.5, RED);
+    rect(cx0 + cw*0.5 - wRed*0.5, cy0, cx0 + cw*0.5 + wRed*0.5, cy0+ch, RED);
+
+    // Estrellas
+    const R_common = h * 0.10, r_common = R_common * 0.45;
+    const R_large  = h * 0.055, r_large = R_large * 0.45;
+    const R_mid    = h * 0.048, r_mid   = R_mid   * 0.45;
+    const R_small5 = h * 0.030, r_small5= R_small5* 0.45;
+    const SX=(f)=>x+w*f, SY=(f)=>y+h*f;
+    // Commonwealth
+    star(x + w*0.25, y + ch + h*0.125, R_common, r_common, 7);
+    // Cruz del Sur
+    star(SX(0.75),  SY(0.75),  R_large, r_large, 7);
+    star(SX(0.875), SY(0.583), R_mid,   r_mid,   7);
+    star(SX(0.70),  SY(0.50),  R_large, r_large, 7);
+    star(SX(0.80),  SY(0.308), R_mid,   r_mid,   7);
+    star(SX(0.91),  SY(0.667), R_small5,r_small5,5);
+    return { positions, colors };
+    },
+
+    austria: (x,y,w,h)=>{
+    const s=h/3, R=[0.928,0.160,0.223], W=[1,1,1];
+    const positions=[],colors=[];
+    positions.push(x,y, x+w,y, x,y+s,  x+w,y, x+w,y+s, x,y+s); colors.push(...Array(6).fill(R).flat());
+    positions.push(x,y+s, x+w,y+s, x,y+2*s,  x+w,y+s, x+w,y+2*s, x,y+2*s); colors.push(...Array(6).fill(W).flat());
+    positions.push(x,y+2*s, x+w,y+2*s, x,y+h,  x+w,y+2*s, x+w,y+h, x,y+h); colors.push(...Array(6).fill(R).flat());
+    return {positions,colors};
+    },
+
+    azerbaijan: (x,y,w,h)=>{
+    // Cian/Rojo/Verde + creciente y estrella 8 puntas
+    const s=h/3, B=[0,0.7098,0.8863], R=[0.937,0.203,0.251], G=[0.314,0.619,0.184], W=[1,1,1];
+    const positions=[],colors=[];
+    positions.push(x,y, x+w,y, x,y+s,  x+w,y, x+w,y+s, x,y+s); colors.push(...Array(6).fill(B).flat());
+    positions.push(x,y+s, x+w,y+s, x,y+2*s,  x+w,y+s, x+w,y+2*s, x,y+2*s); colors.push(...Array(6).fill(R).flat());
+    positions.push(x,y+2*s, x+w,y+2*s, x,y+h,  x+w,y+2*s, x+w,y+h, x,y+h); colors.push(...Array(6).fill(G).flat());
+    const cy=y+h*0.5, cx=x+w*0.45, R0=Math.min(w,h)*0.13, r0=R0*0.65, off=R0*0.40, seg=80, step=2*Math.PI/seg;
+    for(let i=0;i<seg;i++){ const a=i*step,b=(i+1)*step; positions.push(cx,cy, cx+R0*Math.cos(a),cy+R0*Math.sin(a), cx+R0*Math.cos(b),cy+R0*Math.sin(b)); colors.push(...W,...W,...W); }
+    for(let i=0;i<seg;i++){ const a=i*step,b=(i+1)*step, cxx=cx+off; positions.push(cxx,cy, cxx+r0*Math.cos(a),cy+r0*Math.sin(a), cxx+r0*Math.cos(b),cy+r0*Math.sin(b)); colors.push(...R,...R,...R); }
+    const pts=[]; const s8=R0*0.65, scx=cx+R0*1.55, scy=cy;
+    for(let k=0;k<8;k++){ const ang=-Math.PI/2 + k*(Math.PI/4); const rr = (k%2===0? s8 : s8*0.45); pts.push(scx+rr*Math.cos(ang), scy + rr*Math.sin(ang)); }
+    for(let i=1;i<pts.length/2-1;i++){ positions.push(pts[0],pts[1], pts[2*i],pts[2*i+1], pts[2*(i+1)],pts[2*(i+1)+1]); colors.push(...W,...W,...W); }
+    return {positions,colors};
+    },
+
+    bahamas: (x,y,w,h)=>{
+    const s=h/3, A=[0,0.6706,0.7882], Y=[1,0.7804,0.1725], K=[0,0,0];
+    const positions=[],colors=[];
+    positions.push(x,y, x+w,y, x,y+s,  x+w,y, x+w,y+s, x,y+s); colors.push(...Array(6).fill(A).flat());
+    positions.push(x,y+s, x+w,y+s, x,y+2*s,  x+w,y+s, x+w,y+2*s, x,y+2*s); colors.push(...Array(6).fill(Y).flat());
+    positions.push(x,y+2*s, x+w,y+2*s, x,y+h,  x+w,y+2*s, x+w,y+h, x,y+h); colors.push(...Array(6).fill(A).flat());
+    positions.push(x,y, x+w*0.35,y+h*0.5, x,y+h); colors.push(...K, ...K, ...K);
+    return {positions,colors};
+    },
+
+    bangladesh: (x,y,w,h)=>{
+    const G=[0,0.4157,0.3059], R=[0.9569,0.1647,0.2549];
+    const positions=[],colors=[];
+    positions.push(x,y, x+w,y, x,y+h,  x+w,y, x+w,y+h, x,y+h); colors.push(...Array(6).fill(G).flat());
+    const cx=x+w*0.43, cy=y+h*0.5, Rr=Math.min(w,h)*0.25, seg=80, step=2*Math.PI/seg;
+    for(let i=0;i<seg;i++){ const a=i*step,b=(i+1)*step; positions.push(cx,cy, cx+Rr*Math.cos(a),cy+Rr*Math.sin(a), cx+Rr*Math.cos(b),cy+Rr*Math.sin(b)); colors.push(...R,...R,...R); }
+    return {positions,colors};
+    },
+
+    barbados: (()=> {
+    const BLUE=[0,0.149,0.498], GOLD=[1,0.780,0.149];
+
+    const triImg = new Image();
+    triImg.src = 'recursos_yoel/barbados_escudo.svg'; // SVG con viewBox
+
+    const fn=(x,y,w,h)=>{
+        const positions=[],colors=[]; const s=w/3;
+        // Azul (hoist)
+        positions.push(x,y, x+s,y, x,y+h,  x+s,y, x+s,y+h, x,y+h); colors.push(...Array(6).fill(BLUE).flat());
+        // Oro (centro)
+        positions.push(x+s,y, x+2*s,y, x+s,y+h,  x+2*s,y, x+2*s,y+h, x+s,y+h); colors.push(...Array(6).fill(GOLD).flat());
+        // Azul (fly)
+        positions.push(x+2*s,y, x+w,y, x+2*s,y+h,  x+w,y, x+w,y+h, x+2*s,y+h); colors.push(...Array(6).fill(BLUE).flat());
+        return {positions,colors};
+    };
+
+    fn.overlay=(ctx,x,y,w,h)=>{
+        const draw=()=>{
+        const nw = triImg.naturalWidth || 1, nh = triImg.naturalHeight || 1;
+        const ar = nw/nh;
+        const s = w/3;
+        const boxW = s * 0.85;     // que quepa cómodamente dentro del oro
+        const boxH = h * 0.62;
+        const boxAR = boxW/boxH;
+        let ew, eh;
+        if (ar > boxAR) { ew = boxW; eh = ew/ar; } else { eh = boxH; ew = eh*ar; }
+        // centrado en la bandera (y por ende en la franja amarilla si ew <= s)
+        const ex = x + (w - ew)/2;
+        const ey = y + (h - eh)/2;
+        ctx.save(); ctx.drawImage(triImg, ex, ey, ew, eh); ctx.restore();
+        };
+        if (triImg.complete && triImg.naturalWidth>0) draw(); else triImg.onload=draw;
+    };
+
+    return fn;
+    })(),
+
+    bahrain: (x,y,w,h)=>{
+    // Asta blanca dentada + campo rojo
+    const W=[1,1,1], R=[0.694,0,0.129];
+    const positions=[],colors=[];
+    // rojo
+    positions.push(x,y, x+w,y, x,y+h,  x+w,y, x+w,y+h, x,y+h); colors.push(...Array(6).fill(R).flat());
+    // asta blanca ~ 0.28W
+    const bandW=w*0.28;
+    positions.push(x,y, x+bandW,y, x,y+h,  x+bandW,y, x+bandW,y+h, x,y+h); colors.push(...Array(6).fill(W).flat());
+    // sierra (5 dientes)
+    const teeth=5, toothH=h/teeth, depth=Math.min(w*0.13, toothH*0.95), baseX=x+bandW;
+    for(let i=0;i<teeth;i++){
+        const y0=y+i*toothH, y1=y0+toothH/2, y2=y0+toothH, tipX=baseX+depth;
+        positions.push(baseX,y0, tipX,y1, baseX,y1); colors.push(...W, ...W, ...W);
+        positions.push(baseX,y1, tipX,y1, baseX,y2); colors.push(...W, ...W, ...W);
+    }
+    return {positions,colors};
+    },
+
+    belgium: (x,y,w,h)=>{
+    const s=w/3, K=[0,0,0], Y=[1,0.85,0.05], R=[0.937,0.203,0.251];
+    const positions=[],colors=[];
+    positions.push(x,y, x+s,y, x,y+h,  x+s,y, x+s,y+h, x,y+h); colors.push(...Array(6).fill(K).flat());
+    positions.push(x+s,y, x+2*s,y, x+s,y+h,  x+2*s,y, x+2*s,y+h, x+s,y+h); colors.push(...Array(6).fill(Y).flat());
+    positions.push(x+2*s,y, x+w,y, x+2*s,y+h,  x+w,y, x+w,y+h, x+2*s,y+h); colors.push(...Array(6).fill(R).flat());
+    return {positions,colors};
+    },
+
+
     peru: (x, y, w, h) => {
         const w3 = w / 3;
         return {
