@@ -64,7 +64,7 @@ const FLAGS_CONFIG = [
 
     // D
     { key: 'denmark', name: 'Dinamarca', emoji: '🇩🇰' },
-    { key: 'dominica', name: 'Dominica', emoji: '🇩🇲' },
+    { key: 'dominicana', name: 'Dominica', emoji: '🇩🇲' },
     
     // E
     {key: 'ecuador', name: 'Ecuador', emoji: '🇪🇨'},
@@ -179,23 +179,23 @@ const FLAGS_CONFIG = [
     {key: 'papuaNewGuinea', name: 'Papúa Nueva Guinea', emoji: '🇵🇬'},
     {key: 'paraguay', name: 'Paraguay', emoji: '🇵🇾'},
     {key: 'peru', name: 'Perú', emoji: '🇵🇪'},
-    {key: 'poland', name: 'Polonia', emoji: '🇵🇱'},
+    {key: 'polonia', name: 'Polonia', emoji: '🇵🇱'},
     {key: 'portugal', name: 'Portugal', emoji: '🇵🇹'},
 
     // R
     {key: 'uk', name: 'Reino Unido', emoji: '🇬🇧'},
     {key: 'centralAfricanRepublic', name: 'República Centroafricana', emoji: '🇨🇫'},
     {key: 'dominicanRepublic', name: 'República Dominicana', emoji: '🇩🇴'},
-    {key: 'rwanda', name: 'Ruanda', emoji: '🇷🇼'},
-    {key: 'romania', name: 'Rumania', emoji: '🇷🇴'},
-    {key: 'russia', name: 'Rusia', emoji: '🇷🇺'},
+    {key: 'ruanda', name: 'Ruanda', emoji: '🇷🇼'},
+    {key: 'rumania', name: 'Rumania', emoji: '🇷🇴'},
+    {key: 'rusia', name: 'Rusia', emoji: '🇷🇺'},
 
     // S
     {key: 'samoa', name: 'Samoa', emoji: '🇼🇸'},
     {key: 'saintKitts', name: 'San Cristóbal y Nieves', emoji: '🇰🇳'},
     {key: 'sanMarino', name: 'San Marino', emoji: '🇸🇲'},
     {key: 'saintVincent', name: 'San Vicente y las Granadinas', emoji: '🇻🇨'},
-    {key: 'saintLucia', name: 'Santa Lucía', emoji: '🇱🇨'},
+    {key: 'santaLucia', name: 'Santa Lucía', emoji: '🇱🇨'},
     {key: 'vatican', name: 'Santa Sede (Vaticano)', emoji: '🇻🇦'},
     {key: 'saoTome', name: 'Santo Tomé y Príncipe', emoji: '🇸🇹'},
     {key: 'senegal', name: 'Senegal', emoji: '🇸🇳'},
@@ -401,6 +401,985 @@ function drawFlagToCanvas(targetCanvas, width, flagData) {
 // =========================
 
 const flags = {
+
+    
+    rumania: (x, y, w, h) => {
+        const w3 = w / 3;
+        return {
+            positions: [
+                x, y, x + w3, y, x, y + h,
+                x + w3, y, x + w3, y + h, x, y + h,
+
+                x + w3, y, x + w3 * 2, y, x + w3, y + h,
+                x + w3 * 2, y, x + w3 * 2, y + h, x + w3, y + h,
+
+                x + w3 * 2, y, x + w, y, x + w3 * 2, y + h,
+                x + w, y, x + w, y + h, x + w3 * 2, y + h
+            ],
+            colors: [
+                ...new Array(6).fill([0, 0.168, 0.498]).flat(),
+                ...new Array(6).fill([0.988, 0.820, 0.086]).flat(),
+                ...new Array(6).fill([0.808, 0.067, 0.149]).flat()
+            ]
+        };
+    },
+
+    polonia: (x, y, w, h) => {
+        const h2 = h / 2;
+        return {
+            positions: [
+                x, y, x + w, y, x, y + h2,
+                x + w, y, x + w, y + h2, x, y + h2,
+
+                x, y + h2, x + w, y + h2, x, y + h,
+                x + w, y + h2, x + w, y + h, x, y + h
+            ],
+            colors: [
+                ...new Array(6).fill([1, 1, 1]).flat(),
+                ...new Array(6).fill([0.863, 0.078, 0.235]).flat()
+            ]
+        };
+    },
+
+    rusia: (x, y, w, h) => {
+        const h3 = h / 3;
+        return {
+            positions: [
+                x, y, x + w, y, x, y + h3,
+                x + w, y, x + w, y + h3, x, y + h3,
+
+                x, y + h3, x + w, y + h3, x, y + h3 * 2,
+                x + w, y + h3, x + w, y + h3 * 2, x, y + h3 * 2,
+
+                x, y + h3 * 2, x + w, y + h3 * 2, x, y + h,
+                x + w, y + h3 * 2, x + w, y + h, x, y + h
+            ],
+            colors: [
+                ...new Array(6).fill([1, 1, 1]).flat(),
+                ...new Array(6).fill([0, 0.220, 0.655]).flat(),
+                ...new Array(6).fill([0.863, 0.078, 0.235]).flat()
+            ]
+        };
+    },
+
+    santaLucia: (x, y, w, h) => {
+        const cx = x + w / 2; 
+        const top = y + h * 0.15; 
+        const bottom = y + h * 0.90; 
+        return {
+            positions: [
+                x, y, x + w, y, x, y + h,
+                x + w, y, x + w, y + h, x, y + h,
+
+                cx, top, x + w * 0.25, bottom, x + w * 0.75, bottom,
+
+                cx, y + h * 0.20, x + w * 0.30, bottom, x + w * 0.70, bottom,
+
+                cx, y + h * 0.50, x + w * 0.25, bottom, x + w * 0.75, bottom
+            ],
+            colors: [
+                ...new Array(6).fill([0.423, 0.812, 0.965]).flat(),
+                ...new Array(3).fill([1, 1, 1]).flat(),
+                ...new Array(3).fill([0, 0, 0]).flat(),
+                ...new Array(3).fill([1, 0.843, 0]).flat()
+            ]
+        };
+    },
+
+    portugal: (() => {
+        const img = new Image();
+        img.src = 'recursos_yimmy/portugal.png';
+
+        const fn = (x, y, w, h) => {
+            const w5 = w / 5;
+            return {
+                positions: [
+                    x, y, x + w5 * 2, y, x, y + h,
+                    x + w5 * 2, y, x + w5 * 2, y + h, x, y + h,
+                    x + w5 * 2, y, x + w, y, x + w5 * 2, y + h,
+                    x + w, y, x + w, y + h, x + w5 * 2, y + h
+                ],
+                colors: [
+                    ...new Array(6).fill([0, 0.4, 0]).flat(),
+                    ...new Array(6).fill([1, 0, 0]).flat()
+                ]
+            };
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            const drawIt = () => {
+                // Ajuste: escalar el escudo para que ocupe ~60% de la altura de la bandera
+                const targetH = h * 0.60;
+                const iw = img.naturalWidth || 1;
+                const ih = img.naturalHeight || 1;
+                const ratio = iw / ih;
+                let targetW = targetH * ratio;
+
+                // Posicionar el escudo cerca de la unión verde/roja (aprox. 40% desde la izquierda)
+                const cx = x + w * 0.40;
+                const dx = cx - targetW / 2;
+                const dy = y + (h - targetH) / 2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(img, dx, dy, targetW, targetH);
+                ctx.restore();
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                drawIt();
+            } else {
+                img.onload = () => drawIt();
+            }
+        };
+
+        return fn;
+    })(),
+
+    centralAfricanRepublic: (x, y, w, h) => { 
+        const h4 = h / 4;
+        const w5 = w / 5;
+
+        return {
+            positions: [
+                x, y, x + w, y, x, y + h4,
+                x + w, y, x + w, y + h4, x, y + h4,
+
+                x, y + h4, x + w, y + h4, x, y + h4 * 2,
+                x + w, y + h4, x + w, y + h4 * 2, x, y + h4 * 2,
+
+                x, y + h4 * 2, x + w, y + h4 * 2, x, y + h4 * 3,
+                x + w, y + h4 * 2, x + w, y + h4 * 3, x, y + h4 * 3,
+
+                x, y + h4 * 3, x + w, y + h4 * 3, x, y + h,
+                x + w, y + h4 * 3, x + w, y + h, x, y + h,
+
+                x + w * 0.4, y, x + w * 0.6, y, x + w * 0.4, y + h,
+                x + w * 0.6, y, x + w * 0.6, y + h, x + w * 0.4, y + h,
+
+                x + w * 0.12, y + h4 * 0.2,  x + w * 0.15, y + h4 * 0.80,  x + w * 0.09, y + h4 * 0.80,
+
+                x + w * 0.12, y + h4 * 0.65,  x + w * 0.15, y + h4 * 0.80,  x + w * 0.09, y + h4 * 0.80,
+
+                x + w * 0.07, y + h4 * 0.4,  x + w * 0.17, y + h4 * 0.4,  x + w * 0.12, y + h4 * 0.60
+            ],
+            colors: [
+                ...new Array(6).fill([0.0, 0.188, 0.510]).flat(),
+                ...new Array(6).fill([1.0, 1.0, 1.0]).flat(),
+                ...new Array(6).fill([0.0, 0.592, 0.224]).flat(),
+                ...new Array(6).fill([1.0, 0.843, 0.0]).flat(),
+                ...new Array(6).fill([0.823, 0.063, 0.204]).flat(),
+                ...new Array(3).fill([1.0, 0.843, 0.0]).flat(),
+                ...new Array(3).fill([0.0, 0.188, 0.510]).flat(),
+                ...new Array(3).fill([1.0, 0.843, 0.0]).flat()
+            ]
+        };
+
+
+    },
+
+    ruanda: (() => {
+        const img = new Image();
+        img.src = 'recursos_yimmy/ruanda.png';
+
+        const fn = (x, y, w, h) => {
+            const h2 = h / 2;
+            const h4 = h / 4;
+            return {
+                positions: [
+                    x, y, x + w, y, x, y + h2,
+                    x + w, y, x + w, y + h2, x, y + h2,
+
+                    x, y + h2, x + w, y + h2, x, y + h2 + h4,
+                    x + w, y + h2, x + w, y + h2 + h4, x, y + h2 + h4,
+
+                    x, y + h2 + h4, x + w, y + h2 + h4, x, y + h,
+                    x + w, y + h2 + h4, x + w, y + h, x, y + h
+                ],
+                colors: [
+                    ...new Array(6).fill([0.003, 0.635, 0.882]).flat(), // azul
+                    ...new Array(6).fill([0.980, 0.824, 0]).flat(),     // amarillo
+                    ...new Array(6).fill([0.130, 0.380, 0.239]).flat()  // verde
+                ]
+            };
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            const drawIt = () => {
+                const iw = img.naturalWidth || 1;
+                const ih = img.naturalHeight || 1;
+                const ratio = iw / ih;
+
+                // tamaño del emblema: ~30% de la altura de la bandera
+                const targetH = h * 0.30;
+                const targetW = targetH * ratio;
+
+                // posicionar cerca de la esquina superior-derecha (lado de la mosca)
+                const cx = x + w * 0.78;
+                const dx = cx - targetW / 2;
+                const dy = y + h * 0.12;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(img, dx, dy, targetW, targetH);
+                ctx.restore();
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                drawIt();
+            } else {
+                img.onload = () => drawIt();
+            }
+        };
+
+        return fn;
+    })(),
+
+    uk: (x, y, w, h) => {
+        // ---- colores ----
+        const blue = [0.0, 0.18, 0.43]; // azul oscuro
+        const white = [1, 1, 1];
+        const red = [0.82, 0, 0];
+
+        const positions = [];
+        const colors = [];
+
+        // ---- helper vectorial ----
+        // añade 2 triángulos (rectángulo) dado 4 puntos [x1,y1]...[x4,y4] y color
+        function addRectFromQuad(p1, p2, p3, p4, colorArr) {
+            // Triángulo A: p1, p2, p3
+            positions.push(p1[0], p1[1], p2[0], p2[1], p3[0], p3[1]);
+            // Triángulo B: p1, p3, p4
+            positions.push(p1[0], p1[1], p3[0], p3[1], p4[0], p4[1]);
+            for (let i = 0; i < 6; i++) colors.push(...colorArr);
+        }
+
+        // Construye un "rectángulo" centrado a lo largo de la línea p1->p2,
+        // con halfWidth (mitad del ancho) y desplazamiento lateral 'shift' (positivo = hacia la normal)
+        // Extiende ligeramente los extremos en dirección p1->p2 por 'overshoot' para cubrir esquinas.
+        function addRectAlong(p1, p2, halfWidth, shift, overshoot, colorArr) {
+            // dirección desde p1 a p2
+            const dx = p2[0] - p1[0];
+            const dy = p2[1] - p1[1];
+            const len = Math.hypot(dx, dy) || 1;
+            const ux = dx / len;
+            const uy = dy / len;
+            // perpendicular unit (to the right)
+            const px = -uy;
+            const py = ux;
+
+            // extender extremos
+            const p1e = [p1[0] - ux * overshoot, p1[1] - uy * overshoot];
+            const p2e = [p2[0] + ux * overshoot, p2[1] + uy * overshoot];
+
+            // desplazamiento lateral = shift along perp
+            // corners: p1e + perp*(shift+halfWidth) ; p2e + perp*(shift+halfWidth)
+            //          p2e + perp*(shift-halfWidth) ; p1e + perp*(shift-halfWidth)
+            const a = [p1e[0] + px * (shift + halfWidth), p1e[1] + py * (shift + halfWidth)];
+            const b = [p2e[0] + px * (shift + halfWidth), p2e[1] + py * (shift + halfWidth)];
+            const c = [p2e[0] + px * (shift - halfWidth), p2e[1] + py * (shift - halfWidth)];
+            const d = [p1e[0] + px * (shift - halfWidth), p1e[1] + py * (shift - halfWidth)];
+
+            addRectFromQuad(a, b, c, d, colorArr);
+        }
+
+        // ---- 1) fondo azul completo ----
+        addRectFromQuad([x, y], [x + w, y], [x + w, y + h], [x, y + h], blue);
+
+        // parámetros pensados y proporciones (ajustables)
+        const overshoot = Math.max(w, h) * 0.18; // cuánto sobresalen las diagonales fuera del borde
+        // half widths (medias alturas) - proporciones derivadas de observación y la práctica
+        const whiteDiagHalf = w * 0.10; // media anchura de la banda blanca diagonal
+        const redDiagHalf = w * 0.035;  // media anchura de la banda roja diagonal (más estrecha)
+        const redShift = w * 0.035;     // desplazamiento (asimetría) del centro rojo respecto al centro blanco
+
+        // puntos de las diagonales (esquinas)
+        const topLeft = [x, y];
+        const topRight = [x + w, y];
+        const bottomLeft = [x, y + h];
+        const bottomRight = [x + w, y + h];
+
+        // ---- 2) diagonales blancas ----
+        // diagonal TL -> BR (superior izquierda hacia inferior derecha)
+        addRectAlong(topLeft, bottomRight, whiteDiagHalf, 0, overshoot, white);
+        // diagonal TR -> BL (superior derecha hacia inferior izquierda)
+        addRectAlong(topRight, bottomLeft, whiteDiagHalf, 0, overshoot, white);
+
+        // ---- 3) diagonales rojas (dentro de las blancas) ----
+        // Para lograr la asimetría correcta, desplazamos el rojo en sentidos opuestos
+        // en las dos diagonales (esto simula la disposición real del Union Jack).
+        // diagonal TL->BR: desplazar el rojo hacia la "arriba/izquierda" (shift negativo)
+        addRectAlong(topLeft, bottomRight, redDiagHalf, -redShift, overshoot, red);
+        // diagonal TR->BL: desplazar el rojo hacia la "arriba/derecha" (shift positivo)
+        addRectAlong(topRight, bottomLeft, redDiagHalf, redShift, overshoot, red);
+
+        // ---- 4) cruz central blanca ----
+        // grosor de la cruz central (blanco) y roja
+        const crossWhiteHalf = w * 0.11;
+        const crossRedHalf = w * 0.055;
+
+        // franja horizontal blanca
+        addRectFromQuad(
+            [x, y + h / 2 - crossWhiteHalf],
+            [x + w, y + h / 2 - crossWhiteHalf],
+            [x + w, y + h / 2 + crossWhiteHalf],
+            [x, y + h / 2 + crossWhiteHalf],
+            white
+        );
+
+        // franja vertical blanca
+        addRectFromQuad(
+            [x + w / 2 - crossWhiteHalf, y],
+            [x + w / 2 + crossWhiteHalf, y],
+            [x + w / 2 + crossWhiteHalf, y + h],
+            [x + w / 2 - crossWhiteHalf, y + h],
+            white
+        );
+
+        // ---- 5) cruz central roja (más estrecha, encima) ----
+        addRectFromQuad(
+            [x, y + h / 2 - crossRedHalf],
+            [x + w, y + h / 2 - crossRedHalf],
+            [x + w, y + h / 2 + crossRedHalf],
+            [x, y + h / 2 + crossRedHalf],
+            red
+        );
+        addRectFromQuad(
+            [x + w / 2 - crossRedHalf, y],
+            [x + w / 2 + crossRedHalf, y],
+            [x + w / 2 + crossRedHalf, y + h],
+            [x + w / 2 - crossRedHalf, y + h],
+            red
+        );
+
+        return { positions, colors };
+    },
+
+
+    dominicana: (() => {
+        const img = new Image();
+        img.src = 'recursos_yimmy/dominicana.png';
+
+        const fn = (x, y, w, h) => {
+            const w2 = w / 2;
+            const h2 = h / 2;
+            const stripe = w * 0.12;
+
+            const positions = [];
+            const colors = [];
+
+            positions.push(
+                x, y, x + w2 - stripe / 2, y, x, y + h2 - stripe / 2,
+                x + w2 - stripe / 2, y, x + w2 - stripe / 2, y + h2 - stripe / 2, x, y + h2 - stripe / 2
+            );
+            colors.push(...new Array(6).fill([0.0, 0.2, 0.6]).flat());
+
+            positions.push(
+                x + w2 + stripe / 2, y, x + w, y, x + w2 + stripe / 2, y + h2 - stripe / 2,
+                x + w, y, x + w, y + h2 - stripe / 2, x + w2 + stripe / 2, y + h2 - stripe / 2
+            );
+            colors.push(...new Array(6).fill([0.8, 0, 0]).flat());
+
+            positions.push(
+                x, y + h2 + stripe / 2, x + w2 - stripe / 2, y + h2 + stripe / 2, x, y + h,
+                x + w2 - stripe / 2, y + h2 + stripe / 2, x + w2 - stripe / 2, y + h, x, y + h
+            );
+            colors.push(...new Array(6).fill([0.8, 0, 0]).flat());
+
+            positions.push(
+                x + w2 + stripe / 2, y + h2 + stripe / 2, x + w, y + h2 + stripe / 2, x + w2 + stripe / 2, y + h,
+                x + w, y + h2 + stripe / 2, x + w, y + h, x + w2 + stripe / 2, y + h
+            );
+            colors.push(...new Array(6).fill([0.0, 0.2, 0.6]).flat());
+
+            const white = [1, 1, 1];
+
+            positions.push(
+                x + w2 - stripe / 2, y, x + w2 + stripe / 2, y, x + w2 - stripe / 2, y + h,
+                x + w2 + stripe / 2, y, x + w2 + stripe / 2, y + h, x + w2 - stripe / 2, y + h
+            );
+            colors.push(...new Array(6).fill(white).flat());
+
+            positions.push(
+                x, y + h2 - stripe / 2, x + w, y + h2 - stripe / 2, x, y + h2 + stripe / 2,
+                x + w, y + h2 - stripe / 2, x + w, y + h2 + stripe / 2, x, y + h2 + stripe / 2
+            );
+            colors.push(...new Array(6).fill(white).flat());
+
+            return {
+                positions,
+                colors,
+            };
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            const drawIt = () => {
+                const iw = img.naturalWidth || 1;
+                const ih = img.naturalHeight || 1;
+                const ratio = iw / ih;
+
+                // Escudo ocupa aprox 35-45% de la altura; ajustar si es necesario
+                const targetH = h * 0.42;
+                let targetW = targetH * ratio;
+
+                // Centrar el escudo en la intersección de la cruz blanca (centro de la bandera)
+                const dx = x + w / 2 - targetW / 2;
+                const dy = y + h / 2 - targetH / 2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(img, dx, dy, targetW, targetH);
+                ctx.restore();
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                drawIt();
+            } else {
+                img.onload = () => drawIt();
+            }
+        };
+
+        return fn;
+    })(),
+
+    samoa: (x, y, w, h) => {
+        const red = [0.84, 0.09, 0.09];    
+        const blue = [0.0, 0.2, 0.6];      
+        const white = [1, 1, 1];           
+
+        const cantonW = w * 0.48;   
+        const cantonH = h * 0.5;    
+        const cantonX = x;          
+        const cantonY = y;          
+
+        function starTriangles(cx, cy, outerR, innerR, points = 5) {
+            const pts = [];
+            for (let i = 0; i < points * 2; i++) {
+                const angle = -Math.PI / 2 + (i * Math.PI) / points; 
+                const r = (i % 2 === 0) ? outerR : innerR;
+                pts.push([cx + Math.cos(angle) * r, cy + Math.sin(angle) * r]);
+            }
+            const tris = [];
+            for (let i = 0; i < pts.length; i++) {
+                const p1 = pts[i];
+                const p2 = pts[(i + 1) % pts.length];
+                tris.push(cx, cy, p1[0], p1[1], p2[0], p2[1]);
+            }
+            return tris;
+        }
+
+        const positions = [];
+        const colors = [];
+
+        positions.push(
+            x, y, x + w, y, x, y + h,
+            x + w, y, x + w, y + h, x, y + h
+        );
+        colors.push(...new Array(6).fill(red).flat());
+
+        positions.push(
+            cantonX, cantonY, cantonX + cantonW, cantonY, cantonX, cantonY + cantonH,
+            cantonX + cantonW, cantonY, cantonX + cantonW, cantonY + cantonH, cantonX, cantonY + cantonH
+        );
+        colors.push(...new Array(6).fill(blue).flat());
+
+        const starScale = Math.min(w, h) * 0.05; 
+        const starCenters = [
+            [cantonX + cantonW * 0.72, cantonY + cantonH * 0.18, starScale * 1.15],
+            [cantonX + cantonW * 0.88, cantonY + cantonH * 0.42, starScale * 0.85],
+            [cantonX + cantonW * 0.60, cantonY + cantonH * 0.42, starScale * 0.85],
+            [cantonX + cantonW * 0.72, cantonY + cantonH * 0.62, starScale * 0.85],
+            [cantonX + cantonW * 0.78, cantonY + cantonH * 0.78, starScale * 0.85]
+        ];
+
+        starCenters.forEach(([cx, cy, outer]) => {
+            const inner = outer * 0.45; 
+            const triVerts = starTriangles(cx, cy, outer, inner, 5);
+            positions.push(...triVerts);
+            const numVertices = triVerts.length / 2;
+            for (let i = 0; i < numVertices; i++) {
+                colors.push(...white);
+            }
+        });
+
+        return { positions, colors };
+    },
+
+    saintKitts: (x, y, w, h) => { // **************************le falta corregir las proporciones
+        const green = [0.0, 0.6, 0.2];    
+        const red   = [0.8, 0.1, 0.1];    
+        const black = [0, 0, 0];          
+        const yellow= [1, 0.8, 0];        
+        const white = [1, 1, 1];          
+
+        const A = { x: x,       y: y + h }; 
+        const B = { x: x + w,   y: y     }; 
+
+        const dx = B.x - A.x; 
+        const dy = B.y - A.y; 
+        const len = Math.hypot(dx, dy);
+        const px = (h) / len;   
+        const py = (w) / len;   
+
+        const bandHalf = Math.min(w, h) * 0.12;   
+        const fimbriation = bandHalf * 0.28;      
+        const outerHalf = bandHalf + fimbriation; 
+
+        function quadAsTriangles(p1, p2, p3, p4) {
+            return [
+                p1[0], p1[1], p2[0], p2[1], p3[0], p3[1],
+                p1[0], p1[1], p3[0], p3[1], p4[0], p4[1]
+            ];
+        }
+
+        function starTriangles(cx, cy, outerR, innerR, points = 5) {
+            const pts = [];
+            for (let i = 0; i < points * 2; i++) {
+                const angle = -Math.PI / 2 + (i * Math.PI) / points; 
+                const r = (i % 2 === 0) ? outerR : innerR;
+                pts.push([cx + Math.cos(angle) * r, cy + Math.sin(angle) * r]);
+            }
+            const tris = [];
+            for (let i = 0; i < pts.length; i++) {
+                const p1 = pts[i];
+                const p2 = pts[(i + 1) % pts.length];
+                tris.push(cx, cy, p1[0], p1[1], p2[0], p2[1]);
+            }
+            return tris;
+        }
+
+        const positions = [];
+        const colors = [];
+
+        positions.push(
+            x, y, x + w, y, x, y + h
+        );
+        colors.push(...new Array(3).fill(green).flat()); 
+
+        positions.push(
+            x + w, y, x + w, y + h, x, y + h
+        );
+        colors.push(...new Array(3).fill(red).flat()); 
+
+        const A_out_pos = [ A.x + px * outerHalf, A.y + py * outerHalf ];
+        const A_out_neg = [ A.x - px * outerHalf, A.y - py * outerHalf ];
+        const B_out_pos = [ B.x + px * outerHalf, B.y + py * outerHalf ];
+        const B_out_neg = [ B.x - px * outerHalf, B.y - py * outerHalf ];
+
+        positions.push(...quadAsTriangles(A_out_pos, B_out_pos, B_out_neg, A_out_neg));
+        colors.push(...new Array(6).fill(yellow).flat()); 
+
+        const A_in_pos = [ A.x + px * bandHalf, A.y + py * bandHalf ];
+        const A_in_neg = [ A.x - px * bandHalf, A.y - py * bandHalf ];
+        const B_in_pos = [ B.x + px * bandHalf, B.y + py * bandHalf ];
+        const B_in_neg = [ B.x - px * bandHalf, B.y - py * bandHalf ];
+
+        positions.push(...quadAsTriangles(A_in_pos, B_in_pos, B_in_neg, A_in_neg));
+        colors.push(...new Array(6).fill(black).flat());
+
+        const t1 = 0.32;
+        const t2 = 0.68; 
+        const center1 = { x: A.x + dx * t1, y: A.y + dy * t1 };
+        const center2 = { x: A.x + dx * t2, y: A.y + dy * t2 };
+
+        const starOuter = Math.min(w, h) * 0.06;
+        const starInner = starOuter * 0.45;
+
+        const star1 = starTriangles(center1.x, center1.y, starOuter, starInner, 5);
+        const star2 = starTriangles(center2.x, center2.y, starOuter, starInner, 5);
+
+        positions.push(...star1);
+        for (let i = 0; i < star1.length / 2; i++) colors.push(...white);
+
+        positions.push(...star2);
+        for (let i = 0; i < star2.length / 2; i++) colors.push(...white);
+
+        return { positions, colors };
+    },
+
+    sanMarino: (() => {
+        const img = new Image();
+        img.src = 'recursos_yimmy/sanMarino.png';
+
+        const fn = (x, y, w, h) => {
+            const h2 = h / 2;
+            return {
+                positions: [
+                    x, y, x + w, y, x, y + h2,
+                    x + w, y, x + w, y + h2, x, y + h2,
+                    
+                    x, y + h2, x + w, y + h2, x, y + h,
+                    x + w, y + h2, x + w, y + h, x, y + h
+                ],
+                colors: [
+                    ...new Array(6).fill([1, 1, 1]).flat(),        // Blanco
+                    ...new Array(6).fill([0.66, 0.84, 0.93]).flat() // Azul claro
+                ]
+            };
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            const drawIt = () => {
+                const iw = img.naturalWidth || 1;
+                const ih = img.naturalHeight || 1;
+                const ratio = iw / ih;
+
+                // Escudo ocupa ~45% de la altura
+                const targetH = h * 0.75;
+                const targetW = targetH * ratio;
+
+                // Centrado horizontalmente, ligeramente arriba del centro vertical
+                const dx = x + (w - targetW) / 2;
+                const dy = y + h * 0.43 - targetH / 2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(img, dx, dy, targetW, targetH);
+                ctx.restore();
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                drawIt();
+            } else {
+                img.onload = () => drawIt();
+            }
+        };
+
+        return fn;
+    })(),
+
+    saintVincent: (x, y, w, h) => {
+        const leftW = w / 4;
+        const centerW = w / 2;
+        const rightW = w / 4;
+        const leftX = x;
+        const centerX = x + leftW;
+        const rightX = centerX + centerW;
+        const blue = [0.0, 0.32, 0.65];
+        const gold = [0.98, 0.76, 0.09];
+        const green = [0.0, 0.54, 0.26];
+        const positions = [];
+        const colors = [];
+
+        // Bandas verticales
+        positions.push(
+            leftX, y, leftX + leftW, y, leftX, y + h,
+            leftX + leftW, y, leftX + leftW, y + h, leftX, y + h
+        );
+        colors.push(...new Array(6).fill(blue).flat());
+
+        positions.push(
+            centerX, y, centerX + centerW, y, centerX, y + h,
+            centerX + centerW, y, centerX + centerW, y + h, centerX, y + h
+        );
+        colors.push(...new Array(6).fill(gold).flat());
+
+        positions.push(
+            rightX, y, rightX + rightW, y, rightX, y + h,
+            rightX + rightW, y, rightX + rightW, y + h, rightX, y + h
+        );
+        colors.push(...new Array(6).fill(green).flat());
+
+        function addDiamond(cx, cy, rw, rh, color) {
+            const top = [cx, cy - rh];
+            const right = [cx + rw, cy];
+            const bottom = [cx, cy + rh];
+            const left = [cx - rw, cy];
+            positions.push(top[0], top[1], right[0], right[1], bottom[0], bottom[1]);
+            positions.push(top[0], top[1], bottom[0], bottom[1], left[0], left[1]);
+            for (let i = 0; i < 6; i++) colors.push(...color);
+        }
+
+        // Ajustes para los rombos
+        const rw = w * 0.05;  // Ancho del rombo
+        const rh = h * 0.11;  // Alto del rombo
+
+        // Posiciones verticales
+        const topY = y + h * 0.37;    // Rombo superior
+        const midY = y + h * 0.50;    // Rombo medio
+        const bottomY = y + h * 0.37;  // Rombo inferior
+
+        // Posiciones horizontales individuales
+        const topX = x + w * 0.56;    // Rombo superior más a la derecha
+        const midX = x + w * 0.50;    // Rombo medio centrado
+        const bottomX = x + w * 0.44;  // Rombo inferior más a la izquierda
+
+        // Dibujar los rombos en sus posiciones específicas
+        addDiamond(topX, topY, rw, rh, green);
+        addDiamond(midX, midY, rw, rh, green);
+        addDiamond(bottomX, bottomY, rw, rh, green);
+
+        return { positions, colors };
+    },
+
+    serbia: (() => {
+        const img = new Image();
+        img.src = 'recursos_yimmy/serbia.png';
+
+        const fn = (x, y, w, h) => {
+            const h3 = h / 3;
+            const red = [0.82, 0, 0];
+            const blue = [0, 0.18, 0.6];
+            const white = [1, 1, 1];
+
+            const positions = [
+                // franja roja (superior)
+                x, y, x + w, y, x, y + h3,
+                x + w, y, x + w, y + h3, x, y + h3,
+                // franja azul (media)
+                x, y + h3, x + w, y + h3, x, y + h3 * 2,
+                x + w, y + h3, x + w, y + h3 * 2, x, y + h3 * 2,
+                // franja blanca (inferior)
+                x, y + h3 * 2, x + w, y + h3 * 2, x, y + h,
+                x + w, y + h3 * 2, x + w, y + h, x, y + h
+            ];
+
+            const colors = [
+                ...new Array(6).fill(red).flat(),
+                ...new Array(6).fill(blue).flat(),
+                ...new Array(6).fill(white).flat()
+            ];
+
+            return { positions, colors };
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            const drawIt = () => {
+                const iw = img.naturalWidth || 1;
+                const ih = img.naturalHeight || 1;
+                const ratio = iw / ih;
+
+                // Escalar el escudo para que ocupe aprox 40-50% de la altura de la bandera
+                const targetH = h * 0.75;
+                const targetW = targetH * ratio;
+
+                // Posicionar el escudo hacia el asta (≈ 28-32% desde la izquierda)
+                const cx = x + w * 0.30;
+                const dx = cx - targetW / 2;
+                const dy = y + (h - targetH) / 2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(img, dx, dy, targetW, targetH);
+                ctx.restore();
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                drawIt();
+            } else {
+                img.onload = () => drawIt();
+            }
+        };
+
+        return fn;
+    })(),
+
+    senegal: (x, y, w, h) => {
+        const w3 = w / 3;
+        const green = [0.003, 0.518, 0.247];
+        const yellow = [0.988, 0.937, 0.263];
+        const red = [0.890, 0.106, 0.137];
+
+        const positions = [
+            // Franja verde (izquierda)
+            x, y, x + w3, y, x, y + h,
+            x + w3, y, x + w3, y + h, x, y + h,
+            // Franja amarilla (centro)
+            x + w3, y, x + 2 * w3, y, x + w3, y + h,
+            x + 2 * w3, y, x + 2 * w3, y + h, x + w3, y + h,
+            // Franja roja (derecha)
+            x + 2 * w3, y, x + w, y, x + 2 * w3, y + h,
+            x + w, y, x + w, y + h, x + 2 * w3, y + h
+        ];
+
+        const colors = [
+            ...new Array(6).fill(green).flat(),
+            ...new Array(6).fill(yellow).flat(),
+            ...new Array(6).fill(red).flat()
+        ];
+
+        // Función para crear una estrella de 5 puntas centrada
+        function createStar(cx, cy, outerR, color, points = 5) {
+            const innerR = outerR * 0.382; // proporción típica de estrella
+            const pos = [];
+            const col = [];
+            for (let i = 0; i < points * 2; i++) {
+                const a1 = -Math.PI / 2 + (i * Math.PI) / points;
+                const a2 = -Math.PI / 2 + ((i + 1) * Math.PI) / points;
+                const r1 = (i % 2 === 0) ? outerR : innerR;
+                const r2 = ((i + 1) % 2 === 0) ? outerR : innerR;
+                const x1 = cx + r1 * Math.cos(a1);
+                const y1 = cy + r1 * Math.sin(a1);
+                const x2 = cx + r2 * Math.cos(a2);
+                const y2 = cy + r2 * Math.sin(a2);
+                pos.push(cx, cy, x1, y1, x2, y2);
+                col.push(...color, ...color, ...color);
+            }
+            return { positions: pos, colors: col };
+        }
+
+        // Centro de la bandera
+        const cx = x + w / 2;
+        const cy = y + h / 2;
+
+        // Tamaño de la estrella (ajustable)
+        const starOuter = Math.min(w, h) * 0.14;
+        const star = createStar(cx, cy, starOuter, green, 5);
+
+        positions.push(...star.positions);
+        colors.push(...star.colors);
+
+        return { positions, colors };
+    },
+
+    saoTome: (x, y, w, h) => {
+        // Colores oficiales aproximados
+        const green = [0.0, 0.6, 0.2];
+        const yellow = [1.0, 0.84, 0.0];
+        const red = [0.8, 0.0, 0.1];
+        const black = [0, 0, 0];
+
+        const positions = [];
+        const colors = [];
+
+        // Proporciones verticales
+        const h3 = h / 3;
+
+        // Franja verde superior
+        positions.push(
+            x, y, x + w, y, x, y + h3,
+            x + w, y, x + w, y + h3, x, y + h3
+        );
+        colors.push(...new Array(6).fill(green).flat());
+
+        // Franja amarilla (central)
+        positions.push(
+            x, y + h3, x + w, y + h3, x, y + 2 * h3,
+            x + w, y + h3, x + w, y + 2 * h3, x, y + 2 * h3
+        );
+        colors.push(...new Array(6).fill(yellow).flat());
+
+        // Franja verde inferior
+        positions.push(
+            x, y + 2 * h3, x + w, y + 2 * h3, x, y + h,
+            x + w, y + 2 * h3, x + w, y + h, x, y + h
+        );
+        colors.push(...new Array(6).fill(green).flat());
+
+        // Triángulo rojo a la izquierda
+        positions.push(
+            x, y,              // punta superior
+            x + w * 0.25, y + h / 2, // punto medio
+            x, y + h           // punta inferior
+        );
+        colors.push(...red, ...red, ...red);
+
+        // --- Estrella: función auxiliar ---
+        function createStar(cx, cy, outerR, color, points = 5) {
+            const innerR = outerR * 0.382;
+            const pos = [];
+            const col = [];
+            for (let i = 0; i < points * 2; i++) {
+                const a1 = -Math.PI / 2 + (i * Math.PI) / points;
+                const a2 = -Math.PI / 2 + ((i + 1) * Math.PI) / points;
+                const r1 = (i % 2 === 0) ? outerR : innerR;
+                const r2 = ((i + 1) % 2 === 0) ? outerR : innerR;
+                const x1 = cx + r1 * Math.cos(a1);
+                const y1 = cy + r1 * Math.sin(a1);
+                const x2 = cx + r2 * Math.cos(a2);
+                const y2 = cy + r2 * Math.sin(a2);
+                pos.push(cx, cy, x1, y1, x2, y2);
+                col.push(...color, ...color, ...color);
+            }
+            return { positions: pos, colors: col };
+        }
+
+        // --- Estrellas negras (2) ---
+        const starOuter = Math.min(w, h) * 0.12; // tamaño ajustable
+        const cy = y + h / 2;
+
+        // primera estrella (izquierda, dentro del amarillo)
+        const star1 = createStar(x + w * 0.80, cy, starOuter, black, 5);
+        // segunda estrella (derecha)
+        const star2 = createStar(x + w * 0.58, cy, starOuter, black, 5);
+
+        positions.push(...star1.positions, ...star2.positions);
+        colors.push(...star1.colors, ...star2.colors);
+
+        return { positions, colors };
+    },
+
+    vatican: (() => {
+        const img = new Image();
+        img.src = 'recursos_yimmy/vaticano.png';
+
+        const fn = (x, y, w, h) => {
+            const w2 = w / 2;
+            return {
+                positions: [
+                    // Mitad amarilla (izquierda)
+                    x, y, x + w2, y, x, y + h,
+                    x + w2, y, x + w2, y + h, x, y + h,
+                    // Mitad blanca (derecha)
+                    x + w2, y, x + w, y, x + w2, y + h,
+                    x + w, y, x + w, y + h, x + w2, y + h
+                ],
+                colors: [
+                    // Color amarillo para la mitad izquierda
+                    ...new Array(6).fill([1, 0.85, 0]).flat(),
+                    // Color blanco para la mitad derecha
+                    ...new Array(6).fill([1, 1, 1]).flat()
+                ]
+            };
+        };
+
+        fn.overlay = (ctx, x, y, w, h) => {
+            const drawIt = () => {
+                // Ajustar el escudo para que ocupe ~60% de la altura en la mitad derecha
+                const targetH = h * 0.70;
+                const iw = img.naturalWidth || 1;
+                const ih = img.naturalHeight || 1;
+                const ratio = iw / ih;
+                let targetW = targetH * ratio;
+
+                // Posicionar el escudo en el centro de la mitad derecha
+                const cx = x + w * 0.75; // Centro de la mitad derecha
+                const dx = cx - targetW / 2;
+                const dy = y + (h - targetH) / 2;
+
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w, h);
+                ctx.clip();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(img, dx, dy, targetW, targetH);
+                ctx.restore();
+            };
+
+            if (img.complete && img.naturalWidth > 0) {
+                drawIt();
+            } else {
+                img.onload = () => drawIt();
+            }
+        };
+
+        return fn;
+    })(),
     // === A ===
     afghanistan: (() => {
     const BLACK=[0,0,0], RED=[0.827,0.125,0.067], GREEN=[0,0.478,0.239];
@@ -948,8 +1927,6 @@ const flags = {
             ).flat()
         };
     },
-
-
      // Japón: fondo blanco con círculo rojo centrado (diámetro 60% de la altura)
     japon: (x, y, w, h) => {
         const cx = x + w / 2;
@@ -2976,10 +3953,7 @@ const flags = {
         colors: new Array(6).fill([0, 0.2, 0.6]).flat()
     }),
 
-    saintKitts: (x, y, w, h) => ({
-        positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
-        colors: new Array(6).fill([0.1, 0.5, 0.2]).flat()
-    }),
+    
 
     seychelles: (x, y, w, h) => ({
         positions: [
