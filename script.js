@@ -1887,25 +1887,24 @@ const flags = {
         const red = [210/255, 0, 0]; // #D20000
         const yellow = [1, 1, 0];    // #FFFF00
 
-        // Fondo rojo (Correcto)
+       
         const positionsBG = [
             x, y, x + w, y, x, y + h,
             x + w, y, x + w, y + h, x, y + h
         ];
         const colorsBG = new Array(6).fill(red).flat();
 
-        // Sol amarillo: un círculo central y 8 rayos
+        
         const cx = x + w / 2;
         const cy = y + h / 2;
 
-        // --- INICIO DE LA CORRECCIÓN ---
+        
 
-        const radius = h * 0.18; // radio del círculo central
-        const gap = h * 0.025;   // <--- ¡NUEVO! Tamaño del espacio rojo entre círculo y rayos
-        const rayStartRadius = radius + gap; // <--- ¡NUEVO! Radio donde comienzan los rayos
+        const radius = h * 0.18; 
+        const gap = h * 0.025;  
+        const rayStartRadius = radius + gap; 
 
-        // --- FIN DE LA CORRECCIÓN ---
-
+        
 
         const positionsSun = [];
         const colorsSun = [];
@@ -1924,7 +1923,7 @@ const flags = {
             colorsSun.push(...yellow, ...yellow, ...yellow);
         }
 
-        // Rayos (8 rayos trapezoidales)
+        
         for (let i = 0; i < 8; i++) {
             const angle = (i / 8) * Math.PI * 2; 
             const angleWidth = (Math.PI / 32); 
@@ -1932,18 +1931,13 @@ const flags = {
             const a1 = angle - angleWidth; 
             const a2 = angle + angleWidth; 
             
-            // --- INICIO DE LA CORRECCIÓN ---
-
-            // Puntos en la base interna del trapezoide (ahora usan 'rayStartRadius')
-            const x_c1 = cx + rayStartRadius * Math.cos(a1); // <-- CORREGIDO
-            const y_c1 = cy + rayStartRadius * Math.sin(a1); // <-- CORREGIDO
-            const x_c2 = cx + rayStartRadius * Math.cos(a2); // <-- CORREGIDO
-            const y_c2 = cy + rayStartRadius * Math.sin(a2); // <-- CORREGIDO
             
-            // --- FIN DE LA CORRECCIÓN ---
-
-
-            // Función para encontrar el punto de intersección con el borde
+            const x_c1 = cx + rayStartRadius * Math.cos(a1); 
+            const y_c1 = cy + rayStartRadius * Math.sin(a1);
+            const x_c2 = cx + rayStartRadius * Math.cos(a2); 
+            const y_c2 = cy + rayStartRadius * Math.sin(a2); 
+            
+            
             const findEdgePoint = (angle) => {
                 const c = Math.cos(angle);
                 const s = Math.sin(angle);
@@ -1963,11 +1957,11 @@ const flags = {
                 return { x: cx + t * c, y: cy + t * s };
             };
 
-            // Puntos en el borde de la bandera (base externa del trapezoide)
+   
             const p_e1 = findEdgePoint(a1); 
             const p_e2 = findEdgePoint(a2); 
 
-            // Crear el trapezoide con dos triángulos
+            
             positionsSun.push(
                 x_c1, y_c1, p_e1.x, p_e1.y, p_e2.x, p_e2.y,
                 x_c1, y_c1, p_e2.x, p_e2.y, x_c2, y_c2
@@ -2021,10 +2015,7 @@ const flags = {
         const colors = [];
         const stripeH = h / 14;
 
-        // --- CORRECCIÓN EN FRANJAS Y CANTÓN ---
-
-        // 1. Dibujar las 7 franjas inferiores (i = 7 a 13)
-        // Estas ocupan TODO el ancho
+        
         for (let i = 7; i < 14; i++) {
             const y0 = y + i * stripeH;
             const y1 = y0 + stripeH;
@@ -2036,7 +2027,7 @@ const flags = {
             colors.push(...new Array(6).fill(stripeColor).flat());
         }
 
-        // 2. Dibujar el Cantón Azul (Rectángulo corregido)
+        
         const cantonHeight = h / 2; // Correcto (cubre 7 franjas)
         const cantonWidth = w / 2;  // CORREGIDO: Basado en el ancho 'w', no en 'h'
         positions.push(
@@ -2045,8 +2036,7 @@ const flags = {
         );
         colors.push(...new Array(6).fill(blue).flat());
 
-        // 3. Dibujar las 7 franjas superiores (i = 0 a 6)
-        // Estas solo ocupan la parte DERECHA (la "mosca"), desde el cantón hasta el final
+       
         for (let i = 0; i < 7; i++) {
             const y0 = y + i * stripeH;
             const y1 = y0 + stripeH;
@@ -2058,10 +2048,7 @@ const flags = {
             colors.push(...new Array(6).fill(stripeColor).flat());
         }
 
-        // --- AÑADIR SÍMBOLOS (LUNA Y ESTRELLA) ---
-
-        // Centro de los símbolos (dentro del cantón)
-        // Ajustados ligeramente para que se parezcan a la bandera real
+        
         const cx = x + cantonWidth / 2.1; 
         const cy = y + cantonHeight / 2;
 
@@ -2069,10 +2056,7 @@ const flags = {
         const colorsSymbols = [];
         const segments = 32; // Calidad para los círculos
 
-        // 4. Media Luna
-        // Se dibuja con el "método de recorte":
-        // 1. Dibuja un círculo amarillo grande.
-        // 2. Dibuja un círculo azul (color del fondo) más pequeño y desplazado encima.
+        
 
         const rOuterCrescent = h * 0.16; // Radio exterior
         const rInnerCrescent = h * 0.15; // Radio interior (para el recorte)
@@ -2135,11 +2119,857 @@ const flags = {
             colors: [...colors, ...colorsSymbols]
         };
     },
+    malawi: (x, y, w, h) => {
+        const black = [0, 0, 0];
+        const red = [221/255, 61/255, 42/255]; // #DD3D2A
+        const green = [0, 106/255, 78/255];    // #006A4E
+    
+        const h3 = h / 3;
+        const positions = [
+            // Franjas de la bandera
+            x, y, x + w, y, x, y + h3,
+            x + w, y, x + w, y + h3, x, y + h3,
+            x, y + h3, x + w, y + h3, x, y + 2*h3,
+            x + w, y + h3, x + w, y + 2*h3, x, y + 2*h3,
+            x, y + 2*h3, x + w, y + 2*h3, x, y + h,
+            x + w, y + 2*h3, x + w, y + h, x, y + h
+        ];
+    
+        const colors = [
+            ...new Array(6).fill(black).flat(),
+            ...new Array(6).fill(red).flat(),
+            ...new Array(6).fill(green).flat()
+        ];
+    
+        
+        const cx = x + w / 2;
+        
+        const cy = y + h3 * 0.9; 
+    
+        
+        const baseRadius = h3 * 0.25; 
+        const segments = 32;
+    
+        // 1. Base del "Sol" (Semicírculo aplanado)
+        for (let i = segments / 2; i <= segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x1 = cx + baseRadius * Math.cos(a1);
+            const y1 = cy + baseRadius * Math.sin(a1);
+            const x2 = cx + baseRadius * Math.cos(a2);
+            const y2 = cy + baseRadius * Math.sin(a2);
+    
+            positions.push(cx, cy, x1, y1, x2, y2);
+            colors.push(...red, ...red, ...red);
+        }
+    
+        // 2. Rayos del Sol (Forma de Gota Estirada)
+        const rayCount = 31;
+        // AJUSTE 3: Radio interior de los rayos, dejando espacio con la base del sol.
+        const rayInnerRadius = baseRadius + (h3 * 0.05); 
+        // AJUSTE 4: Radio exterior para la punta de la gota (más largo)
+        const rayOuterRadius = h3 * 0.75; 
+        
+        // AJUSTE 5: Ancho angular de la base de la "gota". Más pequeño para la parte inferior "estrecha".
+        const rayBaseAngleWidthRatio = 0.2; // La base de la gota es más estrecha que la punta
+        // AJUSTE 6: Ancho angular de la punta de la "gota". Más grande para la parte superior "ancha".
+        const rayTipAngleWidthRatio = 0.35; // La punta de la gota es más ancha y suave
+    
+        const angleSpan = Math.PI;
+    
+        for (let i = 0; i < rayCount; i++) {
+            const angle = Math.PI + ((i + 0.5) / rayCount) * angleSpan;
+            
+            // Calcular los ángulos para la base de la gota (más estrecha)
+            const baseWidth = (angleSpan / rayCount) * rayBaseAngleWidthRatio;
+            const a_base1 = angle - baseWidth / 2;
+            const a_base2 = angle + baseWidth / 2;
+    
+            // Calcular los ángulos para la punta de la gota (más ancha y redondeada)
+            const tipWidth = (angleSpan / rayCount) * rayTipAngleWidthRatio;
+            const a_tip1 = angle - tipWidth / 2;
+            const a_tip2 = angle + tipWidth / 2;
+    
+            // Vértices de la base de la gota (donde se une al anillo negro)
+            const x_bi1 = cx + rayInnerRadius * Math.cos(a_base1);
+            const y_bi1 = cy + rayInnerRadius * Math.sin(a_base1);
+            const x_bi2 = cx + rayInnerRadius * Math.cos(a_base2);
+            const y_bi2 = cy + rayInnerRadius * Math.sin(a_base2);
+    
+            // Vértices de la punta de la gota (en el radio exterior)
+            const x_to1 = cx + rayOuterRadius * Math.cos(a_tip1);
+            const y_to1 = cy + rayOuterRadius * Math.sin(a_tip1);
+            const x_to2 = cx + rayOuterRadius * Math.cos(a_tip2);
+            const y_to2 = cy + rayOuterRadius * Math.sin(a_tip2);
+    
+            // Dibujar cada "gota" con dos triángulos para darle la forma deseada.
+            // Triángulo 1: Base izquierda, punta izquierda, punta derecha
+            positions.push(x_bi1, y_bi1, x_to1, y_to1, x_to2, y_to2);
+            colors.push(...new Array(3).fill(red).flat());
+            
+            // Triángulo 2: Base izquierda, punta derecha, base derecha
+            positions.push(x_bi1, y_bi1, x_to2, y_to2, x_bi2, y_bi2);
+            colors.push(...new Array(3).fill(red).flat());
+        }
+        
+        return { positions, colors };
+    },
+    maldives: (x, y, w, h) => {
+        // Colores ajustados para que coincidan mejor con la imagen
+        const red = [198/255, 11/255, 30/255]; // #C60B1E - Rojo más cercano al de la imagen
+        const green = [0, 128/255, 0];       // #008000
+        const white = [1, 1, 1];
+    
+        // Fondo rojo
+        const positions = [
+            x, y, x + w, y, x, y + h,
+            x + w, y, x + w, y + h, x, y + h
+        ];
+        const colors = new Array(6).fill(red).flat();
+    
+        
+        const marginH = h * 0.25; 
+        const marginW = w * 0.125; 
 
-    mongolia: (x, y, w, h) => ({
-        positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
-        colors: new Array(6).fill([0.8, 0.1, 0.2]).flat()
-    }),
+        const x1_green = x + marginW;
+        const y1_green = y + marginH;
+        const x2_green = x + w - marginW;
+        const y2_green = y + h - marginH;
+    
+        positions.push(
+            x1_green, y1_green, x2_green, y1_green, x1_green, y2_green,
+            x2_green, y1_green, x2_green, y2_green, x1_green, y2_green
+        );
+        colors.push(...new Array(6).fill(green).flat());
+    
+        
+        const cx_flag = x + w / 2; 
+        const cy_flag = y + h / 2; 
+        const segments = 32;
+    
+        
+        const rOuterCrescent = h * 0.18; 
+        
+        
+        const rInnerCrescent = rOuterCrescent * 0.9; 
+    
+        
+        const crescentOuterCenterX = x1_green + (x2_green - x1_green) / 2; 
+        const crescentInnerCenterX = crescentOuterCenterX + rOuterCrescent * 0.3;
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x_c1 = crescentOuterCenterX + rOuterCrescent * Math.cos(a1);
+            const y_c1 = cy_flag + rOuterCrescent * Math.sin(a1);
+            const x_c2 = crescentOuterCenterX + rOuterCrescent * Math.cos(a2);
+            const y_c2 = cy_flag + rOuterCrescent * Math.sin(a2);
+            positions.push(crescentOuterCenterX, cy_flag, x_c1, y_c1, x_c2, y_c2);
+            colors.push(...white, ...white, ...white);
+        }
+    
+        // Círculo interior (Verde - "Recorte")
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x_c1 = crescentInnerCenterX + rInnerCrescent * Math.cos(a1);
+            const y_c1 = cy_flag + rInnerCrescent * Math.sin(a1);
+            const x_c2 = crescentInnerCenterX + rInnerCrescent * Math.cos(a2);
+            const y_c2 = cy_flag + rInnerCrescent * Math.sin(a2);
+            positions.push(crescentInnerCenterX, cy_flag, x_c1, y_c1, x_c2, y_c2);
+            colors.push(...green, ...green, ...green); // Usar color del fondo verde para el recorte
+        }
+                
+        return { positions, colors };
+    },
+    mali: (x, y, w, h) => {
+        const w3 = w / 3;
+        const green = [20/255, 181/255, 58/255]; // #14B53A
+        const yellow = [252/255, 221/255, 9/255]; // #FCDD09
+        const red = [206/255, 17/255, 38/255];   // #CE1126
+    
+        const positions = [
+            // Franja verde (izquierda)
+            x, y, x + w3, y, x, y + h,
+            x + w3, y, x + w3, y + h, x, y + h,
+            // Franja amarilla (media)
+            x + w3, y, x + 2*w3, y, x + w3, y + h,
+            x + 2*w3, y, x + 2*w3, y + h, x + w3, y + h,
+            // Franja roja (derecha)
+            x + 2*w3, y, x + w, y, x + 2*w3, y + h,
+            x + w, y, x + w, y + h, x + 2*w3, y + h
+        ];
+    
+        const colors = [
+            ...new Array(6).fill(green).flat(),
+            ...new Array(6).fill(yellow).flat(),
+            ...new Array(6).fill(red).flat()
+        ];
+    
+        return { positions, colors };
+    },
+    malta: (() => {
+    
+        const georgeCrossImg = new Image();
+        
+        georgeCrossImg.src = 'Recursos_Juan/CRUZ__BANDERA_DE_MALTA.png'; 
+    
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+    
+            const white = [1, 1, 1];
+            const red = [207/255, 20/255, 43/255]; // #CF142B
+    
+            const w2 = w / 2; // Ancho de cada franja
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                // Dibujar un rectángulo con dos triángulos
+                positions.push(
+                    x0, y0, x1, y0, x0, y1,
+                    x1, y0, x1, y1, x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franja blanca (izquierda)
+            pushRect(x, y, x + w2, y + h, white);
+            // Franja roja (derecha)
+            pushRect(x + w2, y, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        
+        fn.overlay = (ctx, x, y, w, h) => {
+            const w2 = w / 2;
+            const crossSize = h * 0.30; // La cruz ocupa aprox. 45% de la altura
+            const crossOffset = h * 0.03; // Margen desde la esquina (4% de la altura)
+    
+            const drawCross = () => {
+                const ratio = (georgeCrossImg.naturalWidth || 1) / (georgeCrossImg.naturalHeight || 1);
+                const crossW = crossSize * ratio;
+                const crossH = crossSize;
+                
+                
+                const dx = x + crossOffset;
+                const dy = y + crossOffset;
+    
+                // La Cruz de Jorge no necesita clip, ya que solo debe estar en el fondo blanco.
+                ctx.save();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(georgeCrossImg, dx, dy, crossW, crossH);
+                ctx.restore();
+            };
+    
+            // Lógica de carga de imagen
+            if (georgeCrossImg.complete && georgeCrossImg.naturalWidth > 0) {
+                drawCross();
+            } else {
+                georgeCrossImg.onload = drawCross;
+            }
+        };
+    
+        return fn;
+    })(),
+    morocco: (x, y, w, h) => {
+        // Colores de la bandera de Marruecos
+        const red = [193/255, 39/255, 45/255]; // #C1272D
+        const green = [0, 98/255, 51/255];    // #006233
+    
+        // Fondo rojo
+        const positions = [
+            x, y, x + w, y, x, y + h,
+            x + w, y, x + w, y + h, x, y + h
+        ];
+        const colors = new Array(6).fill(red).flat();
+    
+        
+        const cx = x + w / 2; // Centro horizontal
+        const cy = y + h / 2; // Centro vertical
+        const starRadius = h * 0.35; // Radio exterior de la estrella (más grande para la estrella única)
+        const lineThickness = h * 0.025; // Grosor de las líneas del pentagrama
+        const points = 5; // Estrella de 5 puntas
+    
+        const getPentagonPoints = (center_x, center_y, radius, start_angle) => {
+            const vertices = [];
+            for (let i = 0; i < points; i++) {
+                const angle = start_angle + (i * Math.PI * 2 / points);
+                // La estrella de Marruecos apunta hacia arriba, el ángulo inicial es -90 grados (o 1.5 * PI)
+                vertices.push(center_x + radius * Math.sin(angle), center_y - radius * Math.cos(angle));
+            }
+            return vertices;
+        };
+    
+        
+        const vertices = getPentagonPoints(cx, cy, starRadius, 0);
+    
+        
+        const indices = [0, 2, 4, 1, 3, 0]; 
+    
+        const drawLine = (x1, y1, x2, y2, thickness) => {
+            // Calcular el ángulo de la línea
+            const angle = Math.atan2(y2 - y1, x2 - x1);
+            
+            // Desplazamiento perpendicular para el grosor
+            const dx = thickness / 2 * Math.sin(angle);
+            const dy = thickness / 2 * Math.cos(angle);
+    
+            // Vértices del rectángulo (trapezoide) que forma la línea
+            positions.push(
+                x1 - dx, y1 + dy, // Punto A (Extremo 1, lado 1)
+                x2 - dx, y2 + dy, // Punto B (Extremo 2, lado 1)
+                x1 + dx, y1 - dy, // Punto C (Extremo 1, lado 2)
+                
+                x2 - dx, y2 + dy, // Punto B (Extremo 2, lado 1)
+                x2 + dx, y2 - dy, // Punto D (Extremo 2, lado 2)
+                x1 + dx, y1 - dy  // Punto C (Extremo 1, lado 2)
+            );
+            colors.push(...new Array(6).fill(green).flat());
+        };
+        
+        // Iterar sobre las 5 líneas del pentagrama
+        for (let i = 0; i < 5; i++) {
+            const index1 = indices[i];
+            const index2 = indices[i + 1];
+    
+            const x1 = vertices[index1 * 2];
+            const y1 = vertices[index1 * 2 + 1];
+            const x2 = vertices[index2 * 2];
+            const y2 = vertices[index2 * 2 + 1];
+    
+            drawLine(x1, y1, x2, y2, lineThickness);
+        }
+    
+        return { positions, colors };
+    },
+    mauritius: (x, y, w, h) => {
+        const h4 = h / 4;
+        const red = [234/255, 40/255, 57/255];   // #EA2839
+        const blue = [0, 0, 139/255];            // #00008B
+        const yellow = [1, 215/255, 0];          // #FFD700
+        const green = [0, 165/255, 80/255];      // #00A550
+    
+        const positions = [
+            // Franja roja (superior)
+            x, y, x + w, y, x, y + h4,
+            x + w, y, x + w, y + h4, x, y + h4,
+            // Franja azul
+            x, y + h4, x + w, y + h4, x, y + 2*h4,
+            x + w, y + h4, x + w, y + 2*h4, x, y + 2*h4,
+            // Franja amarilla
+            x, y + 2*h4, x + w, y + 2*h4, x, y + 3*h4,
+            x + w, y + 2*h4, x + w, y + 3*h4, x, y + 3*h4,
+            // Franja verde (inferior)
+            x, y + 3*h4, x + w, y + 3*h4, x, y + h,
+            x + w, y + 3*h4, x + w, y + h, x, y + h
+        ];
+    
+        const colors = [
+            ...new Array(6).fill(red).flat(),
+            ...new Array(6).fill(blue).flat(),
+            ...new Array(6).fill(yellow).flat(),
+            ...new Array(6).fill(green).flat()
+        ];
+    
+        return { positions, colors };
+    },
+    mauritania: (x, y, w, h) => {
+        // Colores de la bandera de Mauritania
+        const red = [200/255, 16/255, 46/255]; // Rojo de las franjas (aprox. #C8102E)
+        const green = [0, 158/255, 73/255];  // Verde del centro (aprox. #009E49)
+        const yellow = [1, 215/255, 0];      // Amarillo para los símbolos (#FFD700)
+    
+        const h_red_stripe = h / 5; // Cada franja roja es 1/5 de la altura total
+        
+        const positions = [];
+        const colors = [];
+    
+        const pushRect = (x0, y0, x1, y1, color) => {
+           
+            positions.push(
+                x0, y0, x1, y0, x0, y1,
+                x1, y0, x1, y1, x0, y1
+            );
+            colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+        };
+    
+        pushRect(x, y, x + w, y + h_red_stripe, red);
+        
+        
+        const y_green_start = y + h_red_stripe;
+        const y_green_end = y + h - h_red_stripe;
+        pushRect(x, y_green_start, x + w, y_green_end, green);
+        
+        
+        pushRect(x, y_green_end, x + w, y + h, red);
+    
+        
+    
+        const cx = x + w / 2; // Centro horizontal
+        const cy = y + h / 2; // Centro vertical
+        const segments = 32;
+    
+        
+        const rOuterCrescent = h * 0.25; 
+        
+        const crescentOuterCenterX = cx;
+        const crescentInnerCenterX = cx;
+    
+        
+        const crescentOuterCenterY = cy + h * 0; // Círculo exterior más abajo
+        const crescentInnerCenterY = cy - h * 0.05; // Círculo interior más arriba
+        
+        
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x1 = crescentOuterCenterX + rOuterCrescent * Math.cos(a1);
+            const y1 = crescentOuterCenterY + rOuterCrescent * Math.sin(a1);
+            const x2 = crescentOuterCenterX + rOuterCrescent * Math.cos(a2);
+            const y2 = crescentOuterCenterY + rOuterCrescent * Math.sin(a2);
+            positions.push(crescentOuterCenterX, crescentOuterCenterY, x1, y1, x2, y2);
+            colors.push(...yellow, ...yellow, ...yellow);
+        }
+        
+        // Círculo interior (Recorte Verde - Simula el vacío de la luna)
+        const rInnerCrescent = rOuterCrescent * 0.9;
+        for (let i = 0; i < segments; i++) {
+            const a1 = (i / segments) * Math.PI * 2;
+            const a2 = ((i + 1) / segments) * Math.PI * 2;
+            const x1 = crescentInnerCenterX + rInnerCrescent * Math.cos(a1);
+            const y1 = crescentInnerCenterY + rInnerCrescent * Math.sin(a1);
+            const x2 = crescentInnerCenterX + rInnerCrescent * Math.cos(a2);
+            const y2 = crescentInnerCenterY + rInnerCrescent * Math.sin(a2);
+            positions.push(crescentInnerCenterX, crescentInnerCenterY, x1, y1, x2, y2);
+            colors.push(...green, ...green, ...green); 
+        }
+    
+        
+        
+        const starRadius = h * 0.07; // Radio de la estrella
+        const innerRadiusRatio = 0.382; 
+        const starCx = cx; 
+        
+        const starCy = cy - h * 0.05; 
+    
+        const getStarPoints = (center_x, center_y, outer_r, inner_r, num_points, start_angle) => {
+            const vertices = [];
+            for (let i = 0; i < num_points * 2; i++) {
+                const r = (i % 2 === 0) ? outer_r : inner_r;
+                const angle = start_angle + (i * Math.PI / num_points);
+                vertices.push(center_x + r * Math.sin(angle), center_y - r * Math.cos(angle));
+            }
+            return vertices;
+        };
+        
+        const starVertices = getStarPoints(
+            starCx, starCy, 
+            starRadius, 
+            starRadius * innerRadiusRatio, 
+            5, 
+            0
+        );
+    
+        // Dibujar la estrella rellena (Amarillo)
+        for (let i = 0; i < starVertices.length; i += 2) {
+            const x1 = starVertices[i];
+            const y1 = starVertices[i + 1];
+            const x2 = starVertices[(i + 2) % starVertices.length];
+            const y2 = starVertices[(i + 3) % starVertices.length];
+            
+            positions.push(starCx, starCy, x1, y1, x2, y2);
+            colors.push(...yellow, ...yellow, ...yellow);
+        }
+    
+        return { positions, colors };
+    },
+
+    mexico: (() => {
+        // 1. CARGA DE LA IMAGEN
+        const escudoImg = new Image();
+        // NOTA: Reemplaza 'Ruta_a_tu_escudo_de_Mexico.png' con la ruta real de tu archivo PNG
+        escudoImg.src = 'Recursos_Juan/escudo mexico.png'; 
+    
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            const w3 = w / 3;
+            const green = [0, 104/255, 71/255];    // #006847
+            const white = [1, 1, 1];
+            const red = [206/255, 17/255, 38/255]; // #CE1126
+    
+            // Función auxiliar para dibujar rectángulos (franjas)
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0, x1, y0, x0, y1,
+                    x1, y0, x1, y1, x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franja verde (izquierda)
+            pushRect(x, y, x + w3, y + h, green);
+            // Franja blanca (media)
+            pushRect(x + w3, y, x + 2*w3, y + h, white);
+            // Franja roja (derecha)
+            pushRect(x + 2*w3, y, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        // 2. FUNCIÓN DE OVERLAY (Superpone el Escudo Nacional)
+        fn.overlay = (ctx, x, y, w, h) => {
+            const w3 = w / 3;
+            // El tamaño del escudo se basa en la altura de la bandera, típicamente 3/4 de la altura.
+            const escudoSize = h * 0.40; 
+    
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                const escudoH = escudoSize;
+                const escudoW = escudoSize * ratio;
+                
+                // Centro de la franja blanca (centro de la bandera)
+                const cx = x + w / 2;
+                const cy = y + h / 2;
+                
+                // Coordenadas de inicio (esquina superior izquierda) para dibujar la imagen
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+    
+                // No necesitamos clip, ya que el escudo está centrado en la franja blanca.
+                ctx.save();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+    
+            // Lógica para asegurar que la imagen esté cargada
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = drawEscudo;
+            }
+        };
+    
+        return fn;
+    })(),
+    micronesia: (x, y, w, h) => {
+        // Colores de la bandera de Micronesia
+        // El azul de la imagen es más claro que #003893
+        const blue = [128/255, 186/255, 227/255]; // Aproximado a un azul cielo claro (#80BEE3)
+        const white = [1, 1, 1];
+    
+        // Fondo azul
+        const positions = [
+            x, y, x + w, y, x, y + h,
+            x + w, y, x + w, y + h, x, y + h
+        ];
+        const colors = new Array(6).fill(blue).flat();
+    
+        
+    
+        const starRadius = h * 0.12; // Radio exterior de cada estrella (aprox. 12% de la altura)
+        const innerRadiusRatio = 0.382; // Relación para el radio interior de una estrella de 5 puntas
+        const points = 5; // Estrella de 5 puntas
+        const segments = points * 2; // Para dibujar la estrella
+    
+        // Función para calcular los vértices de una estrella
+        const getStarPoints = (center_x, center_y, outer_r, inner_r, num_points, start_angle) => {
+            const vertices = [];
+            for (let i = 0; i < num_points * 2; i++) {
+                const r = (i % 2 === 0) ? outer_r : inner_r;
+                const angle = start_angle + (i * Math.PI / num_points);
+                // Las estrellas apuntan hacia arriba (ángulo inicial 0 o PI/2 si se usa cos/sin directamente)
+                vertices.push(center_x + r * Math.sin(angle), center_y - r * Math.cos(angle));
+            }
+            return vertices;
+        };
+    
+        
+        const cx_flag = x + w / 2;
+        const cy_flag = y + h / 2;
+    
+        // Distancia de cada estrella desde el centro de la bandera
+        const horizontalOffset = w * 0.22; // Desplazamiento horizontal
+        const verticalOffset = h * 0.22;   // Desplazamiento vertical
+    
+        const starCenters = [
+            { cx: cx_flag, cy: cy_flag - verticalOffset }, // Superior
+            { cx: cx_flag - horizontalOffset, cy: cy_flag }, // Izquierda
+            { cx: cx_flag + horizontalOffset, cy: cy_flag }, // Derecha
+            { cx: cx_flag, cy: cy_flag + verticalOffset }  // Inferior
+        ];
+    
+        // Dibujar cada una de las 4 estrellas
+        starCenters.forEach(center => {
+            const starVertices = getStarPoints(
+                center.cx, center.cy, 
+                starRadius, 
+                starRadius * innerRadiusRatio, 
+                points, 
+                0 // Las estrellas apuntan hacia arriba
+            );
+    
+        
+            for (let i = 0; i < starVertices.length; i += 2) {
+                const x1 = starVertices[i];
+                const y1 = starVertices[i + 1];
+                const x2 = starVertices[(i + 2) % starVertices.length];
+                const y2 = starVertices[(i + 3) % starVertices.length];
+                
+                positions.push(center.cx, center.cy, x1, y1, x2, y2);
+                colors.push(...white, ...white, ...white);
+            }
+        });
+    
+        return { positions, colors };
+    },
+    moldova: (() => {
+       
+        const escudoImg = new Image();
+        
+        escudoImg.src = 'Recursos_Juan/escudo_moldavia.png'; 
+    
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            const w3 = w / 3;
+            
+            const blue = [0, 70/255, 174/255];      // #0046AE (Azul más vibrante)
+            const yellow = [1, 212/255, 0];         // #FFD400
+            const red = [206/255, 17/255, 38/255];  // #CE1126
+    
+            
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0, x1, y0, x0, y1,
+                    x1, y0, x1, y1, x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franja azul (izquierda)
+            pushRect(x, y, x + w3, y + h, blue);
+            // Franja amarilla (media)
+            pushRect(x + w3, y, x + 2*w3, y + h, yellow);
+            // Franja roja (derecha)
+            pushRect(x + 2*w3, y, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        // 2. FUNCIÓN DE OVERLAY (Superpone el Escudo Nacional)
+        fn.overlay = (ctx, x, y, w, h) => {
+            const w3 = w / 3;
+            // El escudo de Moldavia es bastante grande, ocupando una gran parte de la franja.
+            // Lo basamos en el ancho de la franja amarilla, que es w3.
+            const escudoSize = w3 * 0.9; 
+    
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                // Si el escudo es más ancho que alto, ajustamos el ancho. Si es más alto, ajustamos la altura.
+                const escudoH = escudoSize; 
+                const escudoW = escudoSize * ratio;
+                
+                // Centro de la franja amarilla (centro de la bandera)
+                const cx = x + w / 2;
+                const cy = y + h / 2;
+                
+                // Coordenadas de inicio (esquina superior izquierda) para dibujar la imagen
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+    
+                ctx.save();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+    
+            // Lógica para asegurar que la imagen esté cargada
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = drawEscudo;
+            }
+        };
+    
+        return fn;
+    })(),
+    monaco: (x, y, w, h) => {
+        const h2 = h / 2;
+        const red = [207/255, 20/255, 43/255]; // #CF142B
+        const white = [1, 1, 1];
+    
+        const positions = [
+            // Franja roja (superior)
+            x, y, x + w, y, x, y + h2,
+            x + w, y, x + w, y + h2, x, y + h2,
+            // Franja blanca (inferior)
+            x, y + h2, x + w, y + h2, x, y + h,
+            x + w, y + h2, x + w, y + h, x, y + h
+        ];
+    
+        const colors = [
+            ...new Array(6).fill(red).flat(),
+            ...new Array(6).fill(white).flat()
+        ];
+    
+        return { positions, colors };
+    },
+    mongolia: (() => {
+        // 1. CARGA DE LA IMAGEN
+        const soyomboImg = new Image();
+        // NOTA: Reemplaza 'Ruta_a_tu_emblema_Soyombo.png' con la ruta real de tu archivo PNG
+        soyomboImg.src = 'Recursos_Juan/escudo_mongolia.png'; 
+    
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            const w3 = w / 3;
+            // Colores ajustados a los tonos más comunes
+            const red = [220/255, 30/255, 40/255]; // #DC1E28 (Rojo más vibrante)
+            const blue = [0, 93/255, 170/255];     // #005DAA (Azul cielo brillante)
+    
+            // Función auxiliar para dibujar rectángulos (franjas)
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0, x1, y0, x0, y1,
+                    x1, y0, x1, y1, x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // Franja roja (izquierda)
+            pushRect(x, y, x + w3, y + h, red);
+            // Franja azul (media)
+            pushRect(x + w3, y, x + 2*w3, y + h, blue);
+            // Franja roja (derecha)
+            pushRect(x + 2*w3, y, x + w, y + h, red);
+    
+            return { positions, colors };
+        };
+    
+        fn.overlay = (ctx, x, y, w, h) => {
+            const w3 = w / 3;
+            // El Soyombo ocupa una porción significativa de la franja roja izquierda.
+            // Lo basamos en la altura total de la bandera.
+            const soyomboSize = h * 0.7; // Aprox. 70% de la altura
+    
+            const drawSoyombo = () => {
+                const ratio = (soyomboImg.naturalWidth || 1) / (soyomboImg.naturalHeight || 1);
+                const soyomboH = soyomboSize;
+                const soyomboW = soyomboSize * ratio;
+                
+                // Centro de la franja roja izquierda
+                const cx = x + w3 / 2;
+                const cy = y + h / 2;
+                
+                // Coordenadas de inicio (esquina superior izquierda) para dibujar la imagen
+                const dx = cx - soyomboW / 2;
+                const dy = cy - soyomboH / 2;
+    
+                // Asegurar que el Soyombo solo se dibuje dentro de la franja roja izquierda.
+                ctx.save();
+                ctx.beginPath();
+                ctx.rect(x, y, w3, h); // Clip a la primera franja
+                ctx.clip(); 
+                
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(soyomboImg, dx, dy, soyomboW, soyomboH);
+                ctx.restore();
+            };
+    
+            // Lógica para asegurar que la imagen esté cargada
+            if (soyomboImg.complete && soyomboImg.naturalWidth > 0) {
+                drawSoyombo();
+            } else {
+                soyomboImg.onload = drawSoyombo;
+            }
+        };
+    
+        return fn;
+    })(),
+    montenegro: (() => {
+        // 1. CARGA DE LA IMAGEN
+        const escudoImg = new Image();
+        // NOTA: Reemplaza 'Ruta_a_tu_escudo_de_Montenegro.png' con la ruta real de tu archivo PNG
+        escudoImg.src = 'Recursos_Juan/escudo_montenegro.png'; 
+    
+        const fn = (x, y, w, h) => {
+            const positions = [];
+            const colors = [];
+            
+            // Colores de la bandera de Montenegro
+            const red = [193/255, 39/255, 45/255]; // Rojo oscuro
+            const gold = [212/255, 175/255, 55/255]; // Dorado (#D4AF37)
+    
+            const pushRect = (x0, y0, x1, y1, color) => {
+                positions.push(
+                    x0, y0, x1, y0, x0, y1,
+                    x1, y0, x1, y1, x0, y1
+                );
+                colors.push(...color, ...color, ...color, ...color, ...color, ...color);
+            };
+    
+            // 1. Fondo Dorado (para simular el borde)
+            // Dibujamos un rectángulo dorado que cubre todo.
+            pushRect(x, y, x + w, y + h, gold);
+    
+            // 2. Campo Rojo Interior
+            // El borde dorado es de un tamaño específico, aproximadamente 1/20 de la altura.
+            const borderThickness = h / 20; 
+            
+            const innerX1 = x + borderThickness;
+            const innerY1 = y + borderThickness;
+            const innerX2 = x + w - borderThickness;
+            const innerY2 = y + h - borderThickness;
+    
+            // Dibujar el rectángulo rojo más pequeño encima del dorado, dejando un borde.
+            pushRect(innerX1, innerY1, innerX2, innerY2, red);
+    
+            return { positions, colors };
+        };
+    
+        // 2. FUNCIÓN DE OVERLAY (Superpone el Escudo Nacional)
+        fn.overlay = (ctx, x, y, w, h) => {
+            // El escudo de Montenegro ocupa una gran parte del campo rojo.
+            // Lo centramos y lo dimensionamos basado en el ancho o alto disponible.
+            const borderThickness = h / 20; 
+            const innerH = h - 2 * borderThickness;
+            const escudoSize = innerH * 0.8; // Aprox. 80% de la altura del campo rojo
+    
+            const drawEscudo = () => {
+                const ratio = (escudoImg.naturalWidth || 1) / (escudoImg.naturalHeight || 1);
+                const escudoH = escudoSize; 
+                const escudoW = escudoSize * ratio;
+                
+                // Centro de la bandera (y del campo rojo)
+                const cx = x + w / 2;
+                const cy = y + h / 2;
+                
+                // Coordenadas de inicio (esquina superior izquierda) para dibujar la imagen
+                const dx = cx - escudoW / 2;
+                const dy = cy - escudoH / 2;
+    
+                ctx.save();
+                ctx.imageSmoothingEnabled = true;
+                ctx.drawImage(escudoImg, dx, dy, escudoW, escudoH);
+                ctx.restore();
+            };
+    
+            // Lógica para asegurar que la imagen esté cargada
+            if (escudoImg.complete && escudoImg.naturalWidth > 0) {
+                drawEscudo();
+            } else {
+                escudoImg.onload = drawEscudo;
+            }
+        };
+    
+        return fn;
+    })(),
 
     nauru: (x, y, w, h) => ({
         positions: [x, y, x + w, y, x, y + h, x + w, y, x + w, y + h, x, y + h],
