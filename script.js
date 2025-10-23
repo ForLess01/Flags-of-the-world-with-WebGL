@@ -8983,6 +8983,1356 @@ togo: (x, y, w, h) => {
 },
 
 
+  ivoryCoast: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const ORANGE = [255/255, 130/255, 0/255];   // #FF8200
+    const WHITE  = [1.0, 1.0, 1.0];             // #FFFFFF
+    const GREEN  = [0/255, 158/255, 73/255];    // #009E49
+    
+    const w3 = w / 3; // Ancho de cada franja
+
+    let positions = [];
+    let colors = [];
+
+    // 1. Franja Naranja (izquierda)
+    positions.push(
+        x, y,         x + w3, y,         x, y + h,
+        x + w3, y,     x + w3, y + h,     x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...ORANGE);
+
+    // 2. Franja Blanca (centro)
+    positions.push(
+        x + w3, y,     x + 2*w3, y,       x + w3, y + h,
+        x + 2*w3, y,   x + 2*w3, y + h,   x + w3, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...WHITE);
+
+    // 3. Franja Verde (derecha)
+    positions.push(
+        x + 2*w3, y,   x + w, y,         x + 2*w3, y + h,
+        x + w, y,     x + w, y + h,     x + 2*w3, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...GREEN);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  
+  costaRica: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const BLUE_CR = [0/255, 43/255, 127/255];   // #002B7F
+    const WHITE_CR = [1.0, 1.0, 1.0];           // #FFFFFF
+    const RED_CR = [218/255, 41/255, 28/255];   // #DA291C
+
+    const h_unit = h / 7;
+
+    let positions = [];
+    let colors = [];
+
+    // 1. Franja Azul (superior)
+    let currentY = y;
+    positions.push(
+        x, currentY,              x + w, currentY,              x, currentY + h_unit,
+        x + w, currentY,          x + w, currentY + h_unit,       x, currentY + h_unit
+    );
+    for (let i = 0; i < 6; i++) colors.push(...BLUE_CR);
+    currentY += h_unit;
+
+    // 2. Franja Blanca
+    positions.push(
+        x, currentY,              x + w, currentY,              x, currentY + h_unit,
+        x + w, currentY,          x + w, currentY + h_unit,       x, currentY + h_unit
+    );
+    for (let i = 0; i < 6; i++) colors.push(...WHITE_CR);
+    currentY += h_unit;
+
+    // 3. Franja Roja (central, doble ancho)
+    positions.push(
+        x, currentY,              x + w, currentY,              x, currentY + (2 * h_unit),
+        x + w, currentY,          x + w, currentY + (2 * h_unit), x, currentY + (2 * h_unit)
+    );
+    for (let i = 0; i < 6; i++) colors.push(...RED_CR);
+    currentY += (2 * h_unit);
+
+    // 4. Franja Blanca
+    positions.push(
+        x, currentY,              x + w, currentY,              x, currentY + h_unit,
+        x + w, currentY,          x + w, currentY + h_unit,       x, currentY + h_unit
+    );
+    for (let i = 0; i < 6; i++) colors.push(...WHITE_CR);
+    currentY += h_unit;
+
+    // 5. Franja Azul (inferior)
+    positions.push(
+        x, currentY,              x + w, currentY,              x, currentY + h_unit,
+        x + w, currentY,          x + w, currentY + h_unit,       x, currentY + h_unit
+    );
+    for (let i = 0; i < 6; i++) colors.push(...BLUE_CR);
+
+    // ESCUDO DE COSTA RICA OMITIDO
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  /**
+   * Bandera de Croacia
+   * Geometría: 3 franjas horizontales.
+   * ADVERTENCIA: EL ESCUDO Y CORONA CENTRALES HAN SIDO OMITIDOS
+   * debido a su complejidad para este formato de geometría cruda.
+   */
+  croatia: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const RED_HR  = [237/255, 28/255, 36/255]; // #ED1C24
+    const WHITE_HR = [1.0, 1.0, 1.0];          // #FFFFFF
+    const BLUE_HR = [17/255, 49/255, 142/255]; // #11318E
+
+    const h3 = h / 3; // Altura de cada franja
+
+    let positions = [];
+    let colors = [];
+
+    // 1. Franja Roja (superior)
+    positions.push(
+        x, y,         x + w, y,         x, y + h3,
+        x + w, y,     x + w, y + h3,    x, y + h3
+    );
+    for (let i = 0; i < 6; i++) colors.push(...RED_HR);
+
+    // 2. Franja Blanca (centro)
+    positions.push(
+        x, y + h3,    x + w, y + h3,    x, y + 2*h3,
+        x + w, y + h3,  x + w, y + 2*h3,  x, y + 2*h3
+    );
+    for (let i = 0; i < 6; i++) colors.push(...WHITE_HR);
+
+    // 3. Franja Azul (inferior)
+    positions.push(
+        x, y + 2*h3,  x + w, y + 2*h3,  x, y + h,
+        x + w, y + 2*h3,  x + w, y + h,     x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...BLUE_HR);
+
+    // ESCUDO Y CORONA DE CROACIA OMITIDOS
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  
+  dominica: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const GREEN_DM = [0/255, 133/255, 63/255];    // #00853F
+    const YELLOW_DM = [255/255, 212/255, 0/255];  // #FFD400
+    const BLACK_DM  = [0.0, 0.0, 0.0];            // #000000
+    const WHITE_DM  = [1.0, 1.0, 1.0];            // #FFFFFF
+    const RED_DM    = [205/255, 46/255, 58/255];  // #CD2E3A
+
+    let positions = [];
+    let colors = [];
+    
+    // --- Función auxiliar para crear un círculo (aproximado por triángulos) ---
+    // (Asegúrate de que esta función esté definida globalmente o dentro del scope)
+    const createCircle = (cx, cy, r, segments, color) => {
+        for (let i = 0; i < segments; i++) {
+            const angle1 = (i / segments) * (2 * Math.PI);
+            const angle2 = ((i + 1) / segments) * (2 * Math.PI);
+
+            positions.push(cx, cy); // Centro
+            positions.push(cx + r * Math.cos(angle1), cy + r * Math.sin(angle1));
+            positions.push(cx + r * Math.cos(angle2), cy + r * Math.sin(angle2));
+            
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+    // --- Fin función auxiliar de círculo ---
+
+    // 1. Fondo Verde (2 triángulos)
+    positions.push(
+        x, y,     x + w, y,     x, y + h,
+        x + w, y, x + w, y + h, x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...GREEN_DM);
+
+    // 2. Cruz Amarilla (superpuesta)
+    const crossWidth = w * 0.05; // Ajuste visual para el ancho de la cruz
+    
+    // Barra Horizontal Amarilla
+    positions.push(
+        x, y + (h / 2) - (crossWidth / 2),
+        x + w, y + (h / 2) - (crossWidth / 2),
+        x, y + (h / 2) + (crossWidth / 2),
+        x + w, y + (h / 2) - (crossWidth / 2),
+        x + w, y + (h / 2) + (crossWidth / 2),
+        x, y + (h / 2) + (crossWidth / 2)
+    );
+    for (let i = 0; i < 6; i++) colors.push(...YELLOW_DM);
+
+    // Barra Vertical Amarilla
+    positions.push(
+        x + (w / 2) - (crossWidth / 2), y,
+        x + (w / 2) + (crossWidth / 2), y,
+        x + (w / 2) - (crossWidth / 2), y + h,
+        x + (w / 2) + (crossWidth / 2), y,
+        x + (w / 2) + (crossWidth / 2), y + h,
+        x + (w / 2) - (crossWidth / 2), y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...YELLOW_DM);
+
+    // 3. Cruz Blanca (superpuesta a la amarilla)
+    const innerCrossWidth = crossWidth * 0.7; // Más estrecha que la amarilla
+    
+    // Barra Horizontal Blanca
+    positions.push(
+        x, y + (h / 2) - (innerCrossWidth / 2),
+        x + w, y + (h / 2) - (innerCrossWidth / 2),
+        x, y + (h / 2) + (innerCrossWidth / 2),
+        x + w, y + (h / 2) - (innerCrossWidth / 2),
+        x + w, y + (h / 2) + (innerCrossWidth / 2),
+        x, y + (h / 2) + (innerCrossWidth / 2)
+    );
+    for (let i = 0; i < 6; i++) colors.push(...WHITE_DM);
+
+    // Barra Vertical Blanca
+    positions.push(
+        x + (w / 2) - (innerCrossWidth / 2), y,
+        x + (w / 2) + (innerCrossWidth / 2), y,
+        x + (w / 2) - (innerCrossWidth / 2), y + h,
+        x + (w / 2) + (innerCrossWidth / 2), y,
+        x + (w / 2) + (innerCrossWidth / 2), y + h,
+        x + (w / 2) - (innerCrossWidth / 2), y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...WHITE_DM);
+
+    // 4. Cruz Negra (superpuesta a la blanca)
+    const innermostCrossWidth = innerCrossWidth * 0.7; // Más estrecha aún
+    
+    // Barra Horizontal Negra
+    positions.push(
+        x, y + (h / 2) - (innermostCrossWidth / 2),
+        x + w, y + (h / 2) - (innermostCrossWidth / 2),
+        x, y + (h / 2) + (innermostCrossWidth / 2),
+        x + w, y + (h / 2) - (innermostCrossWidth / 2),
+        x + w, y + (h / 2) + (innermostCrossWidth / 2),
+        x, y + (h / 2) + (innermostCrossWidth / 2)
+    );
+    for (let i = 0; i < 6; i++) colors.push(...BLACK_DM);
+
+    // Barra Vertical Negra
+    positions.push(
+        x + (w / 2) - (innermostCrossWidth / 2), y,
+        x + (w / 2) + (innermostCrossWidth / 2), y,
+        x + (w / 2) - (innermostCrossWidth / 2), y + h,
+        x + (w / 2) + (innermostCrossWidth / 2), y,
+        x + (w / 2) + (innermostCrossWidth / 2), y + h,
+        x + (w / 2) - (innermostCrossWidth / 2), y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...BLACK_DM);
+
+    // 5. Círculo Rojo (central)
+    const circleRadius = Math.min(w, h) * 0.2; 
+    const circleSegments = 32;
+    createCircle(x + w / 2, y + h / 2, circleRadius, circleSegments, RED_DM);
+
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+
+
+
+
+  
+  comoros: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const COMOROS_GREEN  = [61/255, 142/255, 51/255];  // #3D8E33
+    const COMOROS_YELLOW = [255/255, 239/255, 0/255]; // #FFEF00
+    const COMOROS_WHITE  = [1.0, 1.0, 1.0];            // #FFFFFF
+    const COMOROS_RED    = [239/255, 51/255, 64/255];  // #EF3340
+    const COMOROS_BLUE   = [60/255, 90/255, 166/255];   // #3C5AA6
+
+    let positions = [];
+    let colors = [];
+
+  
+    const addTesselatedArc = (cx, cy, r, segments, color) => {
+        for (let i = 0; i < segments; i++) {
+            const angle1 = (i / segments) * (2 * Math.PI);
+            const angle2 = ((i + 1) / segments) * (2 * Math.PI);
+            positions.push(cx, cy, cx + r * Math.cos(angle1), cy + r * Math.sin(angle1), cx + r * Math.cos(angle2), cy + r * Math.sin(angle2));
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+
+    const createStar = (cx, cy, r, color) => {
+        const innerRadius = r * 0.381966;
+        const numPoints = 5;
+        let starPoints = [];
+        for (let i = 0; i < numPoints * 2; i++) {
+            const angle = (Math.PI / numPoints * i) - (Math.PI / 2); // Apuntar arriba
+            const radius = (i % 2 === 0) ? r : innerRadius;
+            starPoints.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+        for (let i = 0; i < starPoints.length; i += 2) {
+            positions.push(cx, cy, starPoints[i], starPoints[i+1], starPoints[(i + 2) % starPoints.length], starPoints[(i + 3) % starPoints.length]);
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+    
+    // --- FIN DE FUNCIONES AUXILIARES ---
+
+    const h4 = h / 4; // Altura de las 4 franjas
+    const triTipX = w * 0.4; // Punta del triángulo (basado en 120/300)
+    
+    // 1. Franjas (4 rectángulos / 8 triángulos)
+    // Franja Amarilla (superior)
+    positions.push(x + triTipX, y,       x + w, y,       x + triTipX, y + h4, x + w, y,       x + w, y + h4, x + triTipX, y + h4);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_YELLOW);
+    
+    // Franja Blanca
+    positions.push(x + triTipX, y + h4,  x + w, y + h4,  x + triTipX, y + 2*h4, x + w, y + h4,  x + w, y + 2*h4, x + triTipX, y + 2*h4);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_WHITE);
+    
+    // Franja Roja
+    positions.push(x + triTipX, y + 2*h4, x + w, y + 2*h4, x + triTipX, y + 3*h4, x + w, y + 2*h4, x + w, y + 3*h4, x + triTipX, y + 3*h4);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_RED);
+    
+    // Franja Azul
+    positions.push(x + triTipX, y + 3*h4, x + w, y + 3*h4, x + triTipX, y + h, x + w, y + 3*h4, x + w, y + h, x + triTipX, y + h);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_BLUE);
+
+    // 2. Triángulo Verde (1 triángulo)
+    positions.push(x, y, triTipX, y + h / 2, x, y + h);
+    for (let i = 0; i < 3; i++) colors.push(...COMOROS_GREEN);
+
+    // 3. Media Luna Blanca (teselada)
+    // (Se usa el método del pintor: círculo blanco grande, círculo verde más pequeño encima)
+    const cx1 = w * 0.2;       // 60/300
+    const cy1 = h * 0.4;       // 80/200
+    const r1 = h * 0.125;      // 25/200
+    addTesselatedArc(x + cx1, y + cy1, r1, 32, COMOROS_WHITE);
+    
+    const cx2 = w * 0.2166;    // 65/300
+    const cy2 = h * 0.4;       // 80/200
+    const r2 = h * 0.1;        // 20/200
+    addTesselatedArc(x + cx2, y + cy2, r2, 32, COMOROS_GREEN); // Dibujar el verde encima
+
+    // 4. Estrellas (4 estrellas, 10 triángulos cada una)
+    const starR = h * 0.025; // 5/200
+    
+    // (Posiciones basadas en el SVG del prompt anterior)
+    const starPos = [
+        { cx: w * 0.2,    cy: h * 0.175 }, // (60, 35)
+        { cx: w * 0.2,    cy: h * 0.625 }, // (60, 125)
+        { cx: w * 0.116,  cy: h * 0.5 },   // (35, 100)
+        { cx: w * 0.283,  cy: h * 0.5 }    // (85, 100)
+    ];
+    
+    starPos.forEach(pos => {
+        createStar(x + pos.cx, y + pos.cy, starR, COMOROS_WHITE);
+    });
+    
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+comoros: (x, y, w, h) => {
+    // Colores RGB normalizados (0-1)
+    const COMOROS_GREEN  = [61/255, 142/255, 51/255];  // #3D8E33
+    const COMOROS_YELLOW = [255/255, 239/255, 0/255]; // #FFEF00
+    const COMOROS_WHITE  = [1.0, 1.0, 1.0];            // #FFFFFF
+    const COMOROS_RED    = [239/255, 51/255, 64/255];  // #EF3340
+    const COMOROS_BLUE   = [60/255, 90/255, 166/255];   // #3C5AA6
+
+    let positions = [];
+    let colors = [];
+
+    // --- INICIO DE FUNCIONES AUXILIARES ---
+    
+    /**
+     * Añade triángulos para aproximar un círculo/arco (Teselación).
+     */
+    const addTesselatedCircle = (cx, cy, r, segments, color) => {
+        for (let i = 0; i < segments; i++) {
+            const angle1 = (i / segments) * (2 * Math.PI);
+            const angle2 = ((i + 1) / segments) * (2 * Math.PI);
+            // Vértices del triángulo (Centro, Punto1, Punto2)
+            positions.push(cx, cy, cx + r * Math.cos(angle1), cy + r * Math.sin(angle1), cx + r * Math.cos(angle2), cy + r * Math.sin(angle2));
+            // Asigna color a los 3 vértices
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+
+    /**
+     * Añade triángulos para dibujar una estrella de 5 puntas (Triangulación desde el centro).
+     */
+    const createStar = (cx, cy, r, color) => {
+        const innerRadius = r * 0.381966; // Proporción áurea para puntas internas
+        const numPoints = 5;
+        let starPoints = []; // Almacena los 10 vértices del contorno (5 externos, 5 internos)
+        
+        // Calcular los 10 vértices del contorno
+        for (let i = 0; i < numPoints * 2; i++) {
+            const angle = (Math.PI / numPoints * i) - (Math.PI / 2); // -PI/2 para apuntar arriba
+            const radius = (i % 2 === 0) ? r : innerRadius; // Alternar radio externo/interno
+            starPoints.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+        
+        // Crear 10 triángulos desde el centro a cada par de vértices del contorno
+        for (let i = 0; i < starPoints.length; i += 2) {
+            const nextIndex = (i + 2) % starPoints.length; // Índice del siguiente punto (circular)
+            // Vértices del triángulo (Centro, Punto Actual, Punto Siguiente)
+            positions.push(cx, cy, starPoints[i], starPoints[i+1], starPoints[nextIndex], starPoints[nextIndex+1]);
+             // Asigna color a los 3 vértices
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+    
+    // --- FIN DE FUNCIONES AUXILIARES ---
+
+    // --- Definición de Geometría ---
+    
+    // Proporciones basadas en el SVG (viewBox="0 0 240 160")
+    const h4 = h / 4;        // Altura de cada una de las 4 franjas
+    const triTipX = x + w * (96 / 240); // Posición X de la punta del triángulo (0.4 * w)
+    
+    // 1. Franjas Horizontales (Derecha del triángulo)
+    // Cada franja es un rectángulo (2 triángulos)
+    
+    // Franja Amarilla (superior)
+    positions.push(triTipX, y,       x + w, y,       triTipX, y + h4);
+    positions.push(x + w, y,       x + w, y + h4,  triTipX, y + h4);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_YELLOW);
+    
+    // Franja Blanca
+    positions.push(triTipX, y + h4,  x + w, y + h4,  triTipX, y + 2*h4);
+    positions.push(x + w, y + h4,  x + w, y + 2*h4, triTipX, y + 2*h4);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_WHITE);
+    
+    // Franja Roja
+    positions.push(triTipX, y + 2*h4, x + w, y + 2*h4, triTipX, y + 3*h4);
+    positions.push(x + w, y + 2*h4, x + w, y + 3*h4, triTipX, y + 3*h4);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_RED);
+    
+    // Franja Azul (inferior)
+    positions.push(triTipX, y + 3*h4, x + w, y + 3*h4, triTipX, y + h);
+    positions.push(x + w, y + 3*h4, x + w, y + h,  triTipX, y + h);
+    for (let i = 0; i < 6; i++) colors.push(...COMOROS_BLUE);
+
+    // 2. Triángulo Verde (Izquierda)
+    // (1 triángulo)
+    positions.push(x, y, triTipX, y + h / 2, x, y + h);
+    for (let i = 0; i < 3; i++) colors.push(...COMOROS_GREEN);
+
+    
+    const crescentBaseCX = x + w * (48 / 240); // cx="48"
+    const crescentBaseCY = y + h * (64 / 160); // cy="64"
+    const crescentBaseR  = h * (20 / 160);      // r="20"
+    addTesselatedCircle(crescentBaseCX, crescentBaseCY, crescentBaseR, 32, COMOROS_WHITE); // Círculo blanco grande
+
+    const crescentCutoutCX = x + w * (52 / 240); 
+    const crescentCutoutR  = h * (16 / 160);     
+    addTesselatedCircle(crescentCutoutCX, crescentBaseCY, crescentCutoutR, 32, COMOROS_GREEN); // Círculo verde encima para "cortar"
+
+  
+    const starR = h * (5 / 160); // Radio de las estrellas
+    
+    const starPositions = [
+        { cx: x + w * (48 / 240), cy: y + h * (28 / 160) },  // Estrella superior
+        { cx: x + w * (48 / 240), cy: y + h * (100 / 160) }, // Estrella inferior
+        { cx: x + w * (28 / 240), cy: y + h * (80 / 160) },  // Estrella izquierda
+        { cx: x + w * (68 / 240), cy: y + h * (80 / 160) }   // Estrella derecha
+    ];
+    
+    starPositions.forEach(pos => {
+        createStar(pos.cx, pos.cy, starR, COMOROS_WHITE);
+    });
+    
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+
+
+
+/**
+   * Bandera de la República del Congo
+   * Geometría: Tres secciones diagonales (Verde, Amarillo, Rojo).
+   * AJUSTADO: Se aumentó el tamaño del triángulo verde y se redujo el rojo
+   * moviendo la franja amarilla (aumentando bandRatio).
+   */
+  congo: (x, y, w, h) => {
+    // Colores RGB normalizados (0-1)
+    const CONGO_GREEN  = [0/255, 149/255, 67/255]; // #009543
+    const CONGO_YELLOW = [251/255, 225/255, 0/255]; // #FBE100
+    const CONGO_RED    = [220/255, 36/255, 31/255]; // #DC241F
+    
+    let positions = [];
+    let colors = [];
+
+    // --- Definir los 4 vértices de la bandera ---
+    const topLeft     = [x, y];
+    const bottomLeft  = [x, y + h];
+    const topRight    = [x + w, y];
+    const bottomRight = [x + w, y + h];
+
+    // --- Dibujar las secciones base (Verde y Rojo cubriendo todo) ---
+
+    // 1. Triángulo Verde (Cubre toda la mitad superior izquierda)
+    positions.push(topLeft[0], topLeft[1], topRight[0], topRight[1], bottomLeft[0], bottomLeft[1]);
+    for (let i = 0; i < 3; i++) colors.push(...CONGO_GREEN);
+    
+    // 2. Triángulo Rojo (Cubre toda la mitad inferior derecha)
+    positions.push(bottomLeft[0], bottomLeft[1], bottomRight[0], bottomRight[1], topRight[0], topRight[1]);
+    for (let i = 0; i < 3; i++) colors.push(...CONGO_RED);
+
+    // --- Calcular los puntos interiores para la franja amarilla ---
+    // Aumentamos bandRatio para mover la franja amarilla hacia abajo/derecha
+    const bandRatio = 0.4; // ANTES: 0.22, AHORA: 0.4 (Mayor verde, menor rojo)
+    
+    // Punto donde la diagonal SUPERIOR corta el borde izquierdo
+    const innerLeft = [x, y + h * bandRatio];
+    // Punto donde la diagonal SUPERIOR corta el borde superior
+    const innerTop  = [x + w * bandRatio, y];
+
+    // --- Dibujar la Franja Amarilla (Superpuesta) ---
+    // Vértices del paralelogramo: innerLeft, bottomLeft, topRight, innerTop
+    
+    // Triángulo 1 de la franja: (innerLeft, bottomLeft, innerTop)
+    positions.push(innerLeft[0], innerLeft[1], bottomLeft[0], bottomLeft[1], innerTop[0], innerTop[1]);
+    // Triángulo 2 de la franja: (bottomLeft, topRight, innerTop)
+    positions.push(bottomLeft[0], bottomLeft[1], topRight[0], topRight[1], innerTop[0], innerTop[1]);
+    // Asignar color amarillo a los 6 vértices
+    for (let i = 0; i < 6; i++) colors.push(...CONGO_YELLOW);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+
+
+
+
+
+
+
+
+
+
+    chad: (x, y, w, h) => {
+    const w3 = w / 3;
+    
+    const positions = [
+        x, y, x + w3, y, x, y + h, x + w3, y, x + w3, y + h, x, y + h,
+        x + w3, y, x + w3 * 2, y, x + w3, y + h, x + w3 * 2, y, x + w3 * 2, y + h, x + w3, y + h,
+        x + w3 * 2, y, x + w, y, x + w3 * 2, y + h, x + w, y, x + w, y + h, x + w3 * 2, y + h
+    ];
+
+    const blue   = [0/255, 40/255, 104/255];   // #002868
+    const yellow = [254/255, 203/255, 0/255];  // #FECB00
+    const red    = [206/255, 17/255, 38/255];   // #CE1126
+
+    const colors = new Array(18).fill(0).map((_, i) => {
+      const stripeIndex = Math.floor(i / 6); // 0, 1, o 2
+      
+      if (stripeIndex === 0) {
+        return blue;   
+      } else if (stripeIndex === 1) {
+        return yellow; 
+      } else {
+        return red;    
+      }
+    }).flat(); 
+
+    return {
+      positions: positions,
+      colors: colors
+    };
+      },
+      
+      
+
+  czechia: (x, y, w, h) => {
+    const h2 = h / 2; 
+    const w2 = w / 2; 
+
+   
+    const positions = [
+        x, y,         x + w, y,         x, y + h2,
+        x + w, y,     x + w, y + h2,    x, y + h2,
+        
+        x, y + h2,    x + w, y + h2,    x, y + h,
+        x + w, y + h2, x + w, y + h,     x, y + h,
+        
+        x, y,         x + w2, y + h2,   x, y + h
+    ];
+
+    const white = [1.0, 1.0, 1.0];            // #FFFFFF
+    const red   = [215/255, 20/255, 26/255];  // #D7141A
+    const blue  = [17/255, 69/255, 126/255]; // #11457E
+
+    const colors = [
+        ...white, ...white, ...white,
+        ...white, ...white, ...white,
+        
+        ...red, ...red, ...red,
+        ...red, ...red, ...red,
+        
+        ...blue, ...blue, ...blue
+    ];
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+      
+
+  
+chile: (x, y, w, h) => {
+    // Colores RGB normalizados (0-1)
+    const CHILE_WHITE = [255/255, 255/255, 255/255]; // #FFFFFF
+    const CHILE_RED   = [218/255, 41/255, 28/255];  // #DA291C
+    const CHILE_BLUE  = [0/255, 57/255, 166/255]; // #0039A6
+
+    const h2 = h / 2; // La mitad de la altura para las franjas
+    const squareSize = h2; // El cuadrado azul es 1:1, así que es h/2 x h/2
+
+    let positions = [];
+    let colors = [];
+
+    
+    positions.push(
+        x, y + h2,         x + w, y + h2,         x, y + h,
+        x + w, y + h2,     x + w, y + h,          x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...CHILE_RED);
+
+    
+    positions.push(
+        x + squareSize, y,         x + w, y,         x + squareSize, y + h2,
+        x + w, y,                 x + w, y + h2,    x + squareSize, y + h2
+    );
+    // 6 vertices de color blanco
+    for (let i = 0; i < 6; i++) colors.push(...CHILE_WHITE);
+
+    
+    positions.push(
+        x, y,         x + squareSize, y,         x, y + squareSize,
+        x + squareSize, y,         x + squareSize, y + squareSize,    x, y + squareSize
+    );
+    // 6 vertices de color azul
+    for (let i = 0; i < 6; i++) colors.push(...CHILE_BLUE);
+
+
+    const starCenterX = x + squareSize / 2;
+    const starCenterY = y + squareSize / 2;
+    const outerRadius = squareSize * 0.4; // Radio para las puntas externas
+    const innerRadius = outerRadius * 0.4; // Radio para los valles internos
+    const numPoints = 5;
+
+    let starPoints = [];
+    for (let i = 0; i < numPoints * 2; i++) {
+        const angle = Math.PI / numPoints * i - Math.PI / 2; // Empezar apuntando hacia arriba
+        const r = (i % 2 === 0) ? outerRadius : innerRadius;
+        starPoints.push(starCenterX + r * Math.cos(angle), starCenterY + r * Math.sin(angle));
+    }
+
+   
+    for (let i = 0; i < starPoints.length; i += 2) {
+        positions.push(starCenterX, starCenterY); // Punto central
+        positions.push(starPoints[i], starPoints[i+1]); // Punto actual del contorno
+        
+        const nextIndex = (i + 2) % starPoints.length;
+        positions.push(starPoints[nextIndex], starPoints[nextIndex+1]);
+        
+        for (let j = 0; j < 3; j++) colors.push(...CHILE_WHITE);
+    }
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+},
+
+/**
+   * Bandera de Colombia
+   * Geometría: 3 rectángulos horizontales (proporción 2:1:1)
+   */
+  colombia: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const COLOMBIA_YELLOW = [252/255, 221/255, 9/255];   // #FCDD09
+    const COLOMBIA_BLUE   = [0/255, 56/255, 147/255];  // #003893
+    const COLOMBIA_RED    = [206/255, 17/255, 38/255];   // #CE1126
+
+    const h_top = h / 2;    // Franja superior (50%)
+    const h_mid = h / 4;    // Franja media (25%)
+    
+    let positions = [];
+    let colors = [];
+
+    // 1. Franja Amarilla (superior, 2 triángulos)
+    positions.push(
+        x, y,               x + w, y,               x, y + h_top,
+        x + w, y,           x + w, y + h_top,       x, y + h_top
+    );
+    // 6 vértices de color amarillo
+    for (let i = 0; i < 6; i++) colors.push(...COLOMBIA_YELLOW);
+
+    // 2. Franja Azul (media, 2 triángulos)
+    positions.push(
+        x, y + h_top,       x + w, y + h_top,       x, y + h_top + h_mid,
+        x + w, y + h_top,   x + w, y + h_top + h_mid, x, y + h_top + h_mid
+    );
+    // 6 vértices de color azul
+    for (let i = 0; i < 6; i++) colors.push(...COLOMBIA_BLUE);
+
+    // 3. Franja Roja (inferior, 2 triángulos)
+    positions.push(
+        x, y + h_top + h_mid, x + w, y + h_top + h_mid, x, y + h,
+        x + w, y + h_top + h_mid, x + w, y + h,           x, y + h
+    );
+    // 6 vértices de color rojo
+    for (let i = 0; i < 6; i++) colors.push(...COLOMBIA_RED);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  
+  china: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const CHINA_RED    = [222/255, 41/255, 16/255];  // #DE2910
+    const CHINA_YELLOW = [255/255, 222/255, 0/255]; // #FFDE00
+
+    let positions = [];
+    let colors = [];
+
+    // 1. Fondo Rojo (2 triángulos)
+    positions.push(
+        x, y,     x + w, y,     x, y + h,
+        x + w, y, x + w, y + h, x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...CHINA_RED);
+
+  
+    const createStar = (cx, cy, r, rotation = 0) => {
+        const innerRadius = r * 0.381966; // Proporción áurea para estrella perfecta
+        const numPoints = 5;
+        let starPoints = [];
+
+        // Calcular los 10 vértices del contorno (5 externos, 5 internos)
+        for (let i = 0; i < numPoints * 2; i++) {
+            // -Math.PI / 2 para que la primera punta apunte hacia arriba
+            const angle = (Math.PI / numPoints * i) - (Math.PI / 2) + rotation;
+            const radius = (i % 2 === 0) ? r : innerRadius;
+            starPoints.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+
+        // Añadir los vértices y colores de la estrella a los arrays principales
+        for (let i = 0; i < starPoints.length; i += 2) {
+            positions.push(cx, cy); // Punto central
+            positions.push(starPoints[i], starPoints[i+1]); // Punto actual
+            
+            const nextIndex = (i + 2) % starPoints.length;
+            positions.push(starPoints[nextIndex], starPoints[nextIndex+1]); // Siguiente punto
+            
+            // 3 vértices amarillos por triángulo
+            for (let j = 0; j < 3; j++) colors.push(...CHINA_YELLOW);
+        }
+    };
+    
+    const gridUnit = w / 30; // 1 unidad de la cuadrícula de 30x20
+    
+    // 2. Estrella Grande
+    const largeStarCX = x + 5 * gridUnit;
+    const largeStarCY = y + 5 * gridUnit;
+    const largeStarR = 3 * gridUnit;
+    createStar(largeStarCX, largeStarCY, largeStarR, 0); // Sin rotación
+
+    // 3. Estrellas Pequeñas
+    const smallStarR = 1 * gridUnit;
+    const smallStarPositions = [
+        { cx: x + 10 * gridUnit, cy: y + 2 * gridUnit }, // Estrella 1
+        { cx: x + 12 * gridUnit, cy: y + 4 * gridUnit }, // Estrella 2
+        { cx: x + 12 * gridUnit, cy: y + 7 * gridUnit }, // Estrella 3
+        { cx: x + 10 * gridUnit, cy: y + 9 * gridUnit }  // Estrella 4
+    ];
+
+    smallStarPositions.forEach(pos => {
+        const dx = largeStarCX - pos.cx;
+        const dy = largeStarCY - pos.cy;
+        
+       
+        const rotation = Math.atan2(dy, dx) + (Math.PI / 2);
+
+        createStar(pos.cx, pos.cy, smallStarR, rotation);
+    });
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+
+  
+  denmark: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const DENMARK_RED   = [200/255, 16/255, 46/255]; // #C8102E
+    const DENMARK_WHITE = [1.0, 1.0, 1.0];           // #FFFFFF
+    
+    
+    const v_x = w * 0.35; // Posición X de la barra vertical
+    const v_w = w * 0.1;  // Ancho de la barra vertical
+    const h_y = h * 0.45; // Posición Y de la barra horizontal
+    const h_h = h * 0.1;  // Alto de la barra horizontal
+
+    let positions = [];
+    let colors = [];
+
+    // 1. Fondo Rojo (2 triángulos)
+    positions.push(
+        x, y,     x + w, y,     x, y + h,
+        x + w, y, x + w, y + h, x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DENMARK_RED);
+
+    // 2. Barra Vertical Blanca (2 triángulos)
+    positions.push(
+        x + v_x, y,         x + v_x + v_w, y,         x + v_x, y + h,
+        x + v_x + v_w, y,   x + v_x + v_w, y + h,     x + v_x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DENMARK_WHITE);
+    
+    // 3. Barra Horizontal Blanca (2 triángulos)
+    positions.push(
+        x, y + h_y,     x + w, y + h_y,     x, y + h_y + h_h,
+        x + w, y + h_y, x + w, y + h_y + h_h, x, y + h_y + h_h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DENMARK_WHITE);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  
+  cuba: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const CUBA_BLUE   = [0/255, 42/255, 145/255];  // #002A91
+    const CUBA_WHITE  = [1.0, 1.0, 1.0];          // #FFFFFF
+    const CUBA_RED    = [203/255, 24/255, 49/255]; // #CB1831
+
+    let positions = [];
+    let colors = [];
+
+    // 1. Franjas (5 franjas, cada una 1/5 de la altura)
+    const stripeHeight = h / 5;
+    for (let i = 0; i < 5; i++) {
+        const stripeColor = (i % 2 === 0) ? CUBA_BLUE : CUBA_WHITE;
+        const stripeY = y + i * stripeHeight;
+        
+        // Añadir 2 triángulos por franja
+        positions.push(
+            x, stripeY,              x + w, stripeY,              x, stripeY + stripeHeight,
+            x + w, stripeY,          x + w, stripeY + stripeHeight, x, stripeY + stripeHeight
+        );
+        for (let k = 0; k < 6; k++) colors.push(...stripeColor);
+    }
+    
+ 
+    const triangleTipX = x + w * 0.4;
+    positions.push(
+        x, y,         triangleTipX, y + h / 2,     x, y + h
+    );
+    for (let i = 0; i < 3; i++) colors.push(...CUBA_RED);
+    
+    // --- Función auxiliar interna para crear la estrella ---
+    const createStar = (cx, cy, r) => {
+        const innerRadius = r * 0.381966;
+        const numPoints = 5;
+        let starPoints = [];
+        for (let i = 0; i < numPoints * 2; i++) {
+            const angle = (Math.PI / numPoints * i) - (Math.PI / 2);
+            const radius = (i % 2 === 0) ? r : innerRadius;
+            starPoints.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+        for (let i = 0; i < starPoints.length; i += 2) {
+            positions.push(cx, cy); // Centro
+            positions.push(starPoints[i], starPoints[i+1]); // Punto actual
+            const nextIndex = (i + 2) % starPoints.length;
+            positions.push(starPoints[nextIndex], starPoints[nextIndex+1]); // Siguiente
+            for (let j = 0; j < 3; j++) colors.push(...CUBA_WHITE);
+        }
+    };
+    
+    const starCX = x + w * 0.15;
+    const starCY = y + h * 0.5;
+    const starR = w * 0.05;
+    createStar(starCX, starCY, starR);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  djibouti: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const DJIBOUTI_BLUE   = [106/255, 178/255, 231/255]; // #6AB2E7 (Azul claro)
+    const DJIBOUTI_GREEN  = [0/255, 133/255, 63/255];   // #00853F (Verde)
+    const DJIBOUTI_WHITE  = [1.0, 1.0, 1.0];            // #FFFFFF
+    const DJIBOUTI_RED    = [214/255, 18/255, 33/255];   // #D61221 (Rojo)
+    
+    let positions = [];
+    let colors = [];
+    
+    const h2 = h / 2;
+
+    positions.push(
+        x, y,     x + w, y,     x, y + h2,
+        x + w, y, x + w, y + h2, x, y + h2
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DJIBOUTI_BLUE);
+    
+    positions.push(
+        x, y + h2, x + w, y + h2, x, y + h,
+        x + w, y + h2, x + w, y + h,  x, y + h
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DJIBOUTI_GREEN);
+    
+   
+    const triangleTipX = x + w * 0.38;
+    positions.push(
+        x, y,         triangleTipX, y + h / 2,     x, y + h
+    );
+    for (let i = 0; i < 3; i++) colors.push(...DJIBOUTI_WHITE);
+    
+    // --- Función auxiliar interna para crear la estrella ---
+    const createStar = (cx, cy, r) => {
+        const innerRadius = r * 0.381966;
+        const numPoints = 5;
+        let starPoints = [];
+        for (let i = 0; i < numPoints * 2; i++) {
+            const angle = (Math.PI / numPoints * i) - (Math.PI / 2);
+            const radius = (i % 2 === 0) ? r : innerRadius;
+            starPoints.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+        for (let i = 0; i < starPoints.length; i += 2) {
+            positions.push(cx, cy); // Centro
+            positions.push(starPoints[i], starPoints[i+1]); // Punto actual
+            const nextIndex = (i + 2) % starPoints.length;
+            positions.push(starPoints[nextIndex], starPoints[nextIndex+1]); // Siguiente
+            for (let j = 0; j < 3; j++) colors.push(...DJIBOUTI_RED);
+        }
+    };
+    
+    const starCX = x + w * 0.19;
+    const starCY = y + h * 0.5;
+    const starR = Math.min(w, h) * 0.045;
+    createStar(starCX, starCY, starR);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+
+
+    cyprus: (x, y, w, h, ctx) => {
+    const CYPRUS_WHITE = [1.0, 1.0, 1.0];
+
+    let positions = [];
+    let colors = [];
+
+    // === Fondo blanco ===
+    const topLeft = [x, y];
+    const bottomLeft = [x, y + h];
+    const topRight = [x + w, y];
+    const bottomRight = [x + w, y + h];
+
+    positions.push(
+        topLeft[0], topLeft[1],
+        bottomLeft[0], bottomLeft[1],
+        topRight[0], topRight[1],
+
+        bottomLeft[0], bottomLeft[1],
+        bottomRight[0], bottomRight[1],
+        topRight[0], topRight[1]
+    );
+    for (let i = 0; i < 6; i++) colors.push(...CYPRUS_WHITE);
+
+    // === Logo central (imagen) ===
+    const logoWidth = w * 0.45;
+    const logoHeight = h * 0.45;
+    const logoX = x + (w - logoWidth) / 2;
+    const logoY = y + (h - logoHeight) / 2;
+
+    const logo = new Image();
+    logo.src = "recursos_carlos/imagen.png"; // Asegúrate de que exista esta ruta
+
+    // Limpieza y dibujado del logo tras cargar
+    logo.onload = function() {
+        // Dibuja fondo blanco
+        ctx.fillStyle = "#FFFFFF";
+        ctx.fillRect(x, y, w, h);
+
+        // Dibuja la imagen centrada
+        ctx.drawImage(logo, logoX, logoY, logoWidth, logoHeight);
+    };
+
+    
+    return {
+        positions: positions,
+        colors: colors,
+        logo: {
+        image: logo,
+        x: logoX,
+        y: logoY,
+        width: logoWidth,
+        height: logoHeight
+        }
+    };
+    },
+
+  
+
+  congoDRC: (x, y, w, h) => {
+    // Colores RGB normalizados (0-1)
+    const BLUE_DRC   = [0/255, 127/255, 255/255]; // #007FFF (Azul cielo)
+    const YELLOW_DRC = [247/255, 214/255, 24/255]; // #F7D618 (Amarillo)
+    const RED_DRC    = [206/255, 16/255, 33/255];  // #CE1021 (Rojo)
+
+    let positions = [];
+    let colors = [];
+
+    // --- Definir los 4 vértices de la bandera ---
+    const topLeft     = [x, y];
+    const bottomLeft  = [x, y + h];
+    const topRight    = [x + w, y];
+    const bottomRight = [x + w, y + h];
+
+    // --- Función auxiliar interna para TRIANGULAR una Estrella ---
+    const createStar = (cx, cy, r, color) => {
+        const innerRadius = r * 0.381966; // Proporción áurea
+        let points = [];
+        for (let i = 0; i < 10; i++) {
+            const radius = (i % 2 === 0) ? r : innerRadius;
+            const angle = (i * Math.PI / 5) - (Math.PI / 2); // Apuntar arriba
+            points.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+        // Triangulación simple desde el centro (10 triángulos)
+        for (let i = 0; i < points.length; i += 2) {
+            const nextIndex = (i + 2) % points.length;
+            positions.push(cx, cy, points[i], points[i+1], points[nextIndex], points[nextIndex+1]);
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+    // --- Fin de la función auxiliar ---
+
+    // 1. Fondo Azul (2 triángulos)
+    positions.push(topLeft[0], topLeft[1], topRight[0], topRight[1], bottomLeft[0], bottomLeft[1]);
+    positions.push(bottomLeft[0], bottomLeft[1], bottomRight[0], bottomRight[1], topRight[0], topRight[1]);
+    for (let i = 0; i < 6; i++) colors.push(...BLUE_DRC);
+
+    // --- Calcular vértices para las franjas diagonales ---
+    // La franja roja va de bottomLeft hacia topRight.
+    // Necesitamos 4 líneas paralelas.
+    // Usaremos ratios relativos para definir los offsets.
+    const yellowWidthRatio = 0.03; // Ancho relativo de cada franja amarilla
+    const redWidthRatio = 0.14;    // Ancho relativo de la franja roja
+    const totalStripeRatio = yellowWidthRatio * 2 + redWidthRatio; // ~0.20
+
+    // Puntos de la línea 1 (borde superior/izquierdo de la 1ra amarilla)
+    const p1_L = [x, y + h * (1 - totalStripeRatio)]; // Izquierda
+    const p1_T = [x + w * (1 - totalStripeRatio), y]; // Arriba
+
+    // Puntos de la línea 2 (borde inferior/derecho de la 1ra amarilla / sup/izq roja)
+    const p2_L = [x, y + h * (1 - redWidthRatio - yellowWidthRatio)]; // Izquierda
+    const p2_T = [x + w * (1 - redWidthRatio - yellowWidthRatio), y]; // Arriba
+
+    // Puntos de la línea 3 (borde inferior/derecho roja / sup/izq 2da amarilla)
+    const p3_L = [x, y + h * yellowWidthRatio]; // Izquierda
+    const p3_T = [x + w * yellowWidthRatio, y]; // Arriba
+
+    // Puntos de la línea 4 (borde inferior/derecho de la 2da amarilla) = Esquina bottomLeft y topRight
+    const p4_L = bottomLeft;
+    const p4_T = topRight;
+
+    // --- Dibujar las Franjas (Método del Pintor: Amarillas primero, luego Roja) ---
+
+    // 2. Primera Franja Amarilla (Paralelogramo: p1_L, p2_L, p2_T, p1_T)
+    positions.push(p1_L[0], p1_L[1], p2_L[0], p2_L[1], p1_T[0], p1_T[1]); // Tri 1
+    positions.push(p2_L[0], p2_L[1], p2_T[0], p2_T[1], p1_T[0], p1_T[1]); // Tri 2
+    for (let i = 0; i < 6; i++) colors.push(...YELLOW_DRC);
+
+    // 3. Segunda Franja Amarilla (Paralelogramo: p3_L, p4_L, p4_T, p3_T)
+    positions.push(p3_L[0], p3_L[1], p4_L[0], p4_L[1], p3_T[0], p3_T[1]); // Tri 1
+    positions.push(p4_L[0], p4_L[1], p4_T[0], p4_T[1], p3_T[0], p3_T[1]); // Tri 2
+    for (let i = 0; i < 6; i++) colors.push(...YELLOW_DRC);
+
+    // 4. Franja Roja (Superpuesta) (Paralelogramo: p2_L, p3_L, p3_T, p2_T)
+    positions.push(p2_L[0], p2_L[1], p3_L[0], p3_L[1], p2_T[0], p2_T[1]); // Tri 1
+    positions.push(p3_L[0], p3_L[1], p3_T[0], p3_T[1], p2_T[0], p2_T[1]); // Tri 2
+    for (let i = 0; i < 6; i++) colors.push(...RED_DRC);
+
+    // 5. Estrella Amarilla (en la esquina superior izquierda)
+    const starCX = x + w * 0.15; // Posición X del centro (ajustar si es necesario)
+    const starCY = y + h * 0.20; // Posición Y del centro (ajustar si es necesario)
+    const starR  = h * 0.15; // Radio de la estrella (ajustar si es necesario)
+    createStar(starCX, starCY, starR, YELLOW_DRC);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
+  southKorea: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const KOREA_WHITE = [1.0, 1.0, 1.0];
+    const KOREA_BLACK = [0.0, 0.0, 0.0];
+    const KOREA_RED   = [205/255, 46/255, 58/255]; // #CD2E3A
+    const KOREA_BLUE  = [0/255, 71/255, 160/255]; // #0047A0
+    
+    let positions = [];
+    let colors = [];
+    
+    // --- INICIO DE FUNCIONES AUXILIARES ---
+
+    /**
+     * Añade triángulos para dibujar un rectángulo (quad).
+     */
+    const createQuad = (qx, qy, qw, qh, color) => {
+        const qx2 = qx + qw;
+        const qy2 = qy + qh;
+        positions.push(
+            qx, qy,   qx2, qy,  qx, qy2,
+            qx2, qy,  qx2, qy2, qx, qy2
+        );
+        for (let i = 0; i < 6; i++) colors.push(...color);
+    };
+
+    /**
+     * Añade triángulos para aproximar un arco o círculo (Teselación).
+     */
+    const addTesselatedArc = (cx, cy, r, segments, color, startAngleRad, endAngleRad) => {
+        for (let i = 0; i < segments; i++) {
+            const angle1 = startAngleRad + (endAngleRad - startAngleRad) * (i / segments);
+            const angle2 = startAngleRad + (endAngleRad - startAngleRad) * ((i + 1) / segments);
+
+            // Vértices del triángulo (Centro, Punto1, Punto2)
+            positions.push(cx, cy, cx + r * Math.cos(angle1), cy + r * Math.sin(angle1), cx + r * Math.cos(angle2), cy + r * Math.sin(angle2));
+            // Colores del triángulo
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+    
+    // --- FIN DE FUNCIONES AUXILIARES ---
+
+    // 1. Fondo Blanco
+    createQuad(x, y, w, h, KOREA_WHITE);
+
+    // 2. Taegeuk (Yin-Yang) - Aproximado con Teselación
+    const PI = Math.PI;
+    const centerCX = x + w / 2;
+    const centerCY = y + h / 2;
+    const R = h * 0.25; // Radio grande (1/4 de la altura)
+    const r = R / 2;    // Radio pequeño (1/8 de la altura)
+    const segmentsLarge = 32; // Segmentos para semicírculos grandes
+    const segmentsSmall = 16; // Segmentos para círculos pequeños
+
+    // Dibujamos las 4 partes en orden usando el método del pintor:
+    
+    // a) Mitad superior roja (del círculo grande)
+    addTesselatedArc(centerCX, centerCY, R, segmentsLarge, KOREA_RED, PI, 2 * PI); // Ángulos 180° a 360°
+    
+    // b) Mitad inferior azul (del círculo grande)
+    addTesselatedArc(centerCX, centerCY, R, segmentsLarge, KOREA_BLUE, 0, PI); // Ángulos 0° a 180°
+    
+    // c) Círculo pequeño azul (izquierdo), superpuesto al rojo
+    addTesselatedArc(centerCX - r, centerCY, r, segmentsSmall, KOREA_BLUE, 0, 2 * PI); // Círculo completo
+    
+    // d) Círculo pequeño rojo (derecho), superpuesto al azul
+    addTesselatedArc(centerCX + r, centerCY, r, segmentsSmall, KOREA_RED, 0, 2 * PI); // Círculo completo
+
+    // 3. Trigramas (SIN rotación)
+    const barW = h * (1/4);
+    const barH = barW / 3;
+    const barVGap = barH / 2;
+    const barHGap = barH / 2;
+    const brokenW = (barW - barHGap) / 2;
+
+    const drawTrigram = (cx, cy, lines) => {
+        const y_offsets = [ -(barH + barVGap), 0, (barH + barVGap) ];
+        lines.forEach((isSolid, i) => {
+            const barCenterY = cy + y_offsets[i];
+            if (isSolid) {
+                createQuad(cx - barW / 2, barCenterY - barH / 2, barW, barH, KOREA_BLACK);
+            } else {
+                createQuad(cx - barW / 2, barCenterY - barH / 2, brokenW, barH, KOREA_BLACK);
+                createQuad(cx + barHGap / 2, barCenterY - barH / 2, brokenW, barH, KOREA_BLACK);
+            }
+        });
+    };
+    
+    const marginX = w / 4;
+    const marginY = h / 4;
+
+    // Dibujar los 4 trigramas (sin rotar)
+    drawTrigram(x + marginX,     y + marginY,     [true, true, true]);   // Geon (☰)
+    drawTrigram(x + w - marginX, y + marginY,     [false, true, false]); // Ri (☲) - Corregido
+    drawTrigram(x + marginX,     y + h - marginY, [true, false, true]); // Gam (☵) - Corregido
+    drawTrigram(x + w - marginX, y + h - marginY, [false, false, false]); // Gon (☷)
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+ 
+ 
+  northKorea: (x, y, w, h) => {
+    // Colores RGB normalizados
+    const DPRK_RED    = [237/255, 28/255, 36/255]; // #ED1C24
+    const DPRK_BLUE   = [40/255, 93/255, 178/255]; // #285DB2
+    const DPRK_WHITE  = [1.0, 1.0, 1.0];           // #FFFFFF
+    
+    let positions = [];
+    let colors = [];
+    
+    // --- Proporciones Oficiales (Ratio 1:2) ---
+    // Franjas (vertical): 6 (azul) : 1 (blanco) : 16 (rojo) : 1 (blanco) : 6 (azul)
+    // Total de 30 unidades verticales.
+    const unitHeight = h / 30;
+    
+    const blueHeight = 6 * unitHeight;
+    const whiteHeight = 1 * unitHeight;
+    const redHeight = 16 * unitHeight;
+
+    // Y-offsets (posiciones Y de cada franja)
+    const y_blueTop = y;
+    const y_whiteTop = y_blueTop + blueHeight;
+    const y_redCenter = y_whiteTop + whiteHeight;
+    const y_whiteBottom = y_redCenter + redHeight;
+    const y_blueBottom = y_whiteBottom + whiteHeight;
+    const y_end = y_blueBottom + blueHeight; // Debería ser igual a y + h
+
+    // 1. Franja Azul (Superior)
+    positions.push(
+        x, y_blueTop,    x + w, y_blueTop,    x, y_whiteTop,
+        x + w, y_blueTop, x + w, y_whiteTop,   x, y_whiteTop
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DPRK_BLUE);
+
+    // 2. Franja Blanca (Superior)
+    positions.push(
+        x, y_whiteTop,   x + w, y_whiteTop,   x, y_redCenter,
+        x + w, y_whiteTop, x + w, y_redCenter,  x, y_redCenter
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DPRK_WHITE);
+
+    // 3. Franja Roja (Central)
+    positions.push(
+        x, y_redCenter,  x + w, y_redCenter,  x, y_whiteBottom,
+        x + w, y_redCenter, x + w, y_whiteBottom, x, y_whiteBottom
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DPRK_RED);
+
+    // 4. Franja Blanca (Inferior)
+    positions.push(
+        x, y_whiteBottom, x + w, y_whiteBottom, x, y_blueBottom,
+        x + w, y_whiteBottom, x + w, y_blueBottom, x, y_blueBottom
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DPRK_WHITE);
+
+    // 5. Franja Azul (Inferior)
+    positions.push(
+        x, y_blueBottom,  x + w, y_blueBottom,  x, y_end,
+        x + w, y_blueBottom,  x + w, y_end,       x, y_end
+    );
+    for (let i = 0; i < 6; i++) colors.push(...DPRK_BLUE);
+
+    // --- Posición y Tamaño de Símbolos ---
+    // Centro del círculo: 1/3 del ancho (w) y 1/2 de la altura (h)
+    const centerCX = x + w / 3;
+    const centerCY = y + h / 2;
+    
+    // Radio del círculo blanco: 8/30 de la altura
+    const circleRadius = (8 / 30) * h;
+    // Radio de la estrella roja: 4.5/30 de la altura
+    const starRadius = (4.5 / 30) * h;
+
+    // --- Función auxiliar para crear un círculo (aproximado por triángulos) ---
+    const createCircle = (cx, cy, r, segments, color) => {
+        for (let i = 0; i < segments; i++) {
+            const angle1 = (i / segments) * (2 * Math.PI);
+            const angle2 = ((i + 1) / segments) * (2 * Math.PI);
+
+            positions.push(cx, cy); // Centro
+            positions.push(cx + r * Math.cos(angle1), cy + r * Math.sin(angle1));
+            positions.push(cx + r * Math.cos(angle2), cy + r * Math.sin(angle2));
+            
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+
+    // --- Función auxiliar para crear la geometría de la estrella ---
+    const createStar = (cx, cy, r, color, rotation = 0) => {
+        const innerRadius = r * 0.381966; // Proporción áurea
+        const numPoints = 5;
+        let starPoints = [];
+        for (let i = 0; i < numPoints * 2; i++) {
+            const angle = (Math.PI / numPoints * i) - (Math.PI / 2) + rotation; // -PI/2 para apuntar arriba
+            const radius = (i % 2 === 0) ? r : innerRadius;
+            starPoints.push(cx + radius * Math.cos(angle), cy + radius * Math.sin(angle));
+        }
+        for (let i = 0; i < starPoints.length; i += 2) {
+            positions.push(cx, cy); // Centro
+            positions.push(starPoints[i], starPoints[i+1]);
+            const nextIndex = (i + 2) % starPoints.length;
+            positions.push(starPoints[nextIndex], starPoints[nextIndex+1]);
+            for (let j = 0; j < 3; j++) colors.push(...color);
+        }
+    };
+    // --- Fin de funciones auxiliares ---
+
+    // 6. Círculo Blanco (Superpuesto)
+    const circleSegments = 32; // Calidad del círculo (32 triángulos)
+    createCircle(centerCX, centerCY, circleRadius, circleSegments, DPRK_WHITE);
+
+    // 7. Estrella Roja (Superpuesta)
+    createStar(centerCX, centerCY, starRadius, DPRK_RED);
+
+    return {
+        positions: positions,
+        colors: colors
+    };
+  },
+
 };
 
 // Placeholder para banderas sin implementación
